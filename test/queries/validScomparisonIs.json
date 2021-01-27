@@ -1,0 +1,107 @@
+{
+    "title": "Scomparison Is",
+    "query": {
+        "WHERE": {
+            "IS": {
+                "multipleCourseSections_id": "430"
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "multipleCourseSections_dept",
+                "multipleCourseSections_id"
+            ]
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        {
+            "multipleCourseSections_dept": "cpsc",
+            "multipleCourseSections_id": "430"
+        },
+        {
+            "multipleCourseSections_dept": "cpsc",
+            "multipleCourseSections_id": "430"
+        },
+        {
+            "multipleCourseSections_dept": "cpsc",
+            "multipleCourseSections_id": "430"
+        },
+        {
+            "multipleCourseSections_dept": "cpsc",
+            "multipleCourseSections_id": "430"
+        },
+        {
+            "multipleCourseSections_dept": "cpsc",
+            "multipleCourseSections_id": "430"
+        },
+        {
+            "multipleCourseSections_dept": "cpsc",
+            "multipleCourseSections_id": "430"
+        },
+        {
+            "multipleCourseSections_dept": "cpsc",
+            "multipleCourseSections_id": "430"
+        },
+        {
+            "multipleCourseSections_dept": "cpsc",
+            "multipleCourseSections_id": "430"
+        },
+        {
+            "multipleCourseSections_dept": "cpsc",
+            "multipleCourseSections_id": "430"
+        },
+        {
+            "multipleCourseSections_dept": "cpsc",
+            "multipleCourseSections_id": "430"
+        },
+        {
+            "multipleCourseSections_dept": "cpsc",
+            "multipleCourseSections_id": "430"
+        },
+        {
+            "multipleCourseSections_dept": "cpsc",
+            "multipleCourseSections_id": "430"
+        },
+        {
+            "multipleCourseSections_dept": "cpsc",
+            "multipleCourseSections_id": "430"
+        },
+        {
+            "multipleCourseSections_dept": "cpsc",
+            "multipleCourseSections_id": "430"
+        },
+        {
+            "multipleCourseSections_dept": "cpsc",
+            "multipleCourseSections_id": "430"
+        },
+        {
+            "multipleCourseSections_dept": "cpsc",
+            "multipleCourseSections_id": "430"
+        },
+        {
+            "multipleCourseSections_dept": "cpsc",
+            "multipleCourseSections_id": "430"
+        },
+        {
+            "multipleCourseSections_dept": "cpsc",
+            "multipleCourseSections_id": "430"
+        },
+        {
+            "multipleCourseSections_dept": "cpsc",
+            "multipleCourseSections_id": "430"
+        },
+        {
+            "multipleCourseSections_dept": "cpsc",
+            "multipleCourseSections_id": "430"
+        },
+        {
+            "multipleCourseSections_dept": "cpsc",
+            "multipleCourseSections_id": "430"
+        },
+        {
+            "multipleCourseSections_dept": "cpsc",
+            "multipleCourseSections_id": "430"
+        }
+    ]
+}
