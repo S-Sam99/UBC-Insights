@@ -1,0 +1,6 @@
+{
+    "title": "Bad Formatting with JSON File",
+    "query": "{\n  \"WHERE\": {\n    \"EQ\": {\n      \"courses_avg\": \n    }\n  },\n  \"OPTIONS\": {\n    \"COLUMNS\": [\n      \"courses_dept\",\n      \"courses_avg\"\n    ],\n    \"ORDER\": \"courses_avg\"\n  }\n}",
+    "isQueryValid": false,
+    "result": "InsightError"
+}

@@ -1,0 +1,6 @@
+{
+    "title": "Using 2 Body Types",
+    "query": "{\n  \"WHERE\": {},\n  \"WHERE\": {},\n}",
+    "isQueryValid": false,
+    "result": "InsightError"
+}
