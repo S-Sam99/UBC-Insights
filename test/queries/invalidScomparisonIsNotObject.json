@@ -1,0 +1,35 @@
+{
+    "title": "Scomparison Is Not Object",
+    "query": {
+        "WHERE": {
+            "AND": [
+                {
+                    "IS": [
+                        {
+                            "courses_dept": "cpsc"
+                        },
+                        {
+                            "courses_id": "503"
+                        }
+                    ]
+                },
+                {
+                    "NOT": {
+                        "EQ": {
+                            "courses_avg": 97
+                        }
+                    }
+                }
+            ]
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "courses_id",
+                "courses_avg"
+            ]
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

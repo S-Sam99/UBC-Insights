@@ -1,0 +1,38 @@
+{
+    "title": "Mcomparison Less Than Not Object",
+    "query": {
+        "WHERE": {
+            "AND": [
+                {
+                    "IS": {
+                        "courses_dept": "cpsc"
+                    }
+                },
+                {
+                    "IS": {
+                        "courses_id": "310"
+                    }
+                },
+                {
+                    "LT": [
+                        {
+                            "courses_avg": 80
+                        },
+                        {
+                            "courses_avg": 84.6
+                        }
+                    ]
+                }
+            ]
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "courses_id",
+                "courses_avg"
+            ]
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}
