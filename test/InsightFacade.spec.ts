@@ -34,7 +34,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
         validCourseWithNonJsonCourse: "./test/data/validCourseWithNonJsonCourse.zip",
         validCourseWithZeroCourseSections: "./test/data/validCourseWithZeroCourseSections.zip",
         zeroCourses: "./test/data/zeroCourses.zip",
-        zeroCourseSections: "./test/data/zeroCourseSections.zip"
+        zeroCourseSections: "./test/data/zeroCourseSections.zip",
         courses1: "./test/data/courses-small.zip",
         courses2: "./test/data/AANB500",
         courses3: "./test/data/courses-textfiles.zip",
@@ -580,16 +580,6 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
                 return expect(insightFacade.listDatasets())
                     .to.eventually.deep.equal(expected);
             });
-    // This is a unit test. You should create more like this!
-    it("Should add a valid dataset from 0", function () {
-        const id: string = "courses";
-        const expected: string[] = [id];
-        const futureResult: Promise<string[]> = insightFacade.addDataset(
-            id,
-            datasets[id],
-            InsightDatasetKind.Courses,
-        );
-        return expect(futureResult).to.eventually.deep.equal(expected);
     });
 
     it("Should add a valid dataset - 1 exact valid course", function () {
