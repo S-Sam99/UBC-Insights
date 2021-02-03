@@ -1,0 +1,6 @@
+{
+    "title": "Referencing 2 Datasets Error",
+    "query": "{\n  \"WHERE\": {\n    \"GT\": {\n      \"courses_avg\": 97,\n    }\n  },\n  \"OPTIONS\": {\n    \"COLUMNS\": [\n      \"courses_dept\",\n      \"test_avg\"\n    ],\n    \"ORDER\": \"courses_avg\"\n  }\n}",
+    "isQueryValid": false,
+    "result": "InsightError"
+}

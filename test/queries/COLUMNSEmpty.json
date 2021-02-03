@@ -1,0 +1,15 @@
+{
+    "title": "Empty Column",
+    "query": {
+        "WHERE": {
+            "EQ": {
+                "courses_avg": 50
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": []
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

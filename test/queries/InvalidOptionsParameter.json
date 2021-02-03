@@ -1,0 +1,6 @@
+{
+    "title": "Invalid OPTIONS Parameter error",
+    "query": "{\n  \"WHERE\": {\n    \"NOT\": {\n      \"GT\": {\n        \"courses_avg\": 10\n      }\n    }\"\n  },\n  \"OPTIONS\": {\n    \"ORDER\": \"courses_avg\"\n  }\n}",
+    "isQueryValid": false,
+    "result": "InsightError"
+}

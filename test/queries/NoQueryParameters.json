@@ -1,0 +1,6 @@
+{
+    "title": "No Query Parameters",
+    "query": {},
+    "isQueryValid": false,
+    "result": "InsightError"
+}

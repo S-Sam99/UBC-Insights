@@ -1,0 +1,35 @@
+{
+    "title": "Invalid key type in EQ",
+    "query": {
+        "WHERE": {
+            "AND": [
+                {
+                    "GT": {
+                        "courses_avg": 80
+                    }
+                },
+                {
+                    "GT": {
+                        "courses_avg": 23
+                    }
+                },
+                {
+                    "NOT": {
+                        "EQ": {
+                            "courses_dept": "math"
+                        }
+                    }
+                }
+            ]
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "courses_avg"
+            ],
+            "ORDER": "courses_avg"
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}
