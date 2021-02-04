@@ -1,0 +1,19 @@
+{
+    "title": "Scomparison Is Excess Keys",
+    "query": {
+        "WHERE": {
+            "IS": {
+                "courses_avg": 97,
+                "courses_id": 300
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "courses_avg"
+            ]
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

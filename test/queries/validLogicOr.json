@@ -1,0 +1,60 @@
+{
+    "title": "Logic Or",
+    "query": {
+        "WHERE": {
+            "OR": [
+                {
+                    "LT": {
+                        "multipleCourseSections_avg": 75
+                    }
+                },
+                {
+                    "GT": {
+                        "multipleCourseSections_avg": 80
+                    }
+                }
+            ]
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "multipleCourseSections_dept",
+                "multipleCourseSections_avg",
+                "multipleCourseSections_id"
+            ],
+            "ORDER": "multipleCourseSections_avg"
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        {
+            "multipleCourseSections_dept": "cpsc",
+            "multipleCourseSections_id": "430",
+            "multipleCourseSections_avg": 72.75
+        },
+        {
+            "multipleCourseSections_dept": "cpsc",
+            "multipleCourseSections_id": "430",
+            "multipleCourseSections_avg": 72.75
+        },
+        {
+            "multipleCourseSections_dept": "cpsc",
+            "multipleCourseSections_id": "430",
+            "multipleCourseSections_avg": 73.25
+        },
+        {
+            "multipleCourseSections_dept": "cpsc",
+            "multipleCourseSections_id": "430",
+            "multipleCourseSections_avg": 73.25
+        },
+        {
+            "multipleCourseSections_dept": "cpsc",
+            "multipleCourseSections_id": "430",
+            "multipleCourseSections_avg": 80.55
+        },
+        {
+            "multipleCourseSections_dept": "cpsc",
+            "multipleCourseSections_id": "430",
+            "multipleCourseSections_avg": 80.55
+        }
+    ]
+}

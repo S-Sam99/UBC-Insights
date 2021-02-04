@@ -1,0 +1,17 @@
+{
+    "title": "Invalid type of COLUMN key",
+    "query": {
+        "WHERE": {
+            "GT": {
+                "courses_avg": 97
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                90
+            ]
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

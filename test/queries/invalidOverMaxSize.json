@@ -1,0 +1,14 @@
+{
+    "title": "SELECT id",
+    "query": {
+        "WHERE": {},
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_id"
+            ],
+            "ORDER": "courses_id"
+        }
+    },
+    "isQueryValid": false,
+    "result": "ResultTooLargeError"
+}

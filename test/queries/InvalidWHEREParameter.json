@@ -1,0 +1,6 @@
+{
+    "title": "Invalid WHERE Parameter",
+    "query": "{\n  \"WHERE\": {\n    \"Test\"\n  },\n  \"OPTIONS\": {\n    \"COLUMNS\": [\n      \"courses_avg\",\n      \"courses_id\"\n    ],\n    \"ORDER\": \"courses_avg\"\n  }\n}",
+    "isQueryValid": false,
+    "result": "InsightError"
+}

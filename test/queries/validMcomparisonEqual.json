@@ -1,0 +1,31 @@
+{
+    "title": "Mcomparison Equal",
+    "query": {
+        "WHERE": {
+            "EQ": {
+                "multipleCourseSections_avg": 76.26
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "multipleCourseSections_dept",
+                "multipleCourseSections_avg",
+                "multipleCourseSections_id"
+            ],
+            "ORDER": "multipleCourseSections_avg"
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        {
+            "multipleCourseSections_dept": "cpsc",
+            "multipleCourseSections_avg": 76.26,
+            "multipleCourseSections_id": "430"
+        },
+        {
+            "multipleCourseSections_dept": "cpsc",
+            "multipleCourseSections_avg": 76.26,
+            "multipleCourseSections_id": "430"
+        }
+    ]
+}
