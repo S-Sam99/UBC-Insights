@@ -9,15 +9,7 @@ export default class ValidationHelper {
     }
 
     public static isValidId(id: string, dataset: any): boolean {
-        if (!id) {
-            return false;
-        }
-
-        if (id.includes("_")) {
-            return false;
-        }
-
-        if (!id.trim().length) {
+        if (!id || id.includes("_") || !id.trim().length) {
             return false;
         }
 
