@@ -5,6 +5,7 @@ import * as JSZip from "jszip";
 import Constants from "../Constants";
 import ValidationHelper from "../helper/ValidationHelper";
 import AddCourseDatasetHelper from "../helper/AddCourseDatasetHelper";
+import * as fs from "fs-extra";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -45,20 +46,24 @@ export default class InsightFacade implements IInsightFacade {
      * be successfully answered.
      */
     public addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
-        if (ValidationHelper.isValidId(id, this.courseDatasets)) {
-            if (ValidationHelper.isValidCourseKind(kind)) {
-                if (ValidationHelper.isValidContent(content)) {
-                    return this.unzipCourseDataset(id, content);
+        if (ValidationHelper.isValidIDNotOnDisk(id)) {
+            if (ValidationHelper.isValidId(id, this.courseDatasets)) {
+                if (ValidationHelper.isValidCourseKind(kind)) {
+                    if (ValidationHelper.isValidContent(content)) {
+                        return this.unzipCourseDataset(id, content);
+                    } else {
+                        return Promise.reject(InsightFacade.generateInsightError(Constants.INVALID_CONTENT));
+                    }
                 } else {
-                    return Promise.reject(InsightFacade.generateInsightError(Constants.INVALID_CONTENT));
+                    return Promise.reject(InsightFacade.generateInsightError(Constants.INVALID_KIND_COURSES));
                 }
             } else {
-                return Promise.reject(InsightFacade.generateInsightError(Constants.INVALID_KIND_COURSES));
+                return Promise.reject(InsightFacade.generateInsightError(`${Constants.INVALID_ID} ${id}`));
             }
         } else {
-            return Promise.reject(InsightFacade.generateInsightError(`${Constants.INVALID_ID} ${id}`));
-        }
+            return Promise.reject(InsightFacade.generateInsightError(Constants.DATASET_ALREADY_ADDED));
     }
+}
 
     private unzipCourseDataset(id: string, content: string): Promise<string[]> {
         return JSZip.loadAsync(content, {base64: true})

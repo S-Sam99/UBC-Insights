@@ -6,6 +6,7 @@ import { InsightDatasetKind, InsightDataset, InsightError, NotFoundError } from 
 import InsightFacade from "../src/controller/InsightFacade";
 import Log from "../src/Util";
 import TestUtil from "./TestUtil";
+import Constants from "../src/Constants";
 // This extends chai with assertions that natively support Promises
 chai.use(chaiAsPromised);
 
@@ -33,12 +34,11 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
         validCourseWithZeroCourseSections: "./test/data/validCourseWithZeroCourseSections.zip",
         zeroCourses: "./test/data/zeroCourses.zip",
         zeroCourseSections: "./test/data/zeroCourseSections.zip",
-        courses1: "./test/data/courses-small.zip",
-        courses2: "./test/data/AANB500",
-        courses3: "./test/data/courses-textfiles.zip",
-        courses4: "./test/data/courses-1validcourse.zip",
-        courses5: "./test/data/courses-exactly1validcourse.zip",
-        courses6: "./test/data/courses-morethan1validcoursewithextra.zip",
+        smallCourses: "./test/data/smallCourses.zip",
+        nonZip: "./test/data/nonZip",
+        textFiles: "./test/data/textFiles.zip",
+        oneValidCourse: "./test/data/oneValidCourse.zip",
+        moreThanOneValidCourse: "./test/data/moreThanOneValidCourse.zip",
     };
     let datasets: { [id: string]: string } = {};
     let insightFacade: InsightFacade;
@@ -318,6 +318,37 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
         )).to.eventually.be.rejectedWith(InsightError);
     });
 
+    it("Should add a valid dataset - 1 valid course", function () {
+        const id: string = "oneValidCourse";
+        const expected: string[] = [id];
+        const futureResult: Promise<string[]> = insightFacade.addDataset(
+            id,
+            datasets[id],
+            InsightDatasetKind.Courses,
+        );
+        return expect(futureResult).to.eventually.deep.equal(expected);
+    });
+
+    it("Should add a valid dataset to exisiting list", function () {
+        let id: string = "courses";
+        let expected: string[] = [id];
+        let futureResult: Promise<string[]> = insightFacade.addDataset(
+            id,
+            datasets[id],
+            InsightDatasetKind.Courses,
+        );
+        return expect(futureResult).to.eventually.deep.equal(expected).then(() => {
+            id = "smallCourses";
+            expected = ["courses", id];
+            futureResult = insightFacade.addDataset(
+                id,
+                datasets[id],
+                InsightDatasetKind.Courses,
+            );
+            return expect(futureResult).to.eventually.deep.equal(expected);
+        });
+    });
+
     // it("Should reject addition of dataset with undefined Kind", function () {
     //     const id: string = "courses";
     //     let kind: InsightDatasetKind;
@@ -569,47 +600,6 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //         });
     // });
     //
-    // it("Should add a valid dataset - 1 exact valid course", function () {
-    //     const id: string = "courses-exactly1validcourse";
-    //     const expected: string[] = [id];
-    //     const futureResult: Promise<string[]> = insightFacade.addDataset(
-    //         id,
-    //         datasets[id],
-    //         InsightDatasetKind.Courses,
-    //     );
-    //     return expect(futureResult).to.eventually.deep.equal(expected);
-    // });
-    //
-    // it("Should add a valid dataset - more than 1 valid course with extra", function () {
-    //     const id: string = "courses-morethan1validcoursewithextra";
-    //     const expected: string[] = [id];
-    //     const futureResult: Promise<string[]> = insightFacade.addDataset(
-    //         id,
-    //         datasets[id],
-    //         InsightDatasetKind.Courses,
-    //     );
-    //     return expect(futureResult).to.eventually.deep.equal(expected);
-    // });
-    //
-    // it("Should add a valid dataset to exisiting list", function () {
-    //     let id: string = "courses";
-    //     let expected: string[] = [id];
-    //     let futureResult: Promise<string[]> = insightFacade.addDataset(
-    //         id,
-    //         datasets[id],
-    //         InsightDatasetKind.Courses,
-    //     );
-    //     return expect(futureResult).to.eventually.deep.equal(expected).then(() => {
-    //         id = "courses-small";
-    //         expected = ["courses", id];
-    //         futureResult = insightFacade.addDataset(
-    //             id,
-    //             datasets[id],
-    //             InsightDatasetKind.Courses,
-    //         );
-    //         return expect(futureResult).to.eventually.deep.equal(expected);
-    //     });
-    // });
     //
     // it("Should add a valid dataset that has 1 valid course with extra", function () {
     //     const id: string = "courses-1validcourse";
