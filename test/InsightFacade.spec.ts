@@ -85,239 +85,239 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     });
     // ------------------------------ InsightFacade.addDataset() ------------------------------
     // Fulfill Test Cases
-    it("Should fulfill addition of valid dataset", function () {
-        const id: string = "courses";
-        const expected: string[] = [id];
-
-        return expect(insightFacade.addDataset(
-            id,
-            datasets[id],
-            InsightDatasetKind.Courses,
-        )).to.eventually.deep.equal(expected);
-    });
-
-    it("Should fulfill addition of valid dataset with one course section", function () {
-        const id: string = "oneCourseSection";
-        const expected: string[] = [id];
-
-        return expect(insightFacade.addDataset(
-            id,
-            datasets[id],
-            InsightDatasetKind.Courses,
-        )).to.eventually.deep.equal(expected);
-    });
-
-    it("Should fulfill addition of valid dataset with multiple course sections", function () {
-        const id: string = "multipleCourseSections";
-        const expected: string[] = [id];
-
-        return expect(insightFacade.addDataset(
-            id,
-            datasets[id],
-            InsightDatasetKind.Courses,
-        )).to.eventually.deep.equal(expected);
-    });
-
-    it("Should fulfill addition of valid dataset with valid course, skip zero course sections", function () {
-        const id: string = "validCourseWithZeroCourseSections";
-        const expected: string[] = [id];
-
-        return expect(insightFacade.addDataset(
-            id,
-            datasets[id],
-            InsightDatasetKind.Courses,
-        )).to.eventually.deep.equal(expected);
-    });
-
-    it("Should fulfill addition of valid dataset with valid course, skip non-JSON courses", function () {
-        const id: string = "validCourseWithNonJsonCourses";
-        const expected: string[] = [id];
-
-        return expect(insightFacade.addDataset(
-            id,
-            datasets[id],
-            InsightDatasetKind.Courses,
-        )).to.eventually.deep.equal(expected);
-    });
-
-    it("Should fulfill addition of valid dataset, processed data structure persisted to disk", function () {
-        const id: string = "validCourseWithNonJsonCourses";
-        const expected: string[] = [id];
-
-        return expect(insightFacade.addDataset(
-            id,
-            datasets[id],
-            InsightDatasetKind.Courses,
-        )).to.eventually.deep.equal(expected)
-            .then(() => {
-                try {
-                    const newInsightFacade = new InsightFacade();
-                    const courses: InsightDataset = {
-                        id: id,
-                        kind: InsightDatasetKind.Courses,
-                        numRows: 64612
-                    };
-                    const listExpected: InsightDataset[] = [courses];
-
-                    return expect(newInsightFacade.listDatasets())
-                        .to.eventually.deep.equal(listExpected);
-                } catch (err) {
-                    Log.error(err);
-                }
-            });
-    });
-
-    // Reject Test Cases
-    it("Should reject addition of dataset with invalid Kind of Rooms", function () {
-        const id: string = "courses";
-
-        return expect(insightFacade.addDataset(
-            id,
-            datasets[id],
-            InsightDatasetKind.Rooms,
-        )).to.eventually.be.rejectedWith(InsightError);
-    });
-
-    it("Should reject addition of dataset with ID including whitespaces only", function () {
-        const id: string = "  ";
-
-        return expect(insightFacade.addDataset(
-            id,
-            datasets[id],
-            InsightDatasetKind.Courses,
-        )).to.eventually.be.rejectedWith(InsightError);
-    });
-
-    it("Should reject addition of dataset with ID including underscore", function () {
-        const id: string = "valid_courses";
-
-        return expect(insightFacade.addDataset(
-            id,
-            datasets[id],
-            InsightDatasetKind.Courses,
-        )).to.eventually.be.rejectedWith(InsightError);
-    });
-
-    it("Should reject addition of dataset with duplicate ID", function () {
-        const id: string = "courses";
-        const expected: string[] = [id];
-
-        return expect(insightFacade.addDataset(
-            id,
-            datasets[id],
-            InsightDatasetKind.Courses,
-        )).to.eventually.deep.equal(expected)
-            .then(() => {
-                return expect(insightFacade.addDataset(
-                        id,
-                        datasets[id],
-                        InsightDatasetKind.Courses,
-                    )).to.eventually.be.rejectedWith(InsightError);
-                }
-            );
-    });
-
-    it("Should reject addition of dataset with zero course sections", function () {
-        const id: string = "zeroCourseSections";
-
-        return expect(insightFacade.addDataset(
-            id,
-            datasets[id],
-            InsightDatasetKind.Courses,
-        )).to.eventually.be.rejectedWith(InsightError);
-    });
-
-    it("Should reject addition of dataset with non-JSON courses", function () {
-        const id: string = "nonJsonCourses";
-
-        return expect(insightFacade.addDataset(
-            id,
-            datasets[id],
-            InsightDatasetKind.Courses,
-        )).to.eventually.be.rejectedWith(InsightError);
-    });
-
-    it("Should reject addition of dataset with zero courses", function () {
-        const id: string = "zeroCourses";
-
-        return expect(insightFacade.addDataset(
-            id,
-            datasets[id],
-            InsightDatasetKind.Courses,
-        )).to.eventually.be.rejectedWith(InsightError);
-    });
-
-    it("Should reject addition of non-zip file", function () {
-        const id: string = "notZipFile";
-
-        return expect(insightFacade.addDataset(
-            id,
-            datasets[id],
-            InsightDatasetKind.Courses,
-        )).to.eventually.be.rejectedWith(InsightError);
-    });
-
-    it("Should reject addition of dataset without 'courses' folder", function () {
-        const id: string = "missingCoursesFolder";
-
-        return expect(insightFacade.addDataset(
-            id,
-            datasets[id],
-            InsightDatasetKind.Courses,
-        )).to.eventually.be.rejectedWith(InsightError);
-    });
-
-    it("Should reject addition of dataset with null ID", function () {
-        const id: string = "courses";
-
-        return expect(insightFacade.addDataset(
-            null,
-            datasets[id],
-            InsightDatasetKind.Courses,
-        )).to.eventually.be.rejectedWith(InsightError);
-    });
-
-    it("Should reject addition of dataset with null Content", function () {
-        const id: string = "courses";
-
-        return expect(insightFacade.addDataset(
-            id,
-            null,
-            InsightDatasetKind.Courses,
-        )).to.eventually.be.rejectedWith(InsightError);
-    });
-
-    it("Should reject addition of dataset with null Kind", function () {
-        const id: string = "courses";
-
-        return expect(insightFacade.addDataset(
-            id,
-            datasets[id],
-            null,
-        )).to.eventually.be.rejectedWith(InsightError);
-    });
-
-    it("Should reject addition of dataset with undefined ID", function () {
-        let id: string;
-
-        return expect(insightFacade.addDataset(
-            id,
-            datasets[id],
-            InsightDatasetKind.Courses,
-        )).to.eventually.be.rejectedWith(InsightError);
-    });
-
-    it("Should reject addition of dataset with undefined Content", function () {
-        const id: string = "courses";
-        let content: string;
-
-        return expect(insightFacade.addDataset(
-            id,
-            content,
-            InsightDatasetKind.Courses,
-        )).to.eventually.be.rejectedWith(InsightError);
-    });
-
+    // it("Should fulfill addition of valid dataset", function () {
+    //     const id: string = "courses";
+    //     const expected: string[] = [id];
+    //
+    //     return expect(insightFacade.addDataset(
+    //         id,
+    //         datasets[id],
+    //         InsightDatasetKind.Courses,
+    //     )).to.eventually.deep.equal(expected);
+    // });
+    //
+    // it("Should fulfill addition of valid dataset with one course section", function () {
+    //     const id: string = "oneCourseSection";
+    //     const expected: string[] = [id];
+    //
+    //     return expect(insightFacade.addDataset(
+    //         id,
+    //         datasets[id],
+    //         InsightDatasetKind.Courses,
+    //     )).to.eventually.deep.equal(expected);
+    // });
+    //
+    // it("Should fulfill addition of valid dataset with multiple course sections", function () {
+    //     const id: string = "multipleCourseSections";
+    //     const expected: string[] = [id];
+    //
+    //     return expect(insightFacade.addDataset(
+    //         id,
+    //         datasets[id],
+    //         InsightDatasetKind.Courses,
+    //     )).to.eventually.deep.equal(expected);
+    // });
+    //
+    // it("Should fulfill addition of valid dataset with valid course, skip zero course sections", function () {
+    //     const id: string = "validCourseWithZeroCourseSections";
+    //     const expected: string[] = [id];
+    //
+    //     return expect(insightFacade.addDataset(
+    //         id,
+    //         datasets[id],
+    //         InsightDatasetKind.Courses,
+    //     )).to.eventually.deep.equal(expected);
+    // });
+    //
+    // it("Should fulfill addition of valid dataset with valid course, skip non-JSON courses", function () {
+    //     const id: string = "validCourseWithNonJsonCourses";
+    //     const expected: string[] = [id];
+    //
+    //     return expect(insightFacade.addDataset(
+    //         id,
+    //         datasets[id],
+    //         InsightDatasetKind.Courses,
+    //     )).to.eventually.deep.equal(expected);
+    // });
+    //
+    // it("Should fulfill addition of valid dataset, processed data structure persisted to disk", function () {
+    //     const id: string = "validCourseWithNonJsonCourses";
+    //     const expected: string[] = [id];
+    //
+    //     return expect(insightFacade.addDataset(
+    //         id,
+    //         datasets[id],
+    //         InsightDatasetKind.Courses,
+    //     )).to.eventually.deep.equal(expected)
+    //         .then(() => {
+    //             try {
+    //                 const newInsightFacade = new InsightFacade();
+    //                 const courses: InsightDataset = {
+    //                     id: id,
+    //                     kind: InsightDatasetKind.Courses,
+    //                     numRows: 64612
+    //                 };
+    //                 const listExpected: InsightDataset[] = [courses];
+    //
+    //                 return expect(newInsightFacade.listDatasets())
+    //                     .to.eventually.deep.equal(listExpected);
+    //             } catch (err) {
+    //                 Log.error(err);
+    //             }
+    //         });
+    // });
+    //
+    // // Reject Test Cases
+    // it("Should reject addition of dataset with invalid Kind of Rooms", function () {
+    //     const id: string = "courses";
+    //
+    //     return expect(insightFacade.addDataset(
+    //         id,
+    //         datasets[id],
+    //         InsightDatasetKind.Rooms,
+    //     )).to.eventually.be.rejectedWith(InsightError);
+    // });
+    //
+    // it("Should reject addition of dataset with ID including whitespaces only", function () {
+    //     const id: string = "  ";
+    //
+    //     return expect(insightFacade.addDataset(
+    //         id,
+    //         datasets[id],
+    //         InsightDatasetKind.Courses,
+    //     )).to.eventually.be.rejectedWith(InsightError);
+    // });
+    //
+    // it("Should reject addition of dataset with ID including underscore", function () {
+    //     const id: string = "valid_courses";
+    //
+    //     return expect(insightFacade.addDataset(
+    //         id,
+    //         datasets[id],
+    //         InsightDatasetKind.Courses,
+    //     )).to.eventually.be.rejectedWith(InsightError);
+    // });
+    //
+    // it("Should reject addition of dataset with duplicate ID", function () {
+    //     const id: string = "courses";
+    //     const expected: string[] = [id];
+    //
+    //     return expect(insightFacade.addDataset(
+    //         id,
+    //         datasets[id],
+    //         InsightDatasetKind.Courses,
+    //     )).to.eventually.deep.equal(expected)
+    //         .then(() => {
+    //             return expect(insightFacade.addDataset(
+    //                     id,
+    //                     datasets[id],
+    //                     InsightDatasetKind.Courses,
+    //                 )).to.eventually.be.rejectedWith(InsightError);
+    //             }
+    //         );
+    // });
+    //
+    // it("Should reject addition of dataset with zero course sections", function () {
+    //     const id: string = "zeroCourseSections";
+    //
+    //     return expect(insightFacade.addDataset(
+    //         id,
+    //         datasets[id],
+    //         InsightDatasetKind.Courses,
+    //     )).to.eventually.be.rejectedWith(InsightError);
+    // });
+    //
+    // it("Should reject addition of dataset with non-JSON courses", function () {
+    //     const id: string = "nonJsonCourses";
+    //
+    //     return expect(insightFacade.addDataset(
+    //         id,
+    //         datasets[id],
+    //         InsightDatasetKind.Courses,
+    //     )).to.eventually.be.rejectedWith(InsightError);
+    // });
+    //
+    // it("Should reject addition of dataset with zero courses", function () {
+    //     const id: string = "zeroCourses";
+    //
+    //     return expect(insightFacade.addDataset(
+    //         id,
+    //         datasets[id],
+    //         InsightDatasetKind.Courses,
+    //     )).to.eventually.be.rejectedWith(InsightError);
+    // });
+    //
+    // it("Should reject addition of non-zip file", function () {
+    //     const id: string = "notZipFile";
+    //
+    //     return expect(insightFacade.addDataset(
+    //         id,
+    //         datasets[id],
+    //         InsightDatasetKind.Courses,
+    //     )).to.eventually.be.rejectedWith(InsightError);
+    // });
+    //
+    // it("Should reject addition of dataset without 'courses' folder", function () {
+    //     const id: string = "missingCoursesFolder";
+    //
+    //     return expect(insightFacade.addDataset(
+    //         id,
+    //         datasets[id],
+    //         InsightDatasetKind.Courses,
+    //     )).to.eventually.be.rejectedWith(InsightError);
+    // });
+    //
+    // it("Should reject addition of dataset with null ID", function () {
+    //     const id: string = "courses";
+    //
+    //     return expect(insightFacade.addDataset(
+    //         null,
+    //         datasets[id],
+    //         InsightDatasetKind.Courses,
+    //     )).to.eventually.be.rejectedWith(InsightError);
+    // });
+    //
+    // it("Should reject addition of dataset with null Content", function () {
+    //     const id: string = "courses";
+    //
+    //     return expect(insightFacade.addDataset(
+    //         id,
+    //         null,
+    //         InsightDatasetKind.Courses,
+    //     )).to.eventually.be.rejectedWith(InsightError);
+    // });
+    //
+    // it("Should reject addition of dataset with null Kind", function () {
+    //     const id: string = "courses";
+    //
+    //     return expect(insightFacade.addDataset(
+    //         id,
+    //         datasets[id],
+    //         null,
+    //     )).to.eventually.be.rejectedWith(InsightError);
+    // });
+    //
+    // it("Should reject addition of dataset with undefined ID", function () {
+    //     let id: string;
+    //
+    //     return expect(insightFacade.addDataset(
+    //         id,
+    //         datasets[id],
+    //         InsightDatasetKind.Courses,
+    //     )).to.eventually.be.rejectedWith(InsightError);
+    // });
+    //
+    // it("Should reject addition of dataset with undefined Content", function () {
+    //     const id: string = "courses";
+    //     let content: string;
+    //
+    //     return expect(insightFacade.addDataset(
+    //         id,
+    //         content,
+    //         InsightDatasetKind.Courses,
+    //     )).to.eventually.be.rejectedWith(InsightError);
+    // });
+    //
     // it("Should reject addition of dataset with undefined Kind", function () {
     //     const id: string = "courses";
     //     let kind: InsightDatasetKind;
@@ -1082,87 +1082,81 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
  * You should not need to modify it; instead, add additional files to the queries directory.
  * You can still make tests the normal way, this is just a convenient tool for a majority of queries.
  */
-// describe("InsightFacade PerformQuery", () => {
-//     const datasetsToQuery: {
-//         [id: string]: { path: string; kind: InsightDatasetKind };
-//     } = {
-//         courses: {
-//             path: "./test/data/courses.zip",
-//             kind: InsightDatasetKind.Courses
-//         },
-//         oneCourseSection: {
-//             path: "./test/data/oneCourseSection.zip",
-//             kind: InsightDatasetKind.Courses
-//         },
-//         multipleCourseSections: {
-//             path: "./test/data/multipleCourseSections.zip",
-//             kind: InsightDatasetKind.Courses
-//         },
-//     };
-//     let insightFacade: InsightFacade;
-//     let testQueries: ITestQuery[] = [];
-//
-//     // Load all the test queries, and call addDataset on the insightFacade instance for all the datasets
-//     before(function () {
-//         Log.test(`Before: ${this.test.parent.title}`);
-//
-//         // Load the query JSON files under test/queries.
-//         // Fail if there is a problem reading ANY query.
-//         try {
-//             testQueries = TestUtil.readTestQueries();
-//         } catch (err) {
-//             expect.fail(
-//                 "",
-//                 "",
-//                 `Failed to read one or more test queries. ${err}`,
-//             );
-//         }
-//
-//         // Load the datasets specified in datasetsToQuery and add them to InsightFacade.
-//         // Will fail* if there is a problem reading ANY dataset.
-//         const loadDatasetPromises: Array<Promise<string[]>> = [];
-//         insightFacade = new InsightFacade();
-//         for (const id of Object.keys(datasetsToQuery)) {
-//             const ds = datasetsToQuery[id];
-//             const data = fs.readFileSync(ds.path).toString("base64");
-//             loadDatasetPromises.push(
-//                 insightFacade.addDataset(id, data, ds.kind),
-//             );
-//         }
-//         return Promise.all(loadDatasetPromises).catch((err) => {
-//             /* *IMPORTANT NOTE: This catch is to let this run even without the implemented addDataset,
-//              * for the purposes of seeing all your tests run.
-//              * TODO For C1, remove this catch block (but keep the Promise.all)
-//              */
-//             return Promise.resolve("HACK TO LET QUERIES RUN");
-//         });
-//     });
-//
-//     beforeEach(function () {
-//         Log.test(`BeforeTest: ${this.currentTest.title}`);
-//     });
-//
-//     after(function () {
-//         Log.test(`After: ${this.test.parent.title}`);
-//     });
-//
-//     afterEach(function () {
-//         Log.test(`AfterTest: ${this.currentTest.title}`);
-//     });
-//
-//     // ------------------------------ InsightFacade.performQuery() ------------------------------
-//     // Dynamically create and run a test for each query in testQueries
-//     // Creates an extra "test" called "Should run test queries" as a byproduct. Don't worry about it
-//     it("Should run test queries", function () {
-//         describe("Dynamic InsightFacade PerformQuery tests", function () {
-//             for (const test of testQueries) {
-//                 it(`[${test.filename}] ${test.title}`, function () {
-//                     const futureResult: Promise<
-//                         any[]
-//                       > = insightFacade.performQuery(test.query);
-//                     return TestUtil.verifyQueryResult(futureResult, test);
-//                 });
-//             }
-//         });
-//     });
-// });
+describe("InsightFacade PerformQuery", () => {
+    const datasetsToQuery: {
+        [id: string]: { path: string; kind: InsightDatasetKind };
+    } = {
+        courses: {
+            path: "./test/data/courses.zip",
+            kind: InsightDatasetKind.Courses
+        },
+        oneCourseSection: {
+            path: "./test/data/oneCourseSection.zip",
+            kind: InsightDatasetKind.Courses
+        },
+        multipleCourseSections: {
+            path: "./test/data/multipleCourseSections.zip",
+            kind: InsightDatasetKind.Courses
+        },
+    };
+    let insightFacade: InsightFacade;
+    let testQueries: ITestQuery[] = [];
+
+    // Load all the test queries, and call addDataset on the insightFacade instance for all the datasets
+    before(function () {
+        Log.test(`Before: ${this.test.parent.title}`);
+
+        // Load the query JSON files under test/queries.
+        // Fail if there is a problem reading ANY query.
+        try {
+            testQueries = TestUtil.readTestQueries();
+        } catch (err) {
+            expect.fail(
+                "",
+                "",
+                `Failed to read one or more test queries. ${err}`,
+            );
+        }
+
+        // Load the datasets specified in datasetsToQuery and add them to InsightFacade.
+        // Will fail* if there is a problem reading ANY dataset.
+        const loadDatasetPromises: Array<Promise<string[]>> = [];
+        insightFacade = new InsightFacade();
+        for (const id of Object.keys(datasetsToQuery)) {
+            const ds = datasetsToQuery[id];
+            const data = fs.readFileSync(ds.path).toString("base64");
+            loadDatasetPromises.push(
+                insightFacade.addDataset(id, data, ds.kind),
+            );
+        }
+        return Promise.all(loadDatasetPromises);
+    });
+
+    beforeEach(function () {
+        Log.test(`BeforeTest: ${this.currentTest.title}`);
+    });
+
+    after(function () {
+        Log.test(`After: ${this.test.parent.title}`);
+    });
+
+    afterEach(function () {
+        Log.test(`AfterTest: ${this.currentTest.title}`);
+    });
+
+    // ------------------------------ InsightFacade.performQuery() ------------------------------
+    // Dynamically create and run a test for each query in testQueries
+    // Creates an extra "test" called "Should run test queries" as a byproduct. Don't worry about it
+    it("Should run test queries", function () {
+        describe("Dynamic InsightFacade PerformQuery tests", function () {
+            for (const test of testQueries) {
+                it(`[${test.filename}] ${test.title}`, function () {
+                    const futureResult: Promise<
+                        any[]
+                      > = insightFacade.performQuery(test.query);
+                    return TestUtil.verifyQueryResult(futureResult, test);
+                });
+            }
+        });
+    });
+});

@@ -1,6 +1,7 @@
 import Constants from "../Constants";
 import * as JSZip from "jszip";
 import * as fs from "fs-extra";
+import ValidationHelper from "./ValidationHelper";
 
 /**
  * Localized Helper Class for functions pertaining to adding course datasets.
@@ -33,7 +34,7 @@ export default class AddCourseDatasetHelper {
                         departments[department] = departmentCourses;
                     }
                 }
-                if (Object.keys(departments).length > 0) {
+                if (!ValidationHelper.isObjectEmpty(departments)) {
                     this.persistDataToDisk(id, JSON.stringify(departments));
                     return Promise.resolve(departments);
                 } else {

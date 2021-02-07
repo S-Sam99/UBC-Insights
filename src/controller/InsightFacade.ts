@@ -117,7 +117,10 @@ export default class InsightFacade implements IInsightFacade {
      * The promise should reject with an InsightError describing the error.
      */
     public performQuery(query: any): Promise<any[]> {
-        return Promise.reject("Not implemented.");
+        if (ValidationHelper.isValidQuery(query)) {
+            return Promise.reject("Passes Validation");
+        }
+        return Promise.reject(new InsightError("Query is incorrectly formatted."));
     }
 
     /**
