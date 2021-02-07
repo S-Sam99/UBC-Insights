@@ -50,13 +50,13 @@ export default class InsightFacade implements IInsightFacade {
                 if (ValidationHelper.isValidContent(content)) {
                     return this.unzipCourseDataset(id, content);
                 } else {
-                    return Promise.reject(InsightFacade.generateInsightError(Constants.INVALID_CONTENT));
+                    return Promise.reject(new InsightError(Constants.INVALID_CONTENT));
                 }
             } else {
-                return Promise.reject(InsightFacade.generateInsightError(Constants.INVALID_KIND_COURSES));
+                return Promise.reject(new InsightError(Constants.INVALID_KIND_COURSES));
             }
         } else {
-            return Promise.reject(InsightFacade.generateInsightError(`${Constants.INVALID_ID} ${id}`));
+            return Promise.reject(new InsightError(`${Constants.INVALID_ID} ${id}`));
         }
     }
 
@@ -69,13 +69,13 @@ export default class InsightFacade implements IInsightFacade {
                             this.courseDatasets[id] = dataset;
                             return Promise.resolve(Object.keys(this.courseDatasets));
                         }).catch((err) => {
-                            return Promise.reject(InsightFacade.generateInsightError(err));
+                            return Promise.reject(new InsightError(err));
                         });
                 } else {
-                    return Promise.reject(InsightFacade.generateInsightError(Constants.MISSING_COURSES_FOLDER));
+                    return Promise.reject(new InsightError(Constants.MISSING_COURSES_FOLDER));
                 }
-            }).catch((err) => {
-                return Promise.reject(InsightFacade.generateInsightError(Constants.DATASET_NOT_ZIP));
+            }).catch(() => {
+                return Promise.reject(new InsightError(Constants.DATASET_NOT_ZIP));
             });
     }
 
@@ -128,9 +128,5 @@ export default class InsightFacade implements IInsightFacade {
      */
     public listDatasets(): Promise<InsightDataset[]> {
         return Promise.reject("Not implemented.");
-    }
-
-    private static generateInsightError(msg: string) {
-        return new InsightError(msg);
     }
 }
