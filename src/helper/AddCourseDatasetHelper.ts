@@ -102,8 +102,9 @@ export default class AddCourseDatasetHelper {
     }
 
     private static persistDataToDisk(name: string, data: string): void {
-        const path = `./data/`;
+        const path = "./data";
 
         fs.writeFileSync(`${path}/${name}`, data);
     }
+
 }

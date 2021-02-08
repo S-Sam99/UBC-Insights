@@ -1,4 +1,5 @@
 import {InsightDatasetKind} from "../controller/IInsightFacade";
+import * as fs from "fs-extra";
 import Constants from "../Constants";
 import Log from "../Util";
 
@@ -15,15 +16,7 @@ export default class ValidationHelper {
     }
 
     public static isValidId(id: string, dataset: any): boolean {
-        if (!id) {
-            return false;
-        }
-
-        if (id.includes("_")) {
-            return false;
-        }
-
-        if (!id.trim().length) {
+        if (!id || id.includes("_") || !id.trim().length) {
             return false;
         }
         return !dataset.hasOwnProperty(id);
@@ -32,6 +25,14 @@ export default class ValidationHelper {
     public static isValidCourseKind(kind: InsightDatasetKind) {
         return kind === InsightDatasetKind.Courses;
     }
+
+    public static isValidIDNotOnDisk(id: string): boolean {
+        const path = "./data";
+        if (fs.existsSync(`${path}/${id}`)) {
+            return false;
+        } else {
+            return true;
+        }
 
     public static isValidQuery(query: any): boolean {
         if (!query) {
