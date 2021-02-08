@@ -15,11 +15,8 @@ export default class ValidationHelper {
         return content;
     }
 
-    public static isValidId(id: string, dataset: any): boolean {
-        if (!id || id.includes("_") || !id.trim().length) {
-            return false;
-        }
-        return !dataset.hasOwnProperty(id);
+    public static isValidId(id: string): boolean {
+        return !(!id || id.includes("_") || !id.trim().length);
     }
 
     public static isValidCourseKind(kind: InsightDatasetKind) {
@@ -28,11 +25,8 @@ export default class ValidationHelper {
 
     public static isValidIDNotOnDisk(id: string): boolean {
         const path = "./data";
-        if (fs.existsSync(`${path}/${id}`)) {
-            return false;
-        } else {
-            return true;
-        }
+        return !fs.existsSync(`${path}/${id}`);
+    }
 
     public static isValidQuery(query: any): boolean {
         if (!query) {
