@@ -16,6 +16,62 @@ const KEY_MAP = {
 
 const REQUIRED_DIR = "courses/";
 
+const MKEYS = [
+    "avg",
+    "pass",
+    "fail",
+    "audit",
+    "year"
+];
+
+const SKEYS = [
+    "dept",
+    "id",
+    "instructor",
+    "title",
+    "uuid"
+];
+
+enum FILTER_OPERATIONS {
+    Logic = "LOGIC",
+    MComparison = "MCOMPARISON",
+    SComparison = "SCOMPARISON",
+    Negation = "NEGATION"
+}
+
+const FILTERS: any = {
+    AND: {
+        operation: FILTER_OPERATIONS.Logic
+    },
+    OR: {
+        operation: FILTER_OPERATIONS.Logic
+    },
+    LT: {
+        operation: FILTER_OPERATIONS.MComparison,
+        key: MKEYS
+    },
+    GT: {
+        operation: FILTER_OPERATIONS.MComparison,
+        key: MKEYS
+    },
+    EQ: {
+        operation: FILTER_OPERATIONS.MComparison,
+        key: MKEYS
+    },
+    IS: {
+        operation: FILTER_OPERATIONS.SComparison,
+        key: SKEYS
+    },
+    NOT: {
+        operation: FILTER_OPERATIONS.Negation
+    }
+};
+
+const REQUIRED_QUERY_KEYS = [
+    "WHERE",
+    "OPTIONS"
+];
+
 const DATASET_NOT_ZIP = "Dataset file is not a ZIP.";
 
 const INVALID_ID = "Invalid ID for dataset for:";
@@ -35,6 +91,26 @@ const DATASET_ALREADY_ADDED = "Dataset has already been added.";
 export default class Constants {
     public static get KEY_MAP() {
         return KEY_MAP;
+    }
+
+    public static get MKEYS() {
+        return MKEYS;
+    }
+
+    public static get SKEYS() {
+        return SKEYS;
+    }
+
+    public static get REQUIRED_QUERY_KEYS() {
+        return REQUIRED_QUERY_KEYS;
+    }
+
+    public static get FILTERS() {
+        return FILTERS;
+    }
+
+    public static get FILTER_OPERATIONS() {
+        return FILTER_OPERATIONS;
     }
 
     public static get REQUIRED_DIR() {
