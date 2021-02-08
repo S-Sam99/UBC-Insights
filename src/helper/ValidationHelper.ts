@@ -34,7 +34,9 @@ export default class ValidationHelper {
     }
 
     public static isValidQuery(query: any): boolean {
-        // todo: add check for empty query
+        if (!query) {
+            return false;
+        }
         if (!this.hasRequiredQueryKeys(query)) {
             return false;
         }
@@ -76,8 +78,11 @@ export default class ValidationHelper {
         if (this.isObjectEmpty(options) || !options.hasOwnProperty("COLUMNS")) {
             return false;
         }
+        const optionsKeysLength = Object.keys(options).length;
 
-        // todo: add check for only COLUMNS or ORDER, ORDER.length === 1
+        if (optionsKeysLength < 1 || optionsKeysLength > 2) {
+            return false;
+        }
 
         const columns = options["COLUMNS"];
 
@@ -88,11 +93,15 @@ export default class ValidationHelper {
         if (columns.length < 1) {
             return false;
         }
+
         if (!this.isColumnsReferencingOneDataset(columns)) {
             return false;
         }
 
-        return this.isOrderKeyInColumns(options);
+        if (Object.keys(options).length === 2) {
+            return this.isOrderKeyInColumns(options);
+        }
+        return true;
     }
 
     private static isValidFilterOperator(
@@ -168,9 +177,23 @@ export default class ValidationHelper {
         if (type === "M") {
             return filter["key"].includes(keyWithoutId) && Number.isFinite(parameters[keys[0]]);
         } else {
-            // todo: add check for wildcards of asterisks **
-            return filter["key"].includes(keyWithoutId) && (typeof parameters[keys[0]] === "string");
+            const input = parameters[keys[0]];
+            if (!(filter["key"].includes(keyWithoutId) && (typeof input === "string"))) {
+                return false;
+            }
+            return this.isValidInputString(input);
         }
+    }
+
+    private static isValidInputString(input: string): boolean {
+        const regex: RegExp = /[*]?[^*]*[*]?/g;
+
+        for (const match of input.match(regex)) {
+            if (match === input) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static getParsedKey(key: string, underscorePos: number): string {
@@ -189,7 +212,10 @@ export default class ValidationHelper {
     }
 
     private static hasRequiredQueryKeys(query: any): boolean {
-        // todo: can add check for empty query here! check if keys.length > 1
+        if (Object.keys(query).length !== 2) {
+            return false;
+        }
+
         for (const key of Constants.REQUIRED_QUERY_KEYS) {
             if (!query.hasOwnProperty(key)) {
                 return false;
@@ -198,21 +224,41 @@ export default class ValidationHelper {
         return true;
     }
 
-    // todo: add check for MKEY and SKEY and valid dataset ID
-    // todo: smt about excess keys?
     private static isColumnsReferencingOneDataset(columns: any): boolean {
-        const firstDataset = this.getDatasetIdFromKey(columns[0], null);
+        const firstDataset = this.getFirstDatasetId(columns);
 
-        for (let index = 1; index < columns.length; index++) {
-            const key = columns[index];
+        if (!firstDataset) {
+            return false;
+        }
 
-            if (columns.hasOwnProperty(key)) {
-                if (firstDataset !== this.getDatasetIdFromKey(key, null)) {
-                    return false;
-                }
+        let allKeys = Constants.MKEYS;
+        allKeys = allKeys.concat(Constants.SKEYS);
+
+        for (const key of columns) {
+            if (!(typeof key === "string")) {
+                return false;
+            }
+
+            const underscorePos = this.getUnderscorePosFromKey(key);
+            const keyWithoutId: string = this.getParsedKey(key, underscorePos);
+
+            if (!allKeys.includes(keyWithoutId)) {
+                return false;
+            }
+
+            if (firstDataset !== this.getDatasetIdFromKey(key, underscorePos)) {
+                return false;
             }
         }
         return true;
+    }
+
+    private static getFirstDatasetId(columns: any): string {
+        if (!(typeof columns[0] === "string")) {
+            return null;
+        }
+
+        return this.getDatasetIdFromKey(columns[0], null);
     }
 
     private static isOrderKeyInColumns(options: any): boolean {

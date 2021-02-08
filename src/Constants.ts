@@ -16,7 +16,7 @@ const KEY_MAP = {
 
 const REQUIRED_DIR = "courses/";
 
-const MKEY = [
+const MKEYS = [
     "avg",
     "pass",
     "fail",
@@ -24,7 +24,7 @@ const MKEY = [
     "year"
 ];
 
-const SKEY = [
+const SKEYS = [
     "dept",
     "id",
     "instructor",
@@ -48,19 +48,19 @@ const FILTERS: any = {
     },
     LT: {
         operation: FILTER_OPERATIONS.MComparison,
-        key: MKEY
+        key: MKEYS
     },
     GT: {
         operation: FILTER_OPERATIONS.MComparison,
-        key: MKEY
+        key: MKEYS
     },
     EQ: {
         operation: FILTER_OPERATIONS.MComparison,
-        key: MKEY
+        key: MKEYS
     },
     IS: {
         operation: FILTER_OPERATIONS.SComparison,
-        key: SKEY
+        key: SKEYS
     },
     NOT: {
         operation: FILTER_OPERATIONS.Negation
@@ -89,6 +89,14 @@ const MISSING_COURSE_SECTION = "Missing valid course section for dataset.";
 export default class Constants {
     public static get KEY_MAP() {
         return KEY_MAP;
+    }
+
+    public static get MKEYS() {
+        return MKEYS;
+    }
+
+    public static get SKEYS() {
+        return SKEYS;
     }
 
     public static get REQUIRED_QUERY_KEYS() {
