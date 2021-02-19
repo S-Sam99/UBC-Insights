@@ -1,11 +1,11 @@
 import Log from "../Util";
-import {IInsightFacade, InsightDataset, InsightDatasetKind} from "./IInsightFacade";
-import {InsightError, NotFoundError} from "./IInsightFacade";
+import {IInsightFacade, InsightDataset, InsightDatasetKind, ResultTooLargeError} from "./IInsightFacade";
+import {InsightError} from "./IInsightFacade";
 import * as JSZip from "jszip";
 import Constants from "../Constants";
 import ValidationHelper from "../helper/ValidationHelper";
 import AddCourseDatasetHelper from "../helper/AddCourseDatasetHelper";
-import * as fs from "fs-extra";
+import PerformQueryHelper from "../helper/PerformQueryHelper";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -125,7 +125,16 @@ export default class InsightFacade implements IInsightFacade {
         if (!ValidationHelper.isValidQuery(query)) {
             return Promise.reject(new InsightError("Query is incorrectly formatted."));
         }
-        return Promise.resolve([]);
+        return PerformQueryHelper.performDatasetQuery(query)
+            .then((results) => {
+                if (results.length > Constants.MAX_RESULTS_SIZE) {
+                    return Promise.reject(new ResultTooLargeError());
+                } else {
+                    return Promise.resolve(results);
+                }
+            }).catch((err) => {
+                return Promise.reject(err);
+            });
     }
 
     /**
