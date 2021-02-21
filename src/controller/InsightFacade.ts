@@ -6,6 +6,7 @@ import Constants from "../Constants";
 import ValidationHelper from "../helper/ValidationHelper";
 import AddCourseDatasetHelper from "../helper/AddCourseDatasetHelper";
 import * as fs from "fs-extra";
+import RemoveDatasetHelper from "../helper/RemoveDatasetHelper";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -52,16 +53,16 @@ export default class InsightFacade implements IInsightFacade {
                     if (ValidationHelper.isValidContent(content)) {
                         return this.unzipCourseDataset(id, content);
                     } else {
-                        return Promise.reject(InsightFacade.generateInsightError(Constants.INVALID_CONTENT));
+                        return Promise.reject(new InsightError(Constants.INVALID_CONTENT));
                     }
                 } else {
-                    return Promise.reject(InsightFacade.generateInsightError(Constants.INVALID_KIND_COURSES));
+                    return Promise.reject(new InsightError(Constants.INVALID_KIND_COURSES));
                 }
             } else {
-                return Promise.reject(InsightFacade.generateInsightError(`${Constants.INVALID_ID} ${id}`));
+                return Promise.reject(new InsightError(`${Constants.INVALID_ID} ${id}`));
             }
         } else {
-            return Promise.reject(InsightFacade.generateInsightError(Constants.DATASET_ALREADY_ADDED));
+            return Promise.reject(new InsightError(Constants.DATASET_ALREADY_ADDED));
     }
 }
 
@@ -104,7 +105,15 @@ export default class InsightFacade implements IInsightFacade {
      * that subsequent queries for that id should fail unless a new addDataset happens first.
      */
     public removeDataset(id: string): Promise<string> {
-        return Promise.reject("Not implemented.");
+        if (ValidationHelper.isValidIdforRemove(id)) {
+            if (!ValidationHelper.isValidIDNotOnDisk(id)) {
+                 return RemoveDatasetHelper.removeDataset(id);
+            } else {
+                return Promise.reject(new NotFoundError(Constants.DATASET_NOT_YET_ADDED));
+            }
+        } else {
+            return Promise.reject(new InsightError(`${Constants.INVALID_ID} ${id}`));
+    }
     }
 
     /**

@@ -22,6 +22,13 @@ export default class ValidationHelper {
         return !dataset.hasOwnProperty(id);
     }
 
+    public static isValidIdforRemove(id: string): boolean {
+        if (!id || id.includes("_") || !id.trim().length) {
+            return false;
+        }
+        return true;
+    }
+
     public static isValidCourseKind(kind: InsightDatasetKind) {
         return kind === InsightDatasetKind.Courses;
     }
@@ -33,6 +40,7 @@ export default class ValidationHelper {
         } else {
             return true;
         }
+    }
 
     public static isValidQuery(query: any): boolean {
         if (!query) {
