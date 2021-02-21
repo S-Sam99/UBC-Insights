@@ -32,7 +32,7 @@ export default class CourseDataset {
             if (Object.keys(courseData).length > 0 && courseData.hasOwnProperty("result")) {
                 const course = new Course(this.id, courseData.result, courseSectionFieldMapping);
                 if (course.courseSections.length > 0) {
-                    this.numRows += course.numRows;
+                    this.numRows += course.numCourseRows;
                     CourseDataset.setCourseToCategory(course, course.department, this.departments);
                     CourseDataset.setCourseToCategory(course, course.id, this.courseNumbers);
                     this.allCourses.push(course);

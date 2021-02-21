@@ -6,6 +6,11 @@ import Constants from "../Constants";
 import ValidationHelper from "../helper/ValidationHelper";
 import AddCourseDatasetHelper from "../helper/AddCourseDatasetHelper";
 import PerformQueryHelper from "../helper/PerformQueryHelper";
+import { fstat } from "fs-extra";
+import * as fs from "fs-extra";
+import { files } from "jszip";
+import CourseDataset from "../controller/CourseDataset";
+import ListDatasetHelper from "../helper/ListDatasetHelper";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -122,19 +127,20 @@ export default class InsightFacade implements IInsightFacade {
      * The promise should reject with an InsightError describing the error.
      */
     public performQuery(query: any): Promise<any[]> {
-        if (!ValidationHelper.isValidQuery(query)) {
-            return Promise.reject(new InsightError("Query is incorrectly formatted."));
-        }
-        return PerformQueryHelper.performDatasetQuery(query)
-            .then((results) => {
-                if (results.length > Constants.MAX_RESULTS_SIZE) {
-                    return Promise.reject(new ResultTooLargeError());
-                } else {
-                    return Promise.resolve(results);
-                }
-            }).catch((err) => {
-                return Promise.reject(err);
-            });
+        // if (!ValidationHelper.isValidQuery(query)) {
+        //     return Promise.reject(new InsightError("Query is incorrectly formatted."));
+        // }
+        // return PerformQueryHelper.performDatasetQuery(query)
+        //     .then((results) => {
+        //         if (results.length > Constants.MAX_RESULTS_SIZE) {
+        //             return Promise.reject(new ResultTooLargeError());
+        //         } else {
+        //             return Promise.resolve(results);
+        //         }
+        //     }).catch((err) => {
+        //         return Promise.reject(err);
+        //     });
+        return Promise.reject("Not implemented.");
     }
 
     /**
@@ -144,6 +150,7 @@ export default class InsightFacade implements IInsightFacade {
      * The promise should fulfill an array of currently added InsightDatasets, and will only fulfill.
      */
     public listDatasets(): Promise<InsightDataset[]> {
-        return Promise.reject("Not implemented.");
+        const datasetList: InsightDataset[] = [];
+        return ListDatasetHelper.generateListDataset(datasetList);
     }
 }

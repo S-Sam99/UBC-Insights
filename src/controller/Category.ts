@@ -6,16 +6,16 @@ import Course from "./Course";
 export default class Category {
     public name: string;
     public courses: Course[];
-    public numRows: number;
+    public numCategoryRows: number;
 
     constructor(name: string) {
         this.name = name;
         this.courses = [];
-        this.numRows = 0;
+        this.numCategoryRows = 0;
     }
 
     public addCourse(course: Course) {
-        this.numRows += course.numRows;
+        this.numCategoryRows += course.numCourseRows;
         this.courses.push(course);
     }
 }

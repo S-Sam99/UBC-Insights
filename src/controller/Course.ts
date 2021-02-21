@@ -7,11 +7,11 @@ export default class Course {
     public department: string;
     public id: string;
     public courseSections: CourseSection[];
-    public numRows: number;
+    public numCourseRows: number;
 
     constructor(datasetId: string, courseData: object[], courseSectionFieldMapping: object) {
         this.courseSections = [];
-        this.numRows = 0;
+        this.numCourseRows = 0;
         this.createCourseSections(datasetId, courseData, courseSectionFieldMapping);
         if (this.courseSections.length > 0) {
             this.setCourseData(datasetId);
@@ -22,7 +22,7 @@ export default class Course {
             const courseSection = new CourseSection(datasetId, courseSectionData, courseSectionFieldMapping);
 
             if (courseSection.isValid) {
-                this.numRows++;
+                this.numCourseRows++;
                 this.courseSections.push(courseSection);
             }
         }
