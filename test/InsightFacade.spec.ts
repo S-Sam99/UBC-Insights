@@ -88,62 +88,62 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     // it("Should fulfill addition of valid dataset", function () {
     //     const id: string = "courses";
     //     const expected: string[] = [id];
-    //
+
     //     return expect(insightFacade.addDataset(
     //         id,
     //         datasets[id],
     //         InsightDatasetKind.Courses,
     //     )).to.eventually.deep.equal(expected);
     // });
-    //
+
     // it("Should fulfill addition of valid dataset with one course section", function () {
     //     const id: string = "oneCourseSection";
     //     const expected: string[] = [id];
-    //
+
     //     return expect(insightFacade.addDataset(
     //         id,
     //         datasets[id],
     //         InsightDatasetKind.Courses,
     //     )).to.eventually.deep.equal(expected);
     // });
-    //
+
     // it("Should fulfill addition of valid dataset with multiple course sections", function () {
     //     const id: string = "multipleCourseSections";
     //     const expected: string[] = [id];
-    //
+
     //     return expect(insightFacade.addDataset(
     //         id,
     //         datasets[id],
     //         InsightDatasetKind.Courses,
     //     )).to.eventually.deep.equal(expected);
     // });
-    //
+
     // it("Should fulfill addition of valid dataset with valid course, skip zero course sections", function () {
     //     const id: string = "validCourseWithZeroCourseSections";
     //     const expected: string[] = [id];
-    //
+
     //     return expect(insightFacade.addDataset(
     //         id,
     //         datasets[id],
     //         InsightDatasetKind.Courses,
     //     )).to.eventually.deep.equal(expected);
     // });
-    //
+
     // it("Should fulfill addition of valid dataset with valid course, skip non-JSON courses", function () {
     //     const id: string = "validCourseWithNonJsonCourses";
     //     const expected: string[] = [id];
-    //
+
     //     return expect(insightFacade.addDataset(
     //         id,
     //         datasets[id],
     //         InsightDatasetKind.Courses,
     //     )).to.eventually.deep.equal(expected);
     // });
-    //
+
     // it("Should fulfill addition of valid dataset, processed data structure persisted to disk", function () {
     //     const id: string = "validCourseWithNonJsonCourses";
     //     const expected: string[] = [id];
-    //
+
     //     return expect(insightFacade.addDataset(
     //         id,
     //         datasets[id],
@@ -158,7 +158,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //                     numRows: 64612
     //                 };
     //                 const listExpected: InsightDataset[] = [courses];
-    //
+
     //                 return expect(newInsightFacade.listDatasets())
     //                     .to.eventually.deep.equal(listExpected);
     //             } catch (err) {
@@ -166,42 +166,42 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //             }
     //         });
     // });
-    //
+
     // // Reject Test Cases
     // it("Should reject addition of dataset with invalid Kind of Rooms", function () {
     //     const id: string = "courses";
-    //
+
     //     return expect(insightFacade.addDataset(
     //         id,
     //         datasets[id],
     //         InsightDatasetKind.Rooms,
     //     )).to.eventually.be.rejectedWith(InsightError);
     // });
-    //
+
     // it("Should reject addition of dataset with ID including whitespaces only", function () {
     //     const id: string = "  ";
-    //
+
     //     return expect(insightFacade.addDataset(
     //         id,
     //         datasets[id],
     //         InsightDatasetKind.Courses,
     //     )).to.eventually.be.rejectedWith(InsightError);
     // });
-    //
+
     // it("Should reject addition of dataset with ID including underscore", function () {
     //     const id: string = "valid_courses";
-    //
+
     //     return expect(insightFacade.addDataset(
     //         id,
     //         datasets[id],
     //         InsightDatasetKind.Courses,
     //     )).to.eventually.be.rejectedWith(InsightError);
     // });
-    //
+
     // it("Should reject addition of dataset with duplicate ID", function () {
     //     const id: string = "courses";
     //     const expected: string[] = [id];
-    //
+
     //     return expect(insightFacade.addDataset(
     //         id,
     //         datasets[id],
@@ -216,122 +216,122 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //             }
     //         );
     // });
-    //
+
     // it("Should reject addition of dataset with zero course sections", function () {
     //     const id: string = "zeroCourseSections";
-    //
+
     //     return expect(insightFacade.addDataset(
     //         id,
     //         datasets[id],
     //         InsightDatasetKind.Courses,
     //     )).to.eventually.be.rejectedWith(InsightError);
     // });
-    //
+
     // it("Should reject addition of dataset with non-JSON courses", function () {
     //     const id: string = "nonJsonCourses";
-    //
+
     //     return expect(insightFacade.addDataset(
     //         id,
     //         datasets[id],
     //         InsightDatasetKind.Courses,
     //     )).to.eventually.be.rejectedWith(InsightError);
     // });
-    //
+
     // it("Should reject addition of dataset with zero courses", function () {
     //     const id: string = "zeroCourses";
-    //
+
     //     return expect(insightFacade.addDataset(
     //         id,
     //         datasets[id],
     //         InsightDatasetKind.Courses,
     //     )).to.eventually.be.rejectedWith(InsightError);
     // });
-    //
+
     // it("Should reject addition of non-zip file", function () {
     //     const id: string = "notZipFile";
-    //
+
     //     return expect(insightFacade.addDataset(
     //         id,
     //         datasets[id],
     //         InsightDatasetKind.Courses,
     //     )).to.eventually.be.rejectedWith(InsightError);
     // });
-    //
+
     // it("Should reject addition of dataset without 'courses' folder", function () {
     //     const id: string = "missingCoursesFolder";
-    //
+
     //     return expect(insightFacade.addDataset(
     //         id,
     //         datasets[id],
     //         InsightDatasetKind.Courses,
     //     )).to.eventually.be.rejectedWith(InsightError);
     // });
-    //
+
     // it("Should reject addition of dataset with null ID", function () {
     //     const id: string = "courses";
-    //
+
     //     return expect(insightFacade.addDataset(
     //         null,
     //         datasets[id],
     //         InsightDatasetKind.Courses,
     //     )).to.eventually.be.rejectedWith(InsightError);
     // });
-    //
+
     // it("Should reject addition of dataset with null Content", function () {
     //     const id: string = "courses";
-    //
+
     //     return expect(insightFacade.addDataset(
     //         id,
     //         null,
     //         InsightDatasetKind.Courses,
     //     )).to.eventually.be.rejectedWith(InsightError);
     // });
-    //
+
     // it("Should reject addition of dataset with null Kind", function () {
     //     const id: string = "courses";
-    //
+
     //     return expect(insightFacade.addDataset(
     //         id,
     //         datasets[id],
     //         null,
     //     )).to.eventually.be.rejectedWith(InsightError);
     // });
-    //
+
     // it("Should reject addition of dataset with undefined ID", function () {
     //     let id: string;
-    //
+
     //     return expect(insightFacade.addDataset(
     //         id,
     //         datasets[id],
     //         InsightDatasetKind.Courses,
     //     )).to.eventually.be.rejectedWith(InsightError);
     // });
-    //
+
     // it("Should reject addition of dataset with undefined Content", function () {
     //     const id: string = "courses";
     //     let content: string;
-    //
+
     //     return expect(insightFacade.addDataset(
     //         id,
     //         content,
     //         InsightDatasetKind.Courses,
     //     )).to.eventually.be.rejectedWith(InsightError);
     // });
-    //
+
     // it("Should reject addition of dataset with undefined Kind", function () {
     //     const id: string = "courses";
     //     let kind: InsightDatasetKind;
-    //
+
     //     return expect(insightFacade.addDataset(
     //         id,
     //         datasets[id],
     //         kind,
     //     )).to.eventually.be.rejectedWith(InsightError);
     // });
-    //
+
     // it("Should reject addition of dataset, without processed data structure persisted to disk", function () {
     //     const id: string = "zeroCourses";
-    //
+
     //     return expect(insightFacade.addDataset(
     //         id,
     //         datasets[id],
@@ -341,7 +341,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //             try {
     //                 const newInsightFacade = new InsightFacade();
     //                 const expected: InsightDataset[] = [];
-    //
+
     //                 return expect(newInsightFacade.listDatasets())
     //                     .to.eventually.deep.equal(expected);
     //             } catch (err) {
@@ -349,29 +349,27 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //             }
     //         });
     // });
-    //
+
     // // ------------------------------ InsightFacade.removeDataset() ------------------------------
-    // // Fulfill Test Cases
-    // it("Should fulfill removal of valid dataset", function () {
-    //     const id: string = "courses";
-    //     const expected: string[] = [id];
-    //
-    //     return expect(insightFacade.addDataset(
-    //         id,
-    //         datasets[id],
-    //         InsightDatasetKind.Courses,
-    //     )).to.eventually.deep.equal(expected)
-    //         .then(() => {
-    //             return expect(insightFacade.removeDataset(id))
-    //                     .to.eventually.deep.equal(id);
-    //             }
-    //         );
-    // });
-    //
+    // // // Fulfill Test Cases
+    it("Should fulfill removal of valid dataset", function () {
+        const id: string = "courses";
+        const expected: string[] = [id];
+        return expect(insightFacade.addDataset(
+            id,
+            datasets[id],
+            InsightDatasetKind.Courses,
+        )).to.eventually.deep.equal(expected)
+            .then(() => {
+                return expect(insightFacade.removeDataset(id))
+                        .to.eventually.deep.equal(id);
+                }
+            );
+    });
+
     // it("Should fulfill removal of valid dataset, deleting both memory and disk caches", function () {
     //     const id: string = "courses";
     //     const expected: string[] = [id];
-    //
     //     return expect(insightFacade.addDataset(
     //         id,
     //         datasets[id],
@@ -384,7 +382,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //             try {
     //                 const newInsightFacade = new InsightFacade();
     //                 const listExpected: InsightDataset[] = [];
-    //
+
     //                 return expect(newInsightFacade.listDatasets())
     //                     .to.eventually.deep.equal(listExpected);
     //             } catch (err) {
@@ -392,52 +390,52 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //             }
     //         });
     // });
-    //
-    // // Reject Test Cases
-    // it("Should reject removal of dataset with ID including whitespaces only", function () {
-    //     const id: string = "  ";
-    //
-    //     return expect(insightFacade.removeDataset(id))
-    //         .to.eventually.be.rejectedWith(InsightError);
-    // });
-    //
-    // it("Should reject removal of dataset with ID including underscore", function () {
-    //     const id: string = "valid_courses";
-    //
-    //     return expect(insightFacade.removeDataset(id))
-    //         .to.eventually.be.rejectedWith(InsightError);
-    // });
-    //
-    // it("Should reject removal for dataset with valid ID but not yet added", function () {
-    //     const id: string = "courses";
-    //
-    //     return expect(insightFacade.removeDataset(id))
-    //         .to.eventually.be.rejectedWith(InsightError);
-    // });
-    //
-    // it("Should reject removal for dataset with null ID", function () {
-    //     const id: string = null;
-    //
-    //     return expect(insightFacade.removeDataset(id))
-    //         .to.eventually.be.rejectedWith(InsightError);
-    // });
-    //
-    // it("Should reject removal for dataset with undefined ID", function () {
-    //     let id: string;
-    //
-    //     return expect(insightFacade.removeDataset(id))
-    //         .to.eventually.be.rejectedWith(InsightError);
-    // });
-    //
+
+    // Reject Test Cases
+    it("Should reject removal of dataset with ID including whitespaces only", function () {
+        const id: string = "  ";
+
+        return expect(insightFacade.removeDataset(id))
+            .to.eventually.be.rejectedWith(InsightError);
+    });
+
+    it("Should reject removal of dataset with ID including underscore", function () {
+        const id: string = "valid_courses";
+
+        return expect(insightFacade.removeDataset(id))
+            .to.eventually.be.rejectedWith(InsightError);
+    });
+
+    it("Should reject removal for dataset with valid ID but not yet added", function () {
+        const id: string = "courses";
+
+        return expect(insightFacade.removeDataset(id))
+            .to.eventually.be.rejectedWith(NotFoundError);
+    });
+
+    it("Should reject removal for dataset with null ID", function () {
+        const id: string = null;
+
+        return expect(insightFacade.removeDataset(id))
+            .to.eventually.be.rejectedWith(InsightError);
+    });
+
+    it("Should reject removal for dataset with undefined ID", function () {
+        let id: string;
+
+        return expect(insightFacade.removeDataset(id))
+            .to.eventually.be.rejectedWith(InsightError);
+    });
+
     // // ------------------------------ InsightFacade.listDatasets() ------------------------------
     // // Fulfill Test Cases
     // it("Should return empty array", function () {
     //     const expected: InsightDataset[] = [];
-    //
+
     //     return expect(insightFacade.listDatasets())
     //         .to.eventually.deep.equal(expected);
     // });
-    //
+
     // it("Should return added dataset with type and number of rows", function () {
     //     const id: string = "courses";
     //     const addExpected: string[] = [id];
@@ -447,7 +445,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //         numRows: 64612
     //     };
     //     const expected: InsightDataset[] = [courses];
-    //
+
     //     return expect(insightFacade.addDataset(
     //         id,
     //         datasets[id],
@@ -459,7 +457,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //             }
     //         );
     // });
-    //
+
     // it("Should return added dataset with type and number of rows with new Insight Facade", function () {
     //     const id: string = "courses";
     //     const addExpected: string[] = [id];
@@ -469,7 +467,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //         numRows: 64612
     //     };
     //     const expected: InsightDataset[] = [courses];
-    //
+
     //     return expect(insightFacade.addDataset(
     //         id,
     //         datasets[id],
@@ -481,12 +479,12 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //             }
     //         ).then(() => {
     //             const newInsightFacade = new InsightFacade();
-    //
+
     //             return expect(newInsightFacade.listDatasets())
     //                 .to.eventually.deep.equal(expected);
     //         });
     // });
-    //
+
     // it("Should return added datasets with type and number of rows", function () {
     //     const oneId: string = "oneCourseSection";
     //     const oneExpected: string[] = [oneId];
@@ -503,7 +501,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //         numRows: 22
     //     };
     //     const expected: InsightDataset[] = [oneCourseSelection, multiCourseSelections];
-    //
+
     //     return expect(insightFacade.addDataset(
     //         oneId,
     //         datasets[oneId],
@@ -520,7 +518,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //                 .to.eventually.deep.equal(expected);
     //         });
     // });
-    //
+
     // it("Should return added dataset, ignoring the removed dataset", function () {
     //     const oneId: string = "oneCourseSection";
     //     const oneExpected: string[] = [oneId];
@@ -532,7 +530,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //     const multiId: string = "multipleCourseSections";
     //     const multiExpected: string[] = [oneId, multiId];
     //     const expected: InsightDataset[] = [oneCourseSelection];
-    //
+
     //     return expect(insightFacade.addDataset(
     //         oneId,
     //         datasets[oneId],
@@ -552,12 +550,12 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //                 .to.eventually.deep.equal(expected);
     //         });
     // });
-    //
+
     // it("Should return empty array, ignoring rejected dataset with Kind of Rooms", function () {
     //     const id: string = "courses";
     //     const addExpected: string[] = [];
     //     const expected: InsightDataset[] = [];
-    //
+
     //     return expect(insightFacade.addDataset(
     //         id,
     //         datasets[id],
@@ -568,8 +566,8 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //                 .to.eventually.deep.equal(expected);
     //         });
     // });
-    //
-    //
+
+
     // it("Should add a valid dataset that has 1 valid course with extra", function () {
     //     const id: string = "courses-1validcourse";
     //     const expected: string[] = [id];
@@ -580,7 +578,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //     );
     //     return expect(futureResult).to.eventually.deep.equal(expected);
     // });
-    //
+
     // it("Shouldn't add invalid dataset with wrong naming convention - underscore", function () {
     //     const id: string = "_courses_";
     //     const expected: string[] = [id];
@@ -591,7 +589,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //     );
     //     return expect(futureResult).to.be.rejectedWith(InsightError);
     // });
-    //
+
     // it("Shouldn't add invalid dataset with wrong naming convention - whitespace", function () {
     //     const id: string = "      ";
     //     const expected: string[] = [id];
@@ -602,7 +600,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //     );
     //     return expect(futureResult).to.be.rejectedWith(InsightError);
     // });
-    //
+
     // it("Shouldn't add invalid dataset with wrong naming convention - bad formatting", function () {
     //     const id: string = "/courses/courses/courses";
     //     const expected: string[] = [id];
@@ -613,7 +611,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //     );
     //     return expect(futureResult).to.be.rejectedWith(InsightError);
     // });
-    //
+
     // it("Shouldn't add invalid dataset - null", function () {
     //     const id: string = null;
     //     const expected: string[] = [id];
@@ -624,7 +622,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //     );
     //     return expect(futureResult).to.be.rejectedWith(InsightError);
     // });
-    //
+
     // it("Shouldn't add invalid dataset with wrong parameters - 1st", function () {
     //     const id: string = "courses";
     //     const expected: string[] = [id];
@@ -635,7 +633,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //     );
     //     return expect(futureResult).to.be.rejectedWith(InsightError);
     // });
-    //
+
     // it("Shouldn't add invalid dataset with wrong parameters - 2nd version 1", function () {
     //     const id: string = "courses";
     //     const expected: string[] = [id];
@@ -646,7 +644,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //     );
     //     return expect(futureResult).to.be.rejectedWith(InsightError);
     // });
-    //
+
     // it("Shouldn't add invalid dataset with wrong parameters - 2nd version 2", function () {
     //     const id: string = "courses";
     //     const expected: string[] = [id];
@@ -657,7 +655,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //     );
     //     return expect(futureResult).to.be.rejectedWith(InsightError);
     // });
-    //
+
     // it("Shouldn't add invalid dataset with wrong parameters - 3rd", function () {
     //     const id: string = "courses";
     //     const expected: string[] = [id];
@@ -668,7 +666,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //     );
     //     return expect(futureResult).to.be.rejectedWith(InsightError);
     // });
-    //
+
     // it("Shouldn't add invalid dataset with wrong parameters - all", function () {
     //     const id: string = "courses";
     //     const expected: string[] = [id];
@@ -679,7 +677,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //     );
     //     return expect(futureResult).to.be.rejectedWith(InsightError);
     // });
-    //
+
     // it("Shouldn't add invalid dataset with wrong parameters - all", function () {
     //     const id: string = "courses";
     //     const expected: string[] = [id];
@@ -690,7 +688,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //     );
     //     return expect(futureResult).to.be.rejectedWith(InsightError);
     // });
-    //
+
     // it("Shouldn't add invalid dataset - parameters wrong", function () {
     //     const id: string = "courses";
     //     const expected: string[] = [id];
@@ -701,7 +699,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //     );
     //     return expect(futureResult).to.be.rejectedWith(InsightError);
     // });
-    //
+
     // it("Shouldn't add invalid dataset that hasn't been loaded", function () {
     //     const id: string = "coursesAtUBC";
     //     const expected: string[] = [id];
@@ -712,7 +710,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //     );
     //     return expect(futureResult).to.be.rejectedWith(InsightError);
     // });
-    //
+
     // it("Shouldn't add invalid dataset - invalid format", function () {
     //     const id: string = "AANB500";
     //     const expected: string[] = [id];
@@ -723,7 +721,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //     );
     //     return expect(futureResult).to.be.rejectedWith(InsightError);
     // });
-    //
+
     // it("Shouldn't add invalid dataset - invalid format by courses not being JSON files", function () {
     //     const id: string = "courses-textfiles";
     //     const expected: string[] = [id];
@@ -734,7 +732,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //     );
     //     return expect(futureResult).to.be.rejectedWith(InsightError);
     // });
-    //
+
     // it("Shouldn't add invalid dataset - invalid info of courses in JSON files", function () {
     //     const id: string = "courses-JSONbadinfo";
     //     const expected: string[] = [id];
@@ -745,7 +743,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //     );
     //     return expect(futureResult).to.be.rejectedWith(InsightError);
     // });
-    //
+
     // it("Shouldn't add invalid dataset - no file called 'courses' in zip", function () {
     //     const id: string = "courses123";
     //     const expected: string[] = [id];
@@ -756,7 +754,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //     );
     //     return expect(futureResult).to.be.rejectedWith(InsightError);
     // });
-    //
+
     // it("Should add dataset valid dataset then reject one with same name", function () {
     //     let id: string = "courses";
     //     const expected: string[] = [id];
@@ -775,8 +773,8 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //         return expect(futureResult).to.be.rejectedWith(InsightError);
     //     });
     // });
-    //
-    //
+
+
     // it("Should add dataset valid dataset then reject invalid one", function () {
     //     let id: string = "courses";
     //     const expected: string[] = [id];
@@ -795,7 +793,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //         return expect(futureResult).to.be.rejectedWith(InsightError);
     //     });
     // });
-    //
+
     // it("Should reject dataset invalid dataset then accept valid one", function () {
     //     let id: string = "courses-textfiles";
     //     const expected: string[] = [id];
@@ -814,32 +812,32 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //         return expect(futureResult).to.eventually.deep.equal(expected);
     //     });
     // });
-    //
+
     // it("Should not remove valid dataset not in list", function () {
     //     let futureResult: Promise<string> = insightFacade.removeDataset("courses");
     //     return expect(futureResult).to.be.rejectedWith(NotFoundError);
     // });
-    //
+
     // it("Should not remove invalid dataset not in list", function () {
     //     let futureResult: Promise<string> = insightFacade.removeDataset("/courses/courses/");
     //     return expect(futureResult).to.be.rejectedWith(InsightError);
     // });
-    //
+
     // it("Should not remove invalid dataset - invalid dataset", function () {
     //     let futureResult: Promise<string> = insightFacade.removeDataset("courses-textfiles");
     //     return expect(futureResult).to.be.rejectedWith(InsightError);
     // });
-    //
+
     // it("Should not remove invalid dataset that is not on list - bad files", function () {
     //     let futureResult: Promise<string> = insightFacade.removeDataset("courses123");
     //     return expect(futureResult).to.be.rejectedWith(InsightError);
     // });
-    //
+
     // it("Should not remove invalid dataset - null", function () {
     //     let futureResult: Promise<string> = insightFacade.removeDataset(null);
     //     return expect(futureResult).to.be.rejectedWith(InsightError);
     // });
-    //
+
     // it("Should not remove invalid dataset - bad naming - underscore", function () {
     //     let id: string = "courses";
     //     let expected: string[] = [id];
@@ -854,7 +852,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //         return expect(futureResult2).to.be.rejectedWith(InsightError);
     //     });
     // });
-    //
+
     // it("Should not remove invalid dataset - bad naming - whitespace", function () {
     //     let id: string = "courses";
     //     let expected: string[] = [id];
@@ -869,7 +867,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //         return expect(futureResult2).to.be.rejectedWith(InsightError);
     //     });
     // });
-    //
+
     // it("Should not remove invalid dataset that is spelled wrong", function () {
     //     let id: string = "courses";
     //     let expected: string[] = [id];
@@ -884,7 +882,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //         return expect(futureResult2).to.be.rejectedWith(NotFoundError);
     //     });
     // });
-    //
+
     // it("Should remove valid dataset", function () {
     //     let id: string = "courses";
     //     let expected: string[] = [id];
@@ -900,7 +898,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //          return expect(removeFutureResult).to.eventually.deep.equal(removeExpected);
     //     });
     // });
-    //
+
     // it("Should remove first dataset out of list of 2", function () {
     //     let id: string = "courses";
     //     let expected: string[] = [id];
@@ -928,7 +926,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //         });
     //     });
     // });
-    //
+
     // it("Should remove 2nd dataset out of list of 2", function () {
     //     let id: string = "courses";
     //     let expected: string[] = [id];
@@ -956,79 +954,80 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //         });
     //     });
     // });
-    //
-    it("List datasets with 1 set", function () {
-        const id: string = "courses";
-        const expectedKind: InsightDatasetKind = InsightDatasetKind.Courses;
-        const expectedNumRow: number = 64612;
-        const tempResult: Promise<string[]> = insightFacade.addDataset(
-            id,
-            datasets[id],
-            InsightDatasetKind.Courses,
-        );
-        return expect(tempResult).to.eventually.deep.equal([id]).then(() => {
-            const futureResult: Promise<InsightDataset[]> = insightFacade.listDatasets();
-            return futureResult.then((result: InsightDataset[]) => {
-                expect(result[0]).to.have.property("id", id);
-                expect(result[0]).to.have.property("kind", expectedKind);
-                expect(result[0]).to.have.property("numRows", expectedNumRow);
-            });
-        });
-    });
 
-    it("List datasets with 1 or more sets", function () {
-        const id1: string = "courses";
-        const expectedKind1: InsightDatasetKind = InsightDatasetKind.Courses;
-        const expectedNumRow1: number = 64612;
-        let tempResult: Promise<string[]> = insightFacade.addDataset(
-            id1,
-            datasets[id1],
-            InsightDatasetKind.Courses,
-        );
-        return expect(tempResult).to.eventually.deep.equal([id1]).then(() => {
-            const id2: string = "multipleCourseSections";
-            const expectedKind2: InsightDatasetKind = InsightDatasetKind.Courses;
-            const expectedNumRow2: number = 22;
-            tempResult = insightFacade.addDataset(
-                id2,
-                datasets[id2],
-                InsightDatasetKind.Courses,
-            );
-            return expect(tempResult).to.eventually.deep.equal(["courses", id2]).then(() => {
-                const futureResult: Promise<InsightDataset[]> = insightFacade.listDatasets();
-                return futureResult.then((result: InsightDataset[]) => {
-                    expect(result[0]).to.have.property("id", id1);
-                    expect(result[0]).to.have.property("kind", expectedKind1);
-                    expect(result[0]).to.have.property("numRows", expectedNumRow1);
-                    expect(result[1]).to.have.property("id", id2);
-                    expect(result[1]).to.have.property("kind", expectedKind2);
-                    expect(result[1]).to.have.property("numRows", expectedNumRow2);
-                });
-            });
-        });
-    });
+    // it("List datasets with 1 set", function () {
+    //     const id: string = "courses";
+    //     const expectedID: string[] = [id];
+    //     const expectedKind: InsightDatasetKind = InsightDatasetKind.Courses;
+    //     const expectedNumRow: number = 64612;
+    //     const tempResult: Promise<string[]> = insightFacade.addDataset(
+    //         id,
+    //         datasets[id],
+    //         InsightDatasetKind.Courses,
+    //     );
+    //     return expect(tempResult).to.eventually.deep.equal([id]).then(() => {
+    //         const futureResult: Promise<InsightDataset[]> = insightFacade.listDatasets();
+    //         return futureResult.then((result: InsightDataset[]) => {
+    //             expect(result[0].id).to.have.property("id", expectedID);
+    //             expect(result[0].kind).to.have.property("kind", expectedKind);
+    //             expect(result[0].numRows).to.have.property("numRows", expectedNumRow);
+    //         });
+    //     });
+    // });
 
-    it("List datasets with no sets", function () {
-        const expected: InsightDataset[] = [];
-        const futureResult: Promise<InsightDataset[]> = insightFacade.listDatasets();
-        return expect(futureResult).to.eventually.deep.equal(expected);
-    });
-    //
+    // it("List datasets with 1 or more sets", function () {
+    //     const id1: string = "courses";
+    //     const expectedKind1: InsightDatasetKind = InsightDatasetKind.Courses;
+    //     const expectedNumRow1: number = 64612;
+    //     let tempResult: Promise<string[]> = insightFacade.addDataset(
+    //         id1,
+    //         datasets[id1],
+    //         InsightDatasetKind.Courses,
+    //     );
+    //     return expect(tempResult).to.eventually.deep.equal([id1]).then(() => {
+    //         const id2: string = "courses-small";
+    //         const expectedKind2: InsightDatasetKind = InsightDatasetKind.Courses;
+    //         const expectedNumRow2: number = 2;
+    //         tempResult = insightFacade.addDataset(
+    //             id2,
+    //             datasets[id2],
+    //             InsightDatasetKind.Courses,
+    //         );
+    //         return expect(tempResult).to.eventually.deep.equal(["courses", id2]).then(() => {
+    //             const futureResult: Promise<InsightDataset[]> = insightFacade.listDatasets();
+    //             return futureResult.then((result: InsightDataset[]) => {
+    //                 expect(result[0].id).to.have.property("id", id1);
+    //                 expect(result[0].kind).to.have.property("kind", expectedKind1);
+    //                 expect(result[0].numRows).to.have.property("numRows", expectedNumRow1);
+    //                 expect(result[1].id).to.have.property("id", id2);
+    //                 expect(result[1].kind).to.have.property("kind", expectedKind2);
+    //                 expect(result[1].numRows).to.have.property("numRows", expectedNumRow2);
+    //             });
+    //         });
+    //     });
+    // });
+
+    // it("List datasets with no sets", function () {
+    //     const expected: InsightDataset[] = [];
+    //     const futureResult: Promise<InsightDataset[]> = insightFacade.listDatasets();
+    //     return expect(futureResult).to.eventually.deep.equal(expected);
+    // });
+
     // it("Should not query valid dataset not added yet", function () {
     //     const futureResult: Promise<any[]> = insightFacade.performQuery("courses");
     //     return expect(futureResult).to.be.rejectedWith(InsightError);
     // });
-    //
+
     // it("Should not query null", function () {
     //     const futureResult: Promise<any[]> = insightFacade.performQuery(null);
     //     return expect(futureResult).to.be.rejectedWith(InsightError);
     // });
-    //
+
     // it("Should not query invalid dataset - bad naming", function () {
     //     const futureResult: Promise<any[]> = insightFacade.performQuery("courses_");
     //     return expect(futureResult).to.be.rejectedWith(InsightError);
     // });
-    //
+
     // it("Should not query invalid dataset - files not valid", function () {
     //     const futureResult: Promise<any[]> = insightFacade.performQuery("courses-textfiles");
     //     return expect(futureResult).to.be.rejectedWith(InsightError);
@@ -1040,67 +1039,67 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
  * You should not need to modify it; instead, add additional files to the queries directory.
  * You can still make tests the normal way, this is just a convenient tool for a majority of queries.
  */
-describe("InsightFacade PerformQuery", () => {
-    const datasetsToQuery: {
-        [id: string]: { path: string; kind: InsightDatasetKind };
-    } = {
-        courses: {
-            path: "./test/data/courses.zip",
-            kind: InsightDatasetKind.Courses
-        },
-        oneCourseSection: {
-            path: "./test/data/oneCourseSection.zip",
-            kind: InsightDatasetKind.Courses
-        },
-        multipleCourseSections: {
-            path: "./test/data/multipleCourseSections.zip",
-            kind: InsightDatasetKind.Courses
-        },
-    };
-    let insightFacade: InsightFacade;
-    let testQueries: ITestQuery[] = [];
+// describe("InsightFacade PerformQuery", () => {
+//     const datasetsToQuery: {
+//         [id: string]: { path: string; kind: InsightDatasetKind };
+//     } = {
+//         courses: {
+//             path: "./test/data/courses.zip",
+//             kind: InsightDatasetKind.Courses
+//         },
+//         oneCourseSection: {
+//             path: "./test/data/oneCourseSection.zip",
+//             kind: InsightDatasetKind.Courses
+//         },
+//         multipleCourseSections: {
+//             path: "./test/data/multipleCourseSections.zip",
+//             kind: InsightDatasetKind.Courses
+//         },
+//     };
+//     let insightFacade: InsightFacade;
+//     let testQueries: ITestQuery[] = [];
 
-    // Load all the test queries, and call addDataset on the insightFacade instance for all the datasets
-    before(function () {
-        Log.test(`Before: ${this.test.parent.title}`);
+//     // Load all the test queries, and call addDataset on the insightFacade instance for all the datasets
+//     before(function () {
+//         Log.test(`Before: ${this.test.parent.title}`);
 
-        // Load the query JSON files under test/queries.
-        // Fail if there is a problem reading ANY query.
-        try {
-            testQueries = TestUtil.readTestQueries();
-        } catch (err) {
-            expect.fail(
-                "",
-                "",
-                `Failed to read one or more test queries. ${err}`,
-            );
-        }
+//         // Load the query JSON files under test/queries.
+//         // Fail if there is a problem reading ANY query.
+//         try {
+//             testQueries = TestUtil.readTestQueries();
+//         } catch (err) {
+//             expect.fail(
+//                 "",
+//                 "",
+//                 `Failed to read one or more test queries. ${err}`,
+//             );
+//         }
 
-        // Load the datasets specified in datasetsToQuery and add them to InsightFacade.
-        // Will fail* if there is a problem reading ANY dataset.
-        const loadDatasetPromises: Array<Promise<string[]>> = [];
-        insightFacade = new InsightFacade();
-        for (const id of Object.keys(datasetsToQuery)) {
-            const ds = datasetsToQuery[id];
-            const data = fs.readFileSync(ds.path).toString("base64");
-            loadDatasetPromises.push(
-                insightFacade.addDataset(id, data, ds.kind),
-            );
-        }
-        return Promise.all(loadDatasetPromises);
-    });
+//         // Load the datasets specified in datasetsToQuery and add them to InsightFacade.
+//         // Will fail* if there is a problem reading ANY dataset.
+//         const loadDatasetPromises: Array<Promise<string[]>> = [];
+//         insightFacade = new InsightFacade();
+//         for (const id of Object.keys(datasetsToQuery)) {
+//             const ds = datasetsToQuery[id];
+//             const data = fs.readFileSync(ds.path).toString("base64");
+//             loadDatasetPromises.push(
+//                 insightFacade.addDataset(id, data, ds.kind),
+//             );
+//         }
+//         return Promise.all(loadDatasetPromises);
+//     });
 
-    beforeEach(function () {
-        Log.test(`BeforeTest: ${this.currentTest.title}`);
-    });
+//     beforeEach(function () {
+//         Log.test(`BeforeTest: ${this.currentTest.title}`);
+//     });
 
-    after(function () {
-        Log.test(`After: ${this.test.parent.title}`);
-    });
+//     after(function () {
+//         Log.test(`After: ${this.test.parent.title}`);
+//     });
 
-    afterEach(function () {
-        Log.test(`AfterTest: ${this.currentTest.title}`);
-    });
+//     afterEach(function () {
+//         Log.test(`AfterTest: ${this.currentTest.title}`);
+//     });
 
 //     // ------------------------------ InsightFacade.performQuery() ------------------------------
 //     // Dynamically create and run a test for each query in testQueries

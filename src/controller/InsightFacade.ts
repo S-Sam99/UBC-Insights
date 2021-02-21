@@ -8,6 +8,7 @@ import AddCourseDatasetHelper from "../helper/AddCourseDatasetHelper";
 import PerformQueryHelper from "../helper/PerformQueryHelper";
 import { fstat } from "fs-extra";
 import * as fs from "fs-extra";
+import RemoveDatasetHelper from "../helper/RemoveDatasetHelper";
 import { files } from "jszip";
 import CourseDataset from "../controller/CourseDataset";
 import ListDatasetHelper from "../helper/ListDatasetHelper";
@@ -109,7 +110,15 @@ export default class InsightFacade implements IInsightFacade {
      * that subsequent queries for that id should fail unless a new addDataset happens first.
      */
     public removeDataset(id: string): Promise<string> {
-        return Promise.reject("Not implemented.");
+        if (ValidationHelper.isValidIdforRemove(id)) {
+            if (!ValidationHelper.isValidIDNotOnDisk(id)) {
+                 return RemoveDatasetHelper.removeDataset(id);
+            } else {
+                return Promise.reject(new NotFoundError(Constants.DATASET_NOT_YET_ADDED));
+            }
+        } else {
+            return Promise.reject(new InsightError(`${Constants.INVALID_ID} ${id}`));
+    }
     }
 
     /**
