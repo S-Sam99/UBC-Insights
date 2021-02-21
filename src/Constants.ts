@@ -74,31 +74,48 @@ enum FILTER_OPERATIONS {
     Negation = "NEGATION"
 }
 
+enum FILTER_FUNCTIONS {
+    And = "AND",
+    Or = "OR",
+    LessThan = "LESS THAN",
+    GreaterThan = "GREATER THAN",
+    Equal = "EQUAL",
+    Is = "IS",
+    Negation = "NEGATION"
+}
+
 const FILTERS: any = {
     AND: {
-        operation: FILTER_OPERATIONS.Logic
+        operation: FILTER_OPERATIONS.Logic,
+        function: FILTER_FUNCTIONS.And
     },
     OR: {
-        operation: FILTER_OPERATIONS.Logic
+        operation: FILTER_OPERATIONS.Logic,
+        function: FILTER_FUNCTIONS.Or
     },
     LT: {
         operation: FILTER_OPERATIONS.MComparison,
-        key: MKEYS
+        key: MKEYS,
+        function: FILTER_FUNCTIONS.LessThan
     },
     GT: {
         operation: FILTER_OPERATIONS.MComparison,
-        key: MKEYS
+        key: MKEYS,
+        function: FILTER_FUNCTIONS.GreaterThan
     },
     EQ: {
         operation: FILTER_OPERATIONS.MComparison,
-        key: MKEYS
+        key: MKEYS,
+        function: FILTER_FUNCTIONS.Equal
     },
     IS: {
         operation: FILTER_OPERATIONS.SComparison,
-        key: SKEYS
+        key: SKEYS,
+        function: FILTER_FUNCTIONS.Is
     },
     NOT: {
-        operation: FILTER_OPERATIONS.Negation
+        operation: FILTER_OPERATIONS.Negation,
+        function: FILTER_FUNCTIONS.Negation
     }
 };
 
@@ -154,6 +171,10 @@ export default class Constants {
 
     public static get FILTER_OPERATIONS() {
         return FILTER_OPERATIONS;
+    }
+
+    public static get FILTER_FUNCTIONS() {
+        return FILTER_FUNCTIONS;
     }
 
     public static get REQUIRED_DIR() {

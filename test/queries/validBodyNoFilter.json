@@ -1,20 +1,18 @@
 {
     "title": "SELECT dept",
     "query": {
-        "WHERE": {
-            "WHERE": {},
-            "OPTIONS": {
-                "COLUMNS": [
-                    "oneCourseSection_dept"
-                ],
-                "ORDER": "oneCourseSection_dept"
-            }
+        "WHERE": {},
+        "OPTIONS": {
+            "COLUMNS": [
+                "oneCourseSection_dept"
+            ],
+            "ORDER": "oneCourseSection_dept"
         }
     },
     "isQueryValid": true,
     "result": [
         {
-            "courses_dept": "cpsc"
+            "oneCourseSection_dept": "cpsc"
         }
     ]
 }

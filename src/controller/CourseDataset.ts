@@ -1,22 +1,17 @@
 import Constants from "../Constants";
-import Course from "./Course";
-import Category from "./Category";
+import CourseSection from "./CourseSection";
 
 /**
  * CourseDataset Class
  */
 export default class CourseDataset {
     public id: string;
-    public departments: any;
-    public courseNumbers: any;
-    public allCourses: Course[];
+    public allCourseSections: CourseSection[];
     public numRows: number;
 
     constructor(datasetId: string, dataset: string[]) {
         this.id = datasetId;
-        this.departments = {};
-        this.courseNumbers = {};
-        this.allCourses = [];
+        this.allCourseSections = [];
         this.numRows = 0;
 
         if (dataset.length > 0) {
@@ -25,29 +20,20 @@ export default class CourseDataset {
     }
 
     private parseDataset(dataset: string[]) {
-        const courseSectionFieldMapping = Constants.KEY_MAP;
+        const courseSectionFieldMapping: object = Constants.KEY_MAP;
 
         for (const fileData of dataset) {
             const courseData: any = JSON.parse(fileData);
             if (Object.keys(courseData).length > 0 && courseData.hasOwnProperty("result")) {
-                const course = new Course(this.id, courseData.result, courseSectionFieldMapping);
-                if (course.courseSections.length > 0) {
-                    this.numRows += course.numRows;
-                    CourseDataset.setCourseToCategory(course, course.department, this.departments);
-                    CourseDataset.setCourseToCategory(course, course.id, this.courseNumbers);
-                    this.allCourses.push(course);
+                const results: object[] = courseData.result;
+                for (let courseSectionData of results) {
+                    const courseSection = new CourseSection(this.id, courseSectionData, courseSectionFieldMapping);
+                    if (courseSection.isValid) {
+                        this.numRows++;
+                        this.allCourseSections.push(courseSection);
+                    }
                 }
             }
-        }
-    }
-
-    private static setCourseToCategory(course: Course, key: string, category: any) {
-        if (category.hasOwnProperty(key)) {
-            category[`${key}`].addCourse(course);
-        } else {
-            let cat = new Category(key);
-            cat.addCourse(course);
-            category[`${key}`] = cat;
         }
     }
 }
