@@ -33,6 +33,7 @@ export default class ValidationHelper {
         } else {
             return true;
         }
+    }
 
     public static isValidQuery(query: any): boolean {
         if (!query) {
