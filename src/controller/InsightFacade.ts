@@ -1,7 +1,17 @@
 import Log from "../Util";
-import {IInsightFacade, InsightDataset, InsightDatasetKind} from "./IInsightFacade";
-import {InsightError, NotFoundError} from "./IInsightFacade";
+import {IInsightFacade, InsightDataset, InsightDatasetKind, ResultTooLargeError} from "./IInsightFacade";
+import {InsightError} from "./IInsightFacade";
 import * as JSZip from "jszip";
+import Constants from "../Constants";
+import ValidationHelper from "../helper/ValidationHelper";
+import AddCourseDatasetHelper from "../helper/AddCourseDatasetHelper";
+import PerformQueryHelper from "../helper/PerformQueryHelper";
+import { fstat } from "fs-extra";
+import * as fs from "fs-extra";
+import RemoveDatasetHelper from "../helper/RemoveDatasetHelper";
+import { files } from "jszip";
+import CourseDataset from "../controller/CourseDataset";
+import ListDatasetHelper from "../helper/ListDatasetHelper";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -15,38 +25,6 @@ export default class InsightFacade implements IInsightFacade {
         Log.trace("InsightFacadeImpl::init()");
         this.courseDatasets = {};
     }
-
-    /** courseDatasets: {
-     *      courses: {
-     *          "CPSC": {
-     *              "310": [
-     *                  {
-     *                      "dept": "",
-     *                      "avg": ""
-     *                  },
-     *                  {
-     *                      "dept": "",
-     *                      "avg": ""
-     *                  }
-     *              ]
-     *          }
-     *      },
-     *      oneCourseSection: {
-     *          "CPSC": {
-     *              "310": [
-     *                  {
-     *                      "dept": "",
-     *                      "avg": ""
-     *                  },
-     *                  {
-     *                      "dept": "",
-     *                      "avg": ""
-     *                  }
-     *              ]
-     *          }
-     *      }
-     * }
-     */
 
     /**
      * Add a dataset to insightUBC.
@@ -74,135 +52,42 @@ export default class InsightFacade implements IInsightFacade {
      * be successfully answered.
      */
     public addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
-        if (this.isValidId(id)) {
-            JSZip.loadAsync(content, {base64: true})
-                .then((data) => {
-                    if (data["files"].hasOwnProperty("courses/")) {
-                        const courseDataset: any = InsightFacade.generateCourseDataset(id, data);
-                        if (courseDataset) {
-                            this.courseDatasets[id] = courseDataset;
-                        }
+        if (ValidationHelper.isValidIDNotOnDisk(id)) {
+            if (ValidationHelper.isValidId(id)) {
+                if (ValidationHelper.isValidCourseKind(kind)) {
+                    if (ValidationHelper.isValidContent(content)) {
+                        return this.unzipCourseDataset(id, content);
+                    } else {
+                        return Promise.reject(new InsightError(Constants.INVALID_CONTENT));
                     }
-                })
-                .then(() => {
-                    /* eslint-disable no-console */
-                    console.log(this.courseDatasets);
-                    /* eslint-enable no-console */
-                });
-            return Promise.reject("Not implemented.");
-        }
-        return Promise.reject("Not implemented.");
-    }
-
-    private isValidId(id: string): boolean {
-        if (!id) {
-            return false;
-        }
-
-        if (this.courseDatasets.hasOwnProperty(id)) {
-            return false;
-        }
-
-        return !id.includes("_");
-    }
-
-    private static generateCourseDataset (id: string, data: JSZip): any {
-        let promises = [];
-        let departments: any = {};
-
-        for (let filePath in data.files) {
-            const fileObj = data.files[filePath];
-
-            if (fileObj.dir === false && filePath.startsWith("courses/")) {
-                promises.push(
-                    data.files[filePath].async("string").then((fileData) => {
-                        const parsedCourseData: any = JSON.parse(fileData);
-
-                        if (InsightFacade.hasCourseSection(parsedCourseData.result)) {
-                            let courseSections: any = InsightFacade.createCourseSections(parsedCourseData.result);
-                            const department: string = InsightFacade.determineDepartment(courseSections);
-                            const course: any = {};
-                            const courseId: string = InsightFacade.determineCourseId(courseSections);
-                            course[courseId] = courseSections;
-                            let departmentCourses = [course];
-
-                            if (departments.hasOwnProperty(department)) {
-                                departmentCourses.push(departments[department]);
-                            }
-
-                            /* eslint-disable no-console */
-                            console.log(departmentCourses);
-                            /* eslint-enable no-console */
-                        }
-                    }));
-            }
-        }
-
-        return Promise.all(promises);
-    }
-
-    private static hasCourseSection(courseSections: any): boolean {
-        return (courseSections !== undefined && courseSections.length > 0);
-    }
-
-    private static createCourseSections(parsedCourseSections: any): object {
-        const keyMapping: any = InsightFacade.generateKeyMapping();
-        const courseSections: any = [];
-
-        for (let parsedCourseSection of parsedCourseSections) {
-            const courseSection = InsightFacade.createCourseSection(keyMapping, parsedCourseSection);
-
-            if (courseSection) {
-                courseSections.push(courseSection);
-            }
-        }
-
-        /* eslint-disable no-console */
-        console.log(courseSections);
-        /* eslint-enable no-console */
-
-        return courseSections;
-    }
-
-    private static createCourseSection(keyMapping: any, courseSection: any): object {
-        let courseDataset: any = {};
-
-        for (let key in keyMapping) {
-            if (keyMapping.hasOwnProperty(key)) {
-                const field = keyMapping[key];
-
-                if (!field) {
-                    return null;
+                } else {
+                    return Promise.reject(new InsightError(Constants.INVALID_KIND_COURSES));
                 }
-
-                courseDataset[key] = courseSection[field];
+            } else {
+                return Promise.reject(new InsightError(`${Constants.INVALID_ID} ${id}`));
             }
-        }
-
-        return courseDataset;
+        } else {
+            return Promise.reject(new InsightError(Constants.DATASET_ALREADY_ADDED));
     }
+}
 
-    private static determineDepartment(courseSections: any): string {
-        return courseSections[0].dept;
-    }
-
-    private static determineCourseId(courseSections: any): string {
-        return courseSections[0].id;
-    }
-
-    private static generateKeyMapping(): object {
-        return {
-            dept: "Subject",
-            id: "Course",
-            avg: "Avg",
-            instructor: "Professor",
-            title: "Title",
-            pass: "Pass",
-            fail: "Fail",
-            audit: "Audit",
-            uuid: "id",
-            year: "Year"
-        };
+    private unzipCourseDataset(id: string, content: string): Promise<string[]> {
+        return JSZip.loadAsync(content, {base64: true})
+            .then((data) => {
+                if (data["files"].hasOwnProperty(Constants.REQUIRED_DIR)) {
+                    return AddCourseDatasetHelper.generateCourseDataset(id, data)
+                        .then((dataset) => {
+                            this.courseDatasets[id] = dataset;
+                            return Promise.resolve(Object.keys(this.courseDatasets));
+                        }).catch((err) => {
+                            return Promise.reject(new InsightError(err));
+                        });
+                } else {
+                    return Promise.reject(new InsightError(Constants.MISSING_COURSES_FOLDER));
+                }
+            }).catch(() => {
+                return Promise.reject(new InsightError(Constants.DATASET_NOT_ZIP));
+            });
     }
 
     /**
@@ -225,7 +110,15 @@ export default class InsightFacade implements IInsightFacade {
      * that subsequent queries for that id should fail unless a new addDataset happens first.
      */
     public removeDataset(id: string): Promise<string> {
-        return Promise.reject("Not implemented.");
+        if (ValidationHelper.isValidIdforRemove(id)) {
+            if (!ValidationHelper.isValidIDNotOnDisk(id)) {
+                 return RemoveDatasetHelper.removeDataset(id);
+            } else {
+                return Promise.reject(new NotFoundError(Constants.DATASET_NOT_YET_ADDED));
+            }
+        } else {
+            return Promise.reject(new InsightError(`${Constants.INVALID_ID} ${id}`));
+    }
     }
 
     /**
@@ -243,6 +136,19 @@ export default class InsightFacade implements IInsightFacade {
      * The promise should reject with an InsightError describing the error.
      */
     public performQuery(query: any): Promise<any[]> {
+        // if (!ValidationHelper.isValidQuery(query)) {
+        //     return Promise.reject(new InsightError("Query is incorrectly formatted."));
+        // }
+        // return PerformQueryHelper.performDatasetQuery(query)
+        //     .then((results) => {
+        //         if (results.length > Constants.MAX_RESULTS_SIZE) {
+        //             return Promise.reject(new ResultTooLargeError());
+        //         } else {
+        //             return Promise.resolve(results);
+        //         }
+        //     }).catch((err) => {
+        //         return Promise.reject(err);
+        //     });
         return Promise.reject("Not implemented.");
     }
 
@@ -253,6 +159,7 @@ export default class InsightFacade implements IInsightFacade {
      * The promise should fulfill an array of currently added InsightDatasets, and will only fulfill.
      */
     public listDatasets(): Promise<InsightDataset[]> {
-        return Promise.reject("Not implemented.");
+        const datasetList: InsightDataset[] = [];
+        return ListDatasetHelper.generateListDataset(datasetList);
     }
 }
