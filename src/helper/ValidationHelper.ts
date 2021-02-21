@@ -7,10 +7,6 @@ import PerformQueryHelper from "./PerformQueryHelper";
  * Centralized Helper Class for functions pertaining to validation purposes.
  */
 export default class ValidationHelper {
-    public static isObjectEmpty(obj: any): boolean {
-        return Object.keys(obj).length < 1;
-    }
-
     public static isValidContent(content: any) {
         return content;
     }
@@ -69,8 +65,9 @@ export default class ValidationHelper {
         return this.isValidFilterOperator(filter[keys[0]], filters[keys[0]], filters, filterOperations, datasetId);
     }
 
+    // todo: accept more than 2 keys but check if they are ONLY columns or options
     private static isValidOptions(options: any): boolean {
-        if (this.isObjectEmpty(options) || !options.hasOwnProperty("COLUMNS")) {
+        if (Object.keys(options).length < 1 || !options.hasOwnProperty("COLUMNS")) {
             return false;
         }
         const optionsKeysLength = Object.keys(options).length;

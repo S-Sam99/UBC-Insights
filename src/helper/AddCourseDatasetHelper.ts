@@ -1,8 +1,6 @@
 import Constants from "../Constants";
 import * as JSZip from "jszip";
 import * as fs from "fs-extra";
-import ValidationHelper from "./ValidationHelper";
-import Log from "../Util";
 import CourseDataset from "../controller/CourseDataset";
 
 /**
@@ -22,7 +20,7 @@ export default class AddCourseDatasetHelper {
             return Promise.all(promises).then((dataset) => {
                 let courseDataset = new CourseDataset(id, dataset);
 
-                if (!ValidationHelper.isObjectEmpty(courseDataset.courses)) {
+                if (courseDataset.allCourses.length > 0) {
                     this.persistDataToDisk(id, JSON.stringify(courseDataset));
                     return Promise.resolve(courseDataset);
                 } else {
