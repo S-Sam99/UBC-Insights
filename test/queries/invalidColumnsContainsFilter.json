@@ -1,0 +1,36 @@
+{
+    "title": "Columns Contains Filter",
+    "query": {
+        "WHERE": {
+            "AND": [
+                {
+                    "IS": {
+                        "courses_dept": "cpsc"
+                    }
+                },
+                {
+                    "IS": {
+                        "courses_id": "310"
+                    }
+                },
+                {
+                    "GT": {
+                        "courses_avg": 80
+                    }
+                }
+            ]
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                {
+                    "IS": {
+                        "courses_id": "310"
+                    }
+                }
+            ],
+            "ORDER": "courses_avg"
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

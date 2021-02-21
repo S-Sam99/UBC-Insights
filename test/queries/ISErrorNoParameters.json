@@ -1,0 +1,25 @@
+{
+    "title": "Error with IS - No Parameters",
+    "query": {
+        "WHERE": {
+            "AND": [
+                {
+                    "GT": {
+                        "courses_avg": 90
+                    }
+                },
+                {
+                    "IS": {}
+                }
+            ]
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_avg"
+            ],
+            "ORDER": "courses_avg"
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

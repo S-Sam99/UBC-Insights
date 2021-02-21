@@ -1,0 +1,34 @@
+{
+    "title": "Dataset Id Empty",
+    "query": {
+        "WHERE": {
+            "AND": [
+                {
+                    "IS": {
+                        "_dept": "cpsc"
+                    }
+                },
+                {
+                    "IS": {
+                        "_id": "310"
+                    }
+                },
+                {
+                    "GT": {
+                        "_avg": 80
+                    }
+                }
+            ]
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "_dept",
+                "_id",
+                "_avg"
+            ],
+            "ORDER": "_avg"
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

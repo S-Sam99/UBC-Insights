@@ -1,0 +1,6 @@
+{
+    "title": "Added an additional Parameter in Query",
+    "query": "{\n  \"WHERE\": {\n    \"NOT\": {\n      \"GT\": {\n        \"courses_avg\": \n      }\n    }\n  },\n  \"OPTIONS\": {\n    \"COLUMNS\": [\n      \"courses_avg\",\n      \"courses_id\"\n    ],\n    \"ORDER\": \"courses_avg\"\n  },\n    \"OPTIONS\": {\n    \"COLUMNS\": [\n      \"courses_avg\",\n      \"courses_id\"\n    ],\n    \"ORDER\": \"courses_avg\"\n  }\n}",
+    "isQueryValid": false,
+    "result": "InsightError"
+}
