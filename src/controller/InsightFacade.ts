@@ -1,5 +1,5 @@
 import Log from "../Util";
-import {IInsightFacade, InsightDataset, InsightDatasetKind, ResultTooLargeError} from "./IInsightFacade";
+import {IInsightFacade, InsightDataset, InsightDatasetKind, ResultTooLargeError, NotFoundError} from "./IInsightFacade";
 import {InsightError} from "./IInsightFacade";
 import * as JSZip from "jszip";
 import Constants from "../Constants";
