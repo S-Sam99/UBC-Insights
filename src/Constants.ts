@@ -140,6 +140,8 @@ const MISSING_COURSE_SECTION = "Missing valid course section for dataset.";
 
 const DATASET_ALREADY_ADDED = "Dataset has already been added.";
 
+const DATASET_NOT_YET_ADDED = "Dataset has not been added yet.";
+
 export default class Constants {
     public static get KEY_MAP() {
         return KEY_MAP;
@@ -211,5 +213,9 @@ export default class Constants {
 
     public static get DATASET_ALREADY_ADDED() {
         return DATASET_ALREADY_ADDED;
+    }
+
+    public static get DATASET_NOT_YET_ADDED() {
+        return DATASET_NOT_YET_ADDED;
     }
 }
