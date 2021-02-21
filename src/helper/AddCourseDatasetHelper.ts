@@ -20,7 +20,7 @@ export default class AddCourseDatasetHelper {
             return Promise.all(promises).then((dataset) => {
                 let courseDataset = new CourseDataset(id, dataset);
 
-                if (courseDataset.allCourses.length > 0) {
+                if (courseDataset.allCourseSections.length > 0) {
                     this.persistDataToDisk(id, JSON.stringify(courseDataset));
                     return Promise.resolve(courseDataset);
                 } else {

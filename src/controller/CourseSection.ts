@@ -15,14 +15,29 @@ export default class CourseSection {
         for (const key in fieldMapping) {
             if (fieldMapping.hasOwnProperty(key)) {
                 const field = fieldMapping[key];
-                const value = courseSectionData[field.name];
-
-                if (value === null || value === undefined) {
-                    this.isValid = false;
-                    break;
+                switch (field.type) {
+                    case "number": {
+                        let value: number = courseSectionData[field.name];
+                        if (value === null || value === undefined) {
+                            this.isValid = false;
+                            break;
+                        }
+                        this.data[`${datasetId}_${key}`] = value;
+                        break;
+                    }
+                    default: {
+                        const value: string = courseSectionData[field.name];
+                        if (value === null || value === undefined) {
+                            this.isValid = false;
+                            break;
+                        }
+                        this.data[`${datasetId}_${key}`] = value;
+                    }
                 }
-                this.data[`${datasetId}_${key}`] = value;
             }
+        }
+        if (courseSectionData["Section"] === "overall") {
+            this.data[`${datasetId}_year`] = 1900;
         }
     }
 }

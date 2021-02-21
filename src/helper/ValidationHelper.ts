@@ -39,12 +39,12 @@ export default class ValidationHelper {
             return false;
         }
 
-        if (!this.isValidOptions(query["OPTIONS"])) {
+        if (!this.isValidOptions(query.OPTIONS)) {
             return false;
         }
-        const datasetId = PerformQueryHelper.getDatasetIdFromKey(query["OPTIONS"]["COLUMNS"][0], null);
+        const datasetId = PerformQueryHelper.getDatasetIdFromKey(query.OPTIONS.COLUMNS[0], null);
 
-        return this.isValidWhere(query["WHERE"], datasetId);
+        return this.isValidWhere(query.WHERE, datasetId);
     }
 
     private static isValidWhere(where: any, datasetId: any): boolean {
@@ -72,7 +72,6 @@ export default class ValidationHelper {
         return this.isValidFilterOperator(filter[keys[0]], filters[keys[0]], filters, filterOperations, datasetId);
     }
 
-    // todo: accept more than 2 keys but check if they are ONLY columns or options
     private static isValidOptions(options: any): boolean {
         if (Object.keys(options).length < 1 || !options.hasOwnProperty("COLUMNS")) {
             return false;
@@ -83,7 +82,7 @@ export default class ValidationHelper {
             return false;
         }
 
-        const columns = options["COLUMNS"];
+        const columns = options.COLUMNS;
 
         if (!Array.isArray(columns)) {
             return false;
@@ -110,7 +109,7 @@ export default class ValidationHelper {
         filterOperations: any,
         datasetId: any
     ): boolean {
-        switch (filter["operation"]) {
+        switch (filter.operation) {
             case filterOperations.Logic: {
                 return this.isValidLogicFilter(parameters, filters, filterOperations, datasetId);
             }
@@ -174,10 +173,10 @@ export default class ValidationHelper {
         }
 
         if (type === "M") {
-            return filter["key"].includes(keyWithoutId) && Number.isFinite(parameters[keys[0]]);
+            return filter.key.includes(keyWithoutId) && Number.isFinite(parameters[keys[0]]);
         } else {
             const input = parameters[keys[0]];
-            if (!(filter["key"].includes(keyWithoutId) && (typeof input === "string"))) {
+            if (!(filter.key.includes(keyWithoutId) && (typeof input === "string"))) {
                 return false;
             }
             return this.isValidInputString(input);
@@ -239,13 +238,13 @@ export default class ValidationHelper {
 
     private static isOrderKeyInColumns(options: any): boolean {
         if (options.hasOwnProperty("ORDER")) {
-            const order = options["ORDER"];
+            const order = options.ORDER;
 
             if (!(typeof order === "string")) {
                 return false;
             }
 
-            if (!options["COLUMNS"].includes(order)) {
+            if (!options.COLUMNS.includes(order)) {
                 return false;
             }
         }
