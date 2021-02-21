@@ -2,19 +2,54 @@
  * Centralized location for constants.
  */
 const KEY_MAP = {
-    dept: "Subject",
-    id: "Course",
-    avg: "Avg",
-    instructor: "Professor",
-    title: "Title",
-    pass: "Pass",
-    fail: "Fail",
-    audit: "Audit",
-    uuid: "id",
-    year: "Year"
+    dept: {
+        name: "Subject",
+        type: "string"
+    },
+    id: {
+        name: "Course",
+        type: "string"
+    },
+    avg: {
+        name: "Avg",
+        type: "number"
+    },
+    instructor: {
+        name: "Professor",
+        type: "string"
+    },
+    title: {
+        name: "Title",
+        type: "string"
+    },
+    pass: {
+        name: "Pass",
+        type: "number"
+    },
+    fail: {
+        name: "Fail",
+        type: "number"
+    },
+    audit: {
+        name: "Audit",
+        type: "number"
+    },
+    uuid: {
+        name: "id",
+        type: "string"
+    },
+    year: {
+        name: "Year",
+        type: "number"
+    }
 };
 
 const REQUIRED_DIR = "courses/";
+
+const MAX_RESULTS_SIZE = 5000;
+
+const QUERY_RESULT_TOO_LARGE =
+    `The result is too big. Only queries with a maximum of ${MAX_RESULTS_SIZE} results are supported.`;
 
 const MKEYS = [
     "avg",
@@ -93,6 +128,14 @@ const DATASET_NOT_YET_ADDED = "Dataset has not been added yet.";
 export default class Constants {
     public static get KEY_MAP() {
         return KEY_MAP;
+    }
+
+    public static get MAX_RESULTS_SIZE() {
+        return MAX_RESULTS_SIZE;
+    }
+
+    public static get QUERY_RESULT_TOO_LARGE() {
+        return QUERY_RESULT_TOO_LARGE;
     }
 
     public static get MKEYS() {
