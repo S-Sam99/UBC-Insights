@@ -1,25 +1,18 @@
 import {InsightDatasetKind} from "../controller/IInsightFacade";
 import * as fs from "fs-extra";
 import Constants from "../Constants";
-import Log from "../Util";
+import PerformQueryHelper from "./PerformQueryHelper";
 
 /**
- * Localized Helper Class for functions pertaining to validation purposes.
+ * Centralized Helper Class for functions pertaining to validation purposes.
  */
 export default class ValidationHelper {
-    public static isObjectEmpty(obj: any): boolean {
-        return Object.keys(obj).length < 1;
-    }
-
     public static isValidContent(content: any) {
         return content;
     }
 
-    public static isValidId(id: string, dataset: any): boolean {
-        if (!id || id.includes("_") || !id.trim().length) {
-            return false;
-        }
-        return !dataset.hasOwnProperty(id);
+    public static isValidId(id: string): boolean {
+        return !(!id || id.includes("_") || !id.trim().length);
     }
 
     public static isValidCourseKind(kind: InsightDatasetKind) {
@@ -28,11 +21,7 @@ export default class ValidationHelper {
 
     public static isValidIDNotOnDisk(id: string): boolean {
         const path = "./data";
-        if (fs.existsSync(`${path}/${id}`)) {
-            return false;
-        } else {
-            return true;
-        }
+        return !fs.existsSync(`${path}/${id}`);
     }
 
     public static isValidQuery(query: any): boolean {
@@ -46,7 +35,7 @@ export default class ValidationHelper {
         if (!this.isValidOptions(query["OPTIONS"])) {
             return false;
         }
-        const datasetId = this.getDatasetIdFromKey(query["OPTIONS"]["COLUMNS"][0], null);
+        const datasetId = PerformQueryHelper.getDatasetIdFromKey(query["OPTIONS"]["COLUMNS"][0], null);
 
         return this.isValidWhere(query["WHERE"], datasetId);
     }
@@ -76,8 +65,9 @@ export default class ValidationHelper {
         return this.isValidFilterOperator(filter[keys[0]], filters[keys[0]], filters, filterOperations, datasetId);
     }
 
+    // todo: accept more than 2 keys but check if they are ONLY columns or options
     private static isValidOptions(options: any): boolean {
-        if (this.isObjectEmpty(options) || !options.hasOwnProperty("COLUMNS")) {
+        if (Object.keys(options).length < 1 || !options.hasOwnProperty("COLUMNS")) {
             return false;
         }
         const optionsKeysLength = Object.keys(options).length;
@@ -164,15 +154,15 @@ export default class ValidationHelper {
         }
 
         const keyWithId = Object.keys(parameters)[0];
-        const underscorePos = this.getUnderscorePosFromKey(keyWithId);
+        const underscorePos = PerformQueryHelper.getUnderscorePosFromKey(keyWithId);
 
         if (underscorePos === -1) {
             return false;
         }
 
-        const keyWithoutId = this.getParsedKey(keyWithId, underscorePos);
+        const keyWithoutId = PerformQueryHelper.getParsedKey(keyWithId, underscorePos);
 
-        if (this.getDatasetIdFromKey(keyWithId, underscorePos) !== datasetId) {
+        if (PerformQueryHelper.getDatasetIdFromKey(keyWithId, underscorePos) !== datasetId) {
             return false;
         }
 
@@ -198,21 +188,6 @@ export default class ValidationHelper {
         return false;
     }
 
-    private static getParsedKey(key: string, underscorePos: number): string {
-        return key.substring(underscorePos + 1, key.length);
-    }
-
-    private static getUnderscorePosFromKey(key: string): number {
-        return key.indexOf("_");
-    }
-
-    private static getDatasetIdFromKey(key: string, underscorePos: number): string {
-        if (!underscorePos) {
-            underscorePos = this.getUnderscorePosFromKey(key);
-        }
-        return key.substring(0, underscorePos);
-    }
-
     private static hasRequiredQueryKeys(query: any): boolean {
         if (Object.keys(query).length !== 2) {
             return false;
@@ -227,9 +202,9 @@ export default class ValidationHelper {
     }
 
     private static isColumnsReferencingOneDataset(columns: any): boolean {
-        const firstDataset = this.getFirstDatasetId(columns);
+        const firstDataset = PerformQueryHelper.getFirstDatasetId(columns);
 
-        if (!firstDataset) {
+        if (!firstDataset || this.isValidId(firstDataset) && this.isValidIDNotOnDisk(firstDataset)) {
             return false;
         }
 
@@ -241,26 +216,18 @@ export default class ValidationHelper {
                 return false;
             }
 
-            const underscorePos = this.getUnderscorePosFromKey(key);
-            const keyWithoutId: string = this.getParsedKey(key, underscorePos);
+            const underscorePos = PerformQueryHelper.getUnderscorePosFromKey(key);
+            const keyWithoutId: string = PerformQueryHelper.getParsedKey(key, underscorePos);
 
             if (!allKeys.includes(keyWithoutId)) {
                 return false;
             }
 
-            if (firstDataset !== this.getDatasetIdFromKey(key, underscorePos)) {
+            if (firstDataset !== PerformQueryHelper.getDatasetIdFromKey(key, underscorePos)) {
                 return false;
             }
         }
         return true;
-    }
-
-    private static getFirstDatasetId(columns: any): string {
-        if (!(typeof columns[0] === "string")) {
-            return null;
-        }
-
-        return this.getDatasetIdFromKey(columns[0], null);
     }
 
     private static isOrderKeyInColumns(options: any): boolean {
