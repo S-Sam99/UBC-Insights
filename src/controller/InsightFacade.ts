@@ -85,7 +85,7 @@ export default class InsightFacade implements IInsightFacade {
                 } else {
                     return Promise.reject(new InsightError(Constants.MISSING_COURSES_FOLDER));
                 }
-            }).catch(() => {
+            }).catch((err) => {
                 return Promise.reject(new InsightError(Constants.DATASET_NOT_ZIP));
             });
     }
@@ -136,20 +136,15 @@ export default class InsightFacade implements IInsightFacade {
      * The promise should reject with an InsightError describing the error.
      */
     public performQuery(query: any): Promise<any[]> {
-        // if (!ValidationHelper.isValidQuery(query)) {
-        //     return Promise.reject(new InsightError("Query is incorrectly formatted."));
-        // }
-        // return PerformQueryHelper.performDatasetQuery(query)
-        //     .then((results) => {
-        //         if (results.length > Constants.MAX_RESULTS_SIZE) {
-        //             return Promise.reject(new ResultTooLargeError());
-        //         } else {
-        //             return Promise.resolve(results);
-        //         }
-        //     }).catch((err) => {
-        //         return Promise.reject(err);
-        //     });
-        return Promise.reject("Not implemented.");
+        if (!ValidationHelper.isValidQuery(query)) {
+            return Promise.reject(new InsightError("Query is incorrectly formatted."));
+        }
+        return PerformQueryHelper.performDatasetQuery(query)
+            .then((results) => {
+                return Promise.resolve(results);
+            }).catch((err) => {
+                return Promise.reject(err);
+            });
     }
 
     /**

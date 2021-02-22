@@ -88,14 +88,14 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     // it("Should fulfill addition of valid dataset", function () {
     //     const id: string = "courses";
     //     const expected: string[] = [id];
-
+    //
     //     return expect(insightFacade.addDataset(
     //         id,
     //         datasets[id],
     //         InsightDatasetKind.Courses,
     //     )).to.eventually.deep.equal(expected);
     // });
-
+    //
     // it("Should fulfill addition of valid dataset with one course section", function () {
     //     const id: string = "oneCourseSection";
     //     const expected: string[] = [id];
@@ -392,40 +392,40 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     // });
 
     // Reject Test Cases
-    it("Should reject removal of dataset with ID including whitespaces only", function () {
-        const id: string = "  ";
-
-        return expect(insightFacade.removeDataset(id))
-            .to.eventually.be.rejectedWith(InsightError);
-    });
-
-    it("Should reject removal of dataset with ID including underscore", function () {
-        const id: string = "valid_courses";
-
-        return expect(insightFacade.removeDataset(id))
-            .to.eventually.be.rejectedWith(InsightError);
-    });
-
-    it("Should reject removal for dataset with valid ID but not yet added", function () {
-        const id: string = "courses";
-
-        return expect(insightFacade.removeDataset(id))
-            .to.eventually.be.rejectedWith(NotFoundError);
-    });
-
-    it("Should reject removal for dataset with null ID", function () {
-        const id: string = null;
-
-        return expect(insightFacade.removeDataset(id))
-            .to.eventually.be.rejectedWith(InsightError);
-    });
-
-    it("Should reject removal for dataset with undefined ID", function () {
-        let id: string;
-
-        return expect(insightFacade.removeDataset(id))
-            .to.eventually.be.rejectedWith(InsightError);
-    });
+    // it("Should reject removal of dataset with ID including whitespaces only", function () {
+    //     const id: string = "  ";
+    //
+    //     return expect(insightFacade.removeDataset(id))
+    //         .to.eventually.be.rejectedWith(InsightError);
+    // });
+    //
+    // it("Should reject removal of dataset with ID including underscore", function () {
+    //     const id: string = "valid_courses";
+    //
+    //     return expect(insightFacade.removeDataset(id))
+    //         .to.eventually.be.rejectedWith(InsightError);
+    // });
+    //
+    // it("Should reject removal for dataset with valid ID but not yet added", function () {
+    //     const id: string = "courses";
+    //
+    //     return expect(insightFacade.removeDataset(id))
+    //         .to.eventually.be.rejectedWith(NotFoundError);
+    // });
+    //
+    // it("Should reject removal for dataset with null ID", function () {
+    //     const id: string = null;
+    //
+    //     return expect(insightFacade.removeDataset(id))
+    //         .to.eventually.be.rejectedWith(InsightError);
+    // });
+    //
+    // it("Should reject removal for dataset with undefined ID", function () {
+    //     let id: string;
+    //
+    //     return expect(insightFacade.removeDataset(id))
+    //         .to.eventually.be.rejectedWith(InsightError);
+    // });
 
     // // ------------------------------ InsightFacade.listDatasets() ------------------------------
     // // Fulfill Test Cases
