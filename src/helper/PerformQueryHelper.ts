@@ -3,7 +3,6 @@ import * as fs from "fs-extra";
 import Constants from "../Constants";
 import CourseDataset from "../controller/CourseDataset";
 import CourseSection from "../controller/CourseSection";
-
 /**
  * Centralized Helper Class for functions pertaining to performing queries on added datasets.
  */
@@ -230,7 +229,6 @@ export default class PerformQueryHelper {
                 matchingCourses.push(courseSection);
             }
         }
-
         return matchingCourses;
     }
 
@@ -246,23 +244,20 @@ export default class PerformQueryHelper {
                 matchingCourses.push(courseSection);
             }
         }
-
         return matchingCourses;
     }
 
     private static findCourseSectionsIs(
         key: string,
-        value: number,
+        value: string,
         allCourseSections: CourseSection[]
     ): CourseSection[] {
         let matchingCourses: CourseSection[] = [];
-
         for (const courseSection of allCourseSections) {
             if (courseSection.data[key] === value) {
                 matchingCourses.push(courseSection);
             }
         }
-
         return matchingCourses;
     }
 }
