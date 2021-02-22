@@ -86,7 +86,7 @@ export default class InsightFacade implements IInsightFacade {
                     return Promise.reject(new InsightError(Constants.MISSING_COURSES_FOLDER));
                 }
             }).catch((err) => {
-                return Promise.reject(new InsightError(err));
+                return Promise.reject(new InsightError(Constants.DATASET_NOT_ZIP));
             });
     }
 
