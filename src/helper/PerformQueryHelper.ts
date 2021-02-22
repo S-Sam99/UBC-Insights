@@ -48,15 +48,11 @@ export default class PerformQueryHelper {
 
     private static applyColumns(columnKeys: string[], results: CourseSection[]): any[] {
         let modifiedResults: any[] = [];
-        if (columnKeys.length === 10) {
-            for (const courseSection of results) {
-                modifiedResults.push(courseSection.data);
-            }
-        } else {
-            for (const courseSection of results) {
-                modifiedResults.push(this.generateCourseSectionWithColumns(courseSection, columnKeys));
-            }
+
+        for (const courseSection of results) {
+            modifiedResults.push(this.generateCourseSectionWithColumns(courseSection, columnKeys));
         }
+
         return modifiedResults;
     }
 
@@ -253,11 +249,29 @@ export default class PerformQueryHelper {
         allCourseSections: CourseSection[]
     ): CourseSection[] {
         let matchingCourses: CourseSection[] = [];
+        const hasWildcard = value.includes("*");
         for (const courseSection of allCourseSections) {
-            if (courseSection.data[key] === value) {
+            if (hasWildcard) {
+                if (this.isMatchingInputString(courseSection.data[key], value)) {
+                    matchingCourses.push(courseSection);
+                }
+            } else if (courseSection.data[key] === value) {
                 matchingCourses.push(courseSection);
             }
         }
         return matchingCourses;
+    }
+
+    private static isMatchingInputString(courseSectionData: string, value: string): boolean {
+        const valueLength = value.length - 1;
+        if (value.charAt(0) === "*" && value.charAt(valueLength) === "*") {
+            return courseSectionData.includes(value.substring(1, valueLength - 1));
+        } else if (value.charAt(0) === "*") {
+            return courseSectionData.endsWith(value.substring(1, valueLength));
+        } else if (value.charAt(valueLength) === "*") {
+            return courseSectionData.startsWith(value.substring(0, valueLength - 1));
+        } else {
+            return false;
+        }
     }
 }
