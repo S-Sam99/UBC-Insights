@@ -1,6 +1,7 @@
 /**
  * CourseSection Class
  */
+
 export default class CourseSection {
     public data: any;
     public isValid: boolean;
@@ -17,7 +18,7 @@ export default class CourseSection {
                 const field = fieldMapping[key];
                 switch (field.type) {
                     case "number": {
-                        let value: number = courseSectionData[field.name];
+                        let value: number = +courseSectionData[field.name];
                         if (value === null || value === undefined) {
                             this.isValid = false;
                             break;
@@ -26,7 +27,7 @@ export default class CourseSection {
                         break;
                     }
                     default: {
-                        const value: string = courseSectionData[field.name];
+                        const value: string = courseSectionData[field.name].toString();
                         if (value === null || value === undefined) {
                             this.isValid = false;
                             break;
