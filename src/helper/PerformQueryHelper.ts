@@ -7,18 +7,19 @@ import CourseSection from "../controller/CourseSection";
  * Centralized Helper Class for functions pertaining to performing queries on added datasets.
  */
 export default class PerformQueryHelper {
-    public static performDatasetQuery(query: any): Promise<any[]> {
+    public static performDatasetQuery(query: any): any[] {
         const columnKeys = query.OPTIONS.COLUMNS;
         const dataset: CourseDataset = this.getDataset(this.getFirstDatasetId(columnKeys));
         let results: CourseSection[] = this.applyFilter(query, dataset.allCourseSections);
+        if (results.length > Constants.MAX_RESULTS_SIZE) {
+            return results;
+        }
         if (query.OPTIONS.hasOwnProperty("ORDER")) {
             results = this.applyOrder(query.OPTIONS.ORDER, results);
         }
         const modifiedColumns: any[] = this.applyColumns(columnKeys, results);
-        if (modifiedColumns.length > Constants.MAX_RESULTS_SIZE) {
-            return Promise.reject(new ResultTooLargeError());
-        }
-        return Promise.resolve(modifiedColumns);
+        const stringified = JSON.stringify(modifiedColumns);
+        return modifiedColumns;
     }
 
     private static getDataset(id: string): any {
