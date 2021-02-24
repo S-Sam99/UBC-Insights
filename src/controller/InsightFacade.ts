@@ -141,7 +141,7 @@ export default class InsightFacade implements IInsightFacade {
         }
         const results = PerformQueryHelper.performDatasetQuery(query);
         if (results.length > Constants.MAX_RESULTS_SIZE) {
-            return Promise.reject(new ResultTooLargeError());
+            return Promise.reject(new ResultTooLargeError(Constants.QUERY_RESULT_TOO_LARGE));
         }
         return Promise.resolve(results);
     }

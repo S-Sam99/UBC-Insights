@@ -22,7 +22,7 @@ export default class PerformQueryHelper {
     private static getDataset(id: string): any {
         const path = "./data";
         const dataset = fs
-            .readFileSync(`${path}/${id}/`, "utf8");
+            .readFileSync(`${path}/${id}`, "utf8");
 
         return JSON.parse(dataset);
     }
