@@ -1,4 +1,3 @@
-import {ResultTooLargeError} from "../controller/IInsightFacade";
 import * as fs from "fs-extra";
 import Constants from "../Constants";
 import CourseDataset from "../controller/CourseDataset";
@@ -7,24 +6,23 @@ import CourseSection from "../controller/CourseSection";
  * Centralized Helper Class for functions pertaining to performing queries on added datasets.
  */
 export default class PerformQueryHelper {
-    public static performDatasetQuery(query: any): Promise<any[]> {
+    public static performDatasetQuery(query: any): any[] {
         const columnKeys = query.OPTIONS.COLUMNS;
         const dataset: CourseDataset = this.getDataset(this.getFirstDatasetId(columnKeys));
         let results: CourseSection[] = this.applyFilter(query, dataset.allCourseSections);
+        if (results.length > Constants.MAX_RESULTS_SIZE) {
+            return results;
+        }
         if (query.OPTIONS.hasOwnProperty("ORDER")) {
             results = this.applyOrder(query.OPTIONS.ORDER, results);
         }
-        const modifiedColumns: any[] = this.applyColumns(columnKeys, results);
-        if (modifiedColumns.length > Constants.MAX_RESULTS_SIZE) {
-            return Promise.reject(new ResultTooLargeError());
-        }
-        return Promise.resolve(modifiedColumns);
+        return this.applyColumns(columnKeys, results);
     }
 
     private static getDataset(id: string): any {
         const path = "./data";
         const dataset = fs
-            .readFileSync(`${path}/${id}/`, "utf8");
+            .readFileSync(`${path}/${id}`, "utf8");
 
         return JSON.parse(dataset);
     }
@@ -175,7 +173,9 @@ export default class PerformQueryHelper {
                 if (results.length < 1) {
                     results = courseSections;
                 } else {
-                    results = results.concat(courseSections);
+                    results = results.concat(
+                        courseSections.filter((courseSection) => results.indexOf(courseSection) < 0)
+                    );
                 }
             }
         }
@@ -263,12 +263,12 @@ export default class PerformQueryHelper {
     }
 
     private static isMatchingInputString(courseSectionData: string, value: string): boolean {
-        const valueLength = value.length - 1;
-        if (value.charAt(0) === "*" && value.charAt(valueLength) === "*") {
+        const valueLength = value.length;
+        if (value.charAt(0) === "*" && value.charAt(valueLength - 1) === "*") {
             return courseSectionData.includes(value.substring(1, valueLength - 1));
         } else if (value.charAt(0) === "*") {
             return courseSectionData.endsWith(value.substring(1, valueLength));
-        } else if (value.charAt(valueLength) === "*") {
+        } else if (value.charAt(valueLength - 1) === "*") {
             return courseSectionData.startsWith(value.substring(0, valueLength - 1));
         } else {
             return false;
