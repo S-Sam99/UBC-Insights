@@ -1,6 +1,13 @@
 import Log from "../Util";
-import {IInsightFacade, InsightDataset, InsightDatasetKind, ResultTooLargeError, NotFoundError} from "./IInsightFacade";
-import {InsightError} from "./IInsightFacade";
+import {
+    IInsightFacade,
+    InsightDataset,
+    InsightDatasetKind,
+    ResultTooLargeError,
+    NotFoundError,
+    InsightError
+} from "./IInsightFacade";
+
 import * as JSZip from "jszip";
 import Constants from "../Constants";
 import ValidationHelper from "../helper/ValidationHelper";
@@ -80,7 +87,9 @@ export default class InsightFacade implements IInsightFacade {
                             this.courseDatasets[id] = dataset;
                             return Promise.resolve(Object.keys(this.courseDatasets));
                         }).catch((err) => {
-                            return Promise.reject(new InsightError(err));
+                            if (err.message) {
+                                return Promise.reject(new InsightError(err.message));
+                            }
                         });
                 } else {
                     return Promise.reject(new InsightError(Constants.MISSING_COURSES_FOLDER));
@@ -141,7 +150,7 @@ export default class InsightFacade implements IInsightFacade {
         }
         const results = PerformQueryHelper.performDatasetQuery(query);
         if (results.length > Constants.MAX_RESULTS_SIZE) {
-            return Promise.reject(new ResultTooLargeError());
+            return Promise.reject(new ResultTooLargeError(Constants.QUERY_RESULT_TOO_LARGE));
         }
         return Promise.resolve(results);
     }

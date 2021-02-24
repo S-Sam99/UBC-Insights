@@ -36,7 +36,11 @@ export default class AddCourseDatasetHelper {
 
     private static persistDataToDisk(name: string, data: string): void {
         const path = "./data";
+        const cacheDir = __dirname + "/../data";
 
+        if (!fs.existsSync(cacheDir)) {
+            fs.mkdirSync(cacheDir);
+        }
         fs.writeFileSync(`${path}/${name}`, data);
     }
 
