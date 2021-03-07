@@ -10,7 +10,7 @@ export default class AddCourseDatasetHelper {
     public static generateCourseDataset (id: string, data: JSZip): Promise<CourseDataset> {
         const promises: any[] = [];
 
-        data.folder(Constants.REQUIRED_DIR).forEach((filePath, fileObj) => {
+        data.folder(Constants.REQUIRED_DIR_COURSES).forEach((filePath, fileObj) => {
             if (fileObj.dir === false) {
                 promises.push(fileObj.async("string"));
             }

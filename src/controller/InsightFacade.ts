@@ -12,6 +12,7 @@ import * as JSZip from "jszip";
 import Constants from "../Constants";
 import ValidationHelper from "../helper/ValidationHelper";
 import AddCourseDatasetHelper from "../helper/AddCourseDatasetHelper";
+import AddRoomDatasetHelper from "../helper/AddRoomDatasetHelper";
 import PerformQueryHelper from "../helper/PerformQueryHelper";
 import { fstat } from "fs-extra";
 import * as fs from "fs-extra";
@@ -26,11 +27,11 @@ import ListDatasetHelper from "../helper/ListDatasetHelper";
  *
  */
 export default class InsightFacade implements IInsightFacade {
-    public courseDatasets: any;
+    public datasets: any;
 
     constructor() {
         Log.trace("InsightFacadeImpl::init()");
-        this.courseDatasets = {};
+        this.datasets = {};
     }
 
     /**
@@ -61,14 +62,10 @@ export default class InsightFacade implements IInsightFacade {
     public addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
         if (ValidationHelper.isValidIDNotOnDisk(id)) {
             if (ValidationHelper.isValidId(id)) {
-                if (ValidationHelper.isValidCourseKind(kind)) {
-                    if (ValidationHelper.isValidContent(content)) {
-                        return this.unzipCourseDataset(id, content);
-                    } else {
-                        return Promise.reject(new InsightError(Constants.INVALID_CONTENT));
-                    }
+                if (ValidationHelper.isValidContent(content)) {
+                    return this.unzipCourseDataset(id, content);
                 } else {
-                    return Promise.reject(new InsightError(Constants.INVALID_KIND_COURSES));
+                    return Promise.reject(new InsightError(Constants.INVALID_CONTENT));
                 }
             } else {
                 return Promise.reject(new InsightError(`${Constants.INVALID_ID} ${id}`));
@@ -81,18 +78,29 @@ export default class InsightFacade implements IInsightFacade {
     private unzipCourseDataset(id: string, content: string): Promise<string[]> {
         return JSZip.loadAsync(content, {base64: true})
             .then((data) => {
-                if (data["files"].hasOwnProperty(Constants.REQUIRED_DIR)) {
+                if (data["files"].hasOwnProperty(Constants.REQUIRED_DIR_COURSES)) {
                     return AddCourseDatasetHelper.generateCourseDataset(id, data)
                         .then((dataset) => {
-                            this.courseDatasets[id] = dataset;
-                            return Promise.resolve(Object.keys(this.courseDatasets));
+                            this.datasets[id] = dataset;
+                            return Promise.resolve(Object.keys(this.datasets));
                         }).catch((err) => {
                             if (err.message) {
                                 return Promise.reject(new InsightError(err.message));
                             }
                         });
                 } else {
-                    return Promise.reject(new InsightError(Constants.MISSING_COURSES_FOLDER));
+                    if (data["files"].hasOwnProperty(Constants.REQUIRED_DIR_ROOMS)) {
+                        return AddRoomDatasetHelper.generateRoomDataset(id, data)
+                        .then((dataset) => {
+                            this.datasets[id] = dataset;
+                            return Promise.resolve(Object.keys(this.datasets));
+                        }).catch((err) => {
+                            if (err.message) {
+                                return Promise.reject(new InsightError(err.message));
+                            }
+                        });
+                    }
+                    return Promise.reject(new InsightError(Constants.MISSING_MAIN_FOLDER));
                 }
             }).catch(() => {
                 return Promise.reject(new InsightError(Constants.DATASET_NOT_ZIP));

@@ -21,7 +21,7 @@ export default class CourseDataset {
     }
 
     private parseDataset(dataset: string[]) {
-        const courseSectionFieldMapping: object = Constants.KEY_MAP;
+        const courseSectionFieldMapping: object = Constants.KEY_MAP_COURSES;
 
         for (const fileData of dataset) {
             try {

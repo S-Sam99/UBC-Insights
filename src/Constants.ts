@@ -1,7 +1,7 @@
 /**
  * Centralized location for constants.
  */
-const KEY_MAP = {
+const KEY_MAP_COURSES = {
     dept: {
         name: "Subject",
         type: "string"
@@ -44,7 +44,56 @@ const KEY_MAP = {
     }
 };
 
-const REQUIRED_DIR = "courses/";
+const KEY_MAP_ROOMS = {
+    fullname: {
+        name: "BuildingFull",
+        type: "string"
+    },
+    shortname: {
+        name: "BuildingSmall",
+        type: "string"
+    },
+    number: {
+        name: "Room",
+        type: "number"
+    },
+    name: {
+        name: "id",
+        type: "string"
+    },
+    address: {
+        name: "Address",
+        type: "string"
+    },
+    lat: {
+        name: "Latitude",
+        type: "number"
+    },
+    lon: {
+        name: "Longitude",
+        type: "number"
+    },
+    seats: {
+        name: "Seats",
+        type: "number"
+    },
+    type: {
+        name: "Type",
+        type: "string"
+    },
+    furniture: {
+        name: "Furniture",
+        type: "string"
+    },
+    href: {
+        name: "Link",
+        type: "string"
+    }
+};
+
+const REQUIRED_DIR_COURSES = "courses/";
+
+const REQUIRED_DIR_ROOMS = "rooms/";
 
 const MAX_RESULTS_SIZE = 5000;
 
@@ -132,7 +181,7 @@ const INVALID_KIND_COURSES = "Invalid Kind for Course Dataset";
 
 const INVALID_CONTENT = "Invalid Content for Dataset";
 
-const MISSING_COURSES_FOLDER = "Missing \"courses\" folder in root directory.";
+const MISSING_MAIN_FOLDER = "Missing \"courses\" or \"rooms\" folder in root directory.";
 
 const MISSING_COURSES = "Missing valid courses for dataset.";
 
@@ -143,8 +192,12 @@ const DATASET_ALREADY_ADDED = "Dataset has already been added.";
 const DATASET_NOT_YET_ADDED = "Dataset has not been added yet.";
 
 export default class Constants {
-    public static get KEY_MAP() {
-        return KEY_MAP;
+    public static get KEY_MAP_COURSES() {
+        return KEY_MAP_COURSES;
+    }
+
+    public static get KEY_MAP_ROOMS() {
+        return KEY_MAP_ROOMS;
     }
 
     public static get MAX_RESULTS_SIZE() {
@@ -179,8 +232,12 @@ export default class Constants {
         return FILTER_FUNCTIONS;
     }
 
-    public static get REQUIRED_DIR() {
-        return REQUIRED_DIR;
+    public static get REQUIRED_DIR_COURSES() {
+        return REQUIRED_DIR_COURSES;
+    }
+
+    public static get REQUIRED_DIR_ROOMS() {
+        return REQUIRED_DIR_ROOMS;
     }
 
     public static get DATASET_NOT_ZIP() {
@@ -199,8 +256,8 @@ export default class Constants {
         return INVALID_CONTENT;
     }
 
-    public static get MISSING_COURSES_FOLDER() {
-        return MISSING_COURSES_FOLDER;
+    public static get MISSING_MAIN_FOLDER() {
+        return MISSING_MAIN_FOLDER;
     }
 
     public static get MISSING_COURSES() {

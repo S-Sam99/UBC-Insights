@@ -39,6 +39,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
         textFiles: "./test/data/textFiles.zip",
         oneValidCourse: "./test/data/oneValidCourse.zip",
         moreThanOneValidCourse: "./test/data/moreThanOneValidCourse.zip",
+        rooms: "./test/data/rooms.zip",
     };
     let datasets: { [id: string]: string } = {};
     let insightFacade: InsightFacade;
@@ -95,6 +96,17 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //         InsightDatasetKind.Courses,
     //     )).to.eventually.deep.equal(expected);
     // });
+
+    it("Should fulfill addition of valid dataset - Rooms", function () {
+        const id: string = "rooms";
+        const expected: string[] = [id];
+    
+        return expect(insightFacade.addDataset(
+            id,
+            datasets[id],
+            InsightDatasetKind.Rooms,
+        )).to.eventually.deep.equal(expected);
+    });
     //
     // it("Should fulfill addition of valid dataset with one course section", function () {
     //     const id: string = "oneCourseSection";
