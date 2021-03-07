@@ -10,12 +10,12 @@ const parse5 = require('parse5');
 export default class AddRoomDatasetHelper {
 
     public static generateRoomDataset (id: string, data: JSZip): Promise<RoomDataset> {
-        let link: Promise<string>;
+        let link: string;
         let parsedData: Promise<string>;
 
         data.folder(Constants.REQUIRED_DIR_ROOMS).forEach((filePath, fileObj) => {
             if (filePath === "index.htm") {
-                link = (fileObj.async("string"));
+                link = filePath;
             }
         });
 
@@ -52,7 +52,7 @@ export default class AddRoomDatasetHelper {
         fs.writeFileSync(`${path}/${name}`, data);
     }
 
-    private static parseHTML(html: Promise<string>) : Promise<string>{
+    private static parseHTML(html: string) : Promise<string>{
         return Promise.resolve(parse5.parse(html));
     }
 
