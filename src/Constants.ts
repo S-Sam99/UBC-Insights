@@ -46,47 +46,47 @@ const KEY_MAP_COURSES = {
 
 const KEY_MAP_ROOMS = {
     fullname: {
-        name: "BuildingFull",
+        name: "fullname",
         type: "string"
     },
     shortname: {
-        name: "BuildingSmall",
+        name: "shortname",
         type: "string"
     },
     number: {
-        name: "Room",
-        type: "number"
+        name: "number",
+        type: "string"
     },
     name: {
-        name: "id",
+        name: "name",
         type: "string"
     },
     address: {
-        name: "Address",
+        name: "address",
         type: "string"
     },
     lat: {
-        name: "Latitude",
+        name: "lat",
         type: "number"
     },
     lon: {
-        name: "Longitude",
+        name: "lon",
         type: "number"
     },
     seats: {
-        name: "Seats",
+        name: "seats",
         type: "number"
     },
     type: {
-        name: "Type",
+        name: "name",
         type: "string"
     },
     furniture: {
-        name: "Furniture",
+        name: "furniture",
         type: "string"
     },
     href: {
-        name: "Link",
+        name: "href",
         type: "string"
     }
 };
@@ -187,6 +187,10 @@ const MISSING_COURSES = "Missing valid courses for dataset.";
 
 const MISSING_COURSE_SECTION = "Missing valid course section for dataset.";
 
+const MISSING_BUILDINGS = "Missing valid buildings for dataset.";
+
+const MISSING_ROOMS = "Missing valid Rooms for dataset.";
+
 const DATASET_ALREADY_ADDED = "Dataset has already been added.";
 
 const DATASET_NOT_YET_ADDED = "Dataset has not been added yet.";
@@ -266,6 +270,14 @@ export default class Constants {
 
     public static get MISSING_COURSE_SECTION() {
         return MISSING_COURSE_SECTION;
+    }
+
+    public static get MISSING_BUILDINGS() {
+        return MISSING_BUILDINGS;
+    }
+
+    public static get MISSING_ROOMS() {
+        return MISSING_ROOMS;
     }
 
     public static get DATASET_ALREADY_ADDED() {

@@ -12,7 +12,7 @@ import * as JSZip from "jszip";
 import Constants from "../Constants";
 import ValidationHelper from "../helper/ValidationHelper";
 import AddCourseDatasetHelper from "../helper/AddCourseDatasetHelper";
-import AddRoomDatasetHelper from "../helper/AddRoomDatasetHelper";
+import AddBuildingDatasetHelper from "../helper/AddBuildingDatasetHelper";
 import PerformQueryHelper from "../helper/PerformQueryHelper";
 import { fstat } from "fs-extra";
 import * as fs from "fs-extra";
@@ -63,7 +63,18 @@ export default class InsightFacade implements IInsightFacade {
         if (ValidationHelper.isValidIDNotOnDisk(id)) {
             if (ValidationHelper.isValidId(id)) {
                 if (ValidationHelper.isValidContent(content)) {
-                    return this.unzipCourseDataset(id, content);
+                    return JSZip.loadAsync(content, {base64: true})
+                    .then((data) => {
+                        return AddBuildingDatasetHelper.generateBuildingDataset(id, data)
+                        .then((dataset) => {
+                            this.datasets[id] = dataset;
+                            return Promise.resolve(Object.keys(this.datasets));
+                        }).catch((err) => {
+                            if (err.message) {
+                                return Promise.reject(new InsightError(err.message));
+                            }
+                        });
+                    });
                 } else {
                     return Promise.reject(new InsightError(Constants.INVALID_CONTENT));
                 }
@@ -75,7 +86,7 @@ export default class InsightFacade implements IInsightFacade {
     }
 }
 
-    private unzipCourseDataset(id: string, content: string): Promise<string[]> {
+    private unzipDataset(id: string, content: string): Promise<string[]> {
         return JSZip.loadAsync(content, {base64: true})
             .then((data) => {
                 if (data["files"].hasOwnProperty(Constants.REQUIRED_DIR_COURSES)) {
@@ -90,7 +101,7 @@ export default class InsightFacade implements IInsightFacade {
                         });
                 } else {
                     if (data["files"].hasOwnProperty(Constants.REQUIRED_DIR_ROOMS)) {
-                        return AddRoomDatasetHelper.generateRoomDataset(id, data)
+                        return AddBuildingDatasetHelper.generateBuildingDataset(id, data)
                         .then((dataset) => {
                             this.datasets[id] = dataset;
                             return Promise.resolve(Object.keys(this.datasets));
