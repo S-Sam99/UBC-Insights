@@ -7,7 +7,7 @@ import Util from "../Util";
 import { file } from "jszip";
 import { promises } from "dns";
 import { readFileSync } from "fs";
-const parse5 = require("parse5");
+import {parse, Document} from "parse5";
 
 /**
  * Localized Helper Class for functions pertaining to adding course datasets.
@@ -22,7 +22,8 @@ export default class AddBuildingDatasetHelper {
                 html = Constants.REQUIRED_DIR_ROOMS + filePath;
             }
         });
-        return this.parseData(html).then(this.gatherData).then((info) => {
+
+        return this.parseData(html, data).then(this.gatherData).then((info) => {
             if (info.length > 0) {
                 for (let paths of info) {
                     buildings.push(data.file(Constants.REQUIRED_DIR_ROOMS + paths.getPath()).async("string"));
@@ -56,8 +57,10 @@ export default class AddBuildingDatasetHelper {
         fs.writeFileSync(`${path}/${name}`, data);
     }
 
-    private static parseData(data: string): Promise<any> {
-        return Promise.resolve(parse5.parse(data));
+    private static parseData(html: string, data: JSZip): Promise<Document> {
+        return data.file(html).async("string").then((rawData: string) => {
+            return parse(rawData);
+        });
     }
 
     private static gatherData(html: any): Promise<BuildingInfo[]> {
