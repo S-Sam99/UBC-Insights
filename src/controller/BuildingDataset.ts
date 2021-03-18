@@ -12,24 +12,24 @@ export default class BuildingDataset {
     public id: string;
     public kind: string;
     public allRooms: any[];
-    public numRows: number;
     public buildingInfo: BuildingInfo[];
     public seatNum: number;
     public shortName: string;
     public lat: number;
     public long: number;
     public count: number;
+    public numRows: number;
 
     constructor(datasetId: string, kind: string, dataset: any, buildingInfo: BuildingInfo[]) {
         this.id = datasetId;
         this.kind = kind;
         this.allRooms = [];
-        this.numRows = 0;
         this.buildingInfo = buildingInfo;
         this.seatNum = 0;
         this.lat = 0;
         this.long = 0;
         this.count = 0;
+        this.numRows = 0;
 
         if (dataset.length > 0) {
             this.parseDataset(dataset);
@@ -37,8 +37,6 @@ export default class BuildingDataset {
     }
 
     private parseDataset(dataset: string[]) {
-        const roomFieldMapping: object = Constants.KEY_MAP_ROOMS;
-
         for (const fileData of dataset) {
             try {
                 const parsedData = this.parseData(fileData);

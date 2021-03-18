@@ -77,31 +77,6 @@ export default class InsightFacade implements IInsightFacade {
                 return resolve(result);
             });
         });
-    //     if (ValidationHelper.isValidIDNotOnDisk(id)) {
-    //         if (ValidationHelper.isValidId(id)) {
-    //             if (ValidationHelper.isValidContent(content)) {
-    //                 return Promise.resolve(this.unzipDataset(id, content));
-    //                 // return JSZip.loadAsync(content, {base64: true})
-    //                 // .then((data) => {
-    //                 //     return AddBuildingDatasetHelper.generateBuildingDataset(id, data)
-    //                 //     .then((dataset) => {
-    //                 //         this.datasets[id] = dataset;
-    //                 //         return Promise.resolve(Object.keys(this.datasets));
-    //                 //     }).catch((err) => {
-    //                 //         if (err.message) {
-    //                 //             return Promise.reject(new InsightError(err.message));
-    //                 //         }
-    //                 //     });
-    //                 // });
-    //             } else {
-    //                 return Promise.reject(new InsightError(Constants.INVALID_CONTENT));
-    //             }
-    //         } else {
-    //             return Promise.reject(new InsightError(`${Constants.INVALID_ID} ${id}`));
-    //         }
-    //     } else {
-    //         return Promise.reject(new InsightError(Constants.DATASET_ALREADY_ADDED));
-    // }
 }
 
     private unzipDataset(id: string, kind: string, content: string): Promise<string[]> {
@@ -156,15 +131,17 @@ export default class InsightFacade implements IInsightFacade {
      * that subsequent queries for that id should fail unless a new addDataset happens first.
      */
     public removeDataset(id: string): Promise<string> {
-        if (ValidationHelper.isValidIdforRemove(id)) {
-            return Promise.reject(new InsightError(`${Constants.INVALID_ID} ${id}`));
+        return new Promise<string>((resolve, reject) => {
+        if (!ValidationHelper.isValidId(id)) {
+            return reject(new InsightError(`${Constants.INVALID_ID} ${id}`));
         }
 
-        if (!ValidationHelper.isValidIDNotOnDisk(id)) {
-            return Promise.reject(new NotFoundError(Constants.DATASET_NOT_YET_ADDED));
+        if (ValidationHelper.isValidIDNotOnDisk(id)) {
+            return reject(new NotFoundError(Constants.DATASET_NOT_YET_ADDED));
         }
 
-        return RemoveDatasetHelper.removeDataset(id);
+        return resolve(RemoveDatasetHelper.removeDataset(id));
+        });
     }
 
     /**
