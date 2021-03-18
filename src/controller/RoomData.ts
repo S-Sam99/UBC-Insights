@@ -20,7 +20,7 @@
                 switch (field.type) {
                     case "number": {
                         let value: number = roomData[field.name];
-                        if (value === null || value === undefined || value === 0) {
+                        if (value === null || value === undefined) {
                             this.isValid = false;
                             break;
                         }

@@ -7,11 +7,13 @@ import Log from "../Util";
  */
 export default class CourseDataset {
     public id: string;
+    public kind: string;
     public allCourseSections: CourseSection[];
     public numRows: number;
 
-    constructor(datasetId: string, dataset: string[]) {
+    constructor(datasetId: string, kind: string, dataset: string[]) {
         this.id = datasetId;
+        this.kind = kind;
         this.allCourseSections = [];
         this.numRows = 0;
 

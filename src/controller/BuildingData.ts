@@ -37,31 +37,31 @@ export default class BuildingData {
         this.shortName = this.buildingInfo.getCode();
         try {
             this.fullName = this.setFullName(data);
-            this.findCoordinates(this.address);
+            // this.findCoordinates(this.address);
             this.findRooms(data, roomFieldMapping);
         } catch (err) {
             Log.error(err);
         }
     }
 
-    private setAddress(html: any): string {
-        if (html.nodeName === "div" && html.attrs[0].value === "building-info") {
-            return String(html.childNodes[3].childNodes[0].childNodes[0].value);
-        }
+    // private setAddress(html: any): string {
+    //     if (html.nodeName === "div" && html.attrs[0].value === "building-info") {
+    //         return String(html.childNodes[3].childNodes[0].childNodes[0].value);
+    //     }
 
-        if (html.childNodes && html.childNodes.length > 0) {
-            for (let child of html.childNodes) {
-                let possibleAddress = this.setAddress(child);
-                if (possibleAddress !== "") {
-                    return possibleAddress;
-                }
-            }
-        }
-        return "";
-    }
+    //     if (html.childNodes && html.childNodes.length > 0) {
+    //         for (let child of html.childNodes) {
+    //             let possibleAddress = this.setAddress(child);
+    //             if (possibleAddress !== "") {
+    //                 return possibleAddress;
+    //             }
+    //         }
+    //     }
+    //     return "";
+    // }
 
     private setFullName(html: any): string {
-        if (html.nodeName === "span" && html.attrs[0].value === "field-content") {
+        if (html.nodeName === "span" && html.attrs.length > 0 && html.attrs[0].value === "field-content") {
             return String(html.childNodes[0].value);
         }
 
@@ -80,7 +80,7 @@ export default class BuildingData {
         if (html.nodeName === "tbody") {
             for (let child of html.childNodes) {
                 if (child.nodeName === "tr") {
-                    let fields: any;
+                    let fields: any[] = [];
                     this.setupArray(fields);
                     for (let data of child.childNodes) {
                         if (data.nodeName === "td") {
@@ -111,7 +111,7 @@ export default class BuildingData {
                             }
                         }
                     }
-                    if (fields.length === 11) {
+                    if (fields[0] !== "") {
                         const room = new RoomData(this.id, fields, fieldMapping);
                         this.allRooms.push(room);
                     }
@@ -127,14 +127,14 @@ export default class BuildingData {
 
     // TODO: finish and test implementation
     private findCoordinates(address: string): void {
-        http.get("http://cs310.students.cs.ubc.ca:11316/api/v1/project_team138/" + address, (result: any) => {
-            if (result.error) {
-                return;
-            } else {
-                this.lat = result.lat;
-                this.long = result.long;
-            }
-        });
+        const codedAddress = encodeURI(address);
+        const result =  http.get("http://cs310.students.cs.ubc.ca:11316/api/v1/project_team138/" + codedAddress);
+        try {
+            this.long = result.lon;
+            this.lat = result.lat;
+        } catch (err) {
+            Log.error(result.error);
+        }
     }
 
     private setupArray(array: any): void {
@@ -143,6 +143,7 @@ export default class BuildingData {
         array["fullname"] = this.fullName;
         array["shortname"] = this.shortName;
         array["address"] = this.address;
+        array["seats"] = 0;
     }
 
     private setRoomNum(data: any, array: any): void {

@@ -14,23 +14,28 @@ import {parse, Document} from "parse5";
  */
 export default class AddBuildingDatasetHelper {
 
-    public static generateBuildingDataset (id: string, data: JSZip): Promise<BuildingDataset> {
+    public static generateBuildingDataset (id: string, kind: string, data: JSZip): Promise<BuildingDataset> {
         const buildings: any[] = [];
+        let buildingInfo: any[] = [];
         let html: any;
+        let path = "";
+        let code = "";
+        let address = "";
         data.folder(Constants.REQUIRED_DIR_ROOMS).forEach((filePath, fileObj) => {
             if (fileObj.dir === false && filePath === "index.htm") {
                 html = Constants.REQUIRED_DIR_ROOMS + filePath;
             }
         });
 
-        return this.parseData(html, data).then(this.gatherData).then((info) => {
-            if (info.length > 0) {
-                for (let paths of info) {
+        return this.parseData(html, data).then((parsedData) => {
+            buildingInfo  = this.gatherData(parsedData);
+            if (buildingInfo.length > 0) {
+                for (let paths of buildingInfo) {
                     buildings.push(data.file(Constants.REQUIRED_DIR_ROOMS + paths.getPath()).async("string"));
                 }
 
                 return Promise.all(buildings).then((dataset) => {
-                    let buildingDataset = new BuildingDataset(id, dataset, info);
+                    let buildingDataset = new BuildingDataset(id, kind, dataset, buildingInfo);
 
                     if (buildingDataset.allRooms.length > 0) {
                         this.persistDataToDisk(id, JSON.stringify(buildingDataset));
@@ -57,71 +62,67 @@ export default class AddBuildingDatasetHelper {
         fs.writeFileSync(`${path}/${name}`, data);
     }
 
-    private static parseData(html: string, data: JSZip): Promise<Document> {
-        return data.file(html).async("string").then((rawData: string) => {
+    private static parseData(document: string, data: JSZip): Promise<Document> {
+        return data.file(document).async("string").then((rawData: string) => {
             return parse(rawData);
         });
     }
 
-    private static gatherData(html: any): Promise<BuildingInfo[]> {
-        if (html.nodeName === "tbody") {
+    private static gatherData(data: any): BuildingInfo[] {
+        if (data.nodeName === "tbody") {
             let array: any[] = [];
-            for (let child of html.childNodes) {
-                let path: string = "";
-                let code: string = "";
-                let address: string = "";
-                this.goThroughChildrenTR(child, "tr", path, code, address);
-                if (path !== "" && code !== "" && address !== "") {
-                    array.push(new BuildingInfo(path, code, address));
+            for (let child of data.childNodes) {
+                let temp: any[3] = ["", "", ""];
+                this.goThroughChildrenTR(child, "tr", temp);
+                if (temp[0] !== "" && temp[1] !== "" && temp[2] !== "") {
+                    array.push(new BuildingInfo(temp));
                 }
             }
-            return Promise.resolve(array).catch((err) => {
-                    return Promise.reject(err);
-        });
+            return array;
     }
 
-        if (html.childNodes && html.childNodes.length > 0) {
-            for (let child of html.childNodes) {
+        if (data.childNodes && data.childNodes.length > 0) {
+            for (let child of data.childNodes) {
                 let possibleArray = this.gatherData(child);
-                if (possibleArray != null) {
+                if (possibleArray.length > 0) {
                     return possibleArray;
                 }
             }
         }
-        return null;
+        return [];
     }
 
-    private static goThroughChildrenTR(html: any, identifier: string, path: string, code: string, address: string) {
-        if (html.nodeName === identifier) {
-            for (let child of html.childNodes) {
-                this.goThroughChildrenTD(child, "td", path, code, address);
+    private static goThroughChildrenTR(data: any, identifier: string, array: any) {
+        if (data.nodeName === identifier) {
+            for (let child of data.childNodes) {
+                this.goThroughChildrenTD(child, "td", array);
             }
+            return array;
         }
 
-        if (html.childNodes && html.childNodes.length > 0) {
-            for (let child of html.childNodes) {
-                this.goThroughChildrenTR(child, identifier, path, code, address);
+        if (data.childNodes && data.childNodes.length > 0) {
+            for (let child of data.childNodes) {
+                this.goThroughChildrenTR(child, identifier, array);
             }
         }
+        return array;
     }
 
-    private static goThroughChildrenTD(html: any, identifier: string, path: string, code: string, address: string) {
-        if (html.nodeName === identifier) {
-            if (html.attrs[0].value === "views-field views-field-field-building-image") {
-                path = String(html.childNodes[1].attrs[0].value.substring(1));
-            } else if (html.attrs[0].value === "views-field views-field-field-building-code") {
-                code = String(html.childNodes[0].value.substring(2).trim());
-            } else if (html.attrs[0].value === "views-field views-field-field-building-address") {
-                    address = String(html.childNodes[0].value);
+    private static goThroughChildrenTD(data: any, identifier: string, array: any) {
+        if (data.nodeName === identifier) {
+            if (data.attrs[0].value === "views-field views-field-nothing") {
+                array[0] = String(data.childNodes[1].attrs[0].value.substring(2));
+                return array;
+            } else if (data.attrs[0].value === "views-field views-field-field-building-code") {
+                array[1] = String(data.childNodes[0].value.substring(2).trim());
+                return array;
+            } else if (data.attrs[0].value === "views-field views-field-field-building-address") {
+                array[2] = String(data.childNodes[0].value.substring(2).trim());
+                return array;
             } else {
-                return;
+                return array;
             }
         }
-
-        if (html.childNodes && html.childNodes.length > 0) {
-            for (let child of html.childNodes) {
-                this.goThroughChildrenTD(child, identifier, path, code, address);
-            }
-        }
+        return array;
     }
 }

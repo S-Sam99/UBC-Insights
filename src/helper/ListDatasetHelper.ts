@@ -17,10 +17,10 @@ export default class ListDatasetHelper {
         const dir = fs.readdirSync (path);
         dir.forEach ((file) => {
             const data = fs.readFileSync(`${path}/${file}`, "utf8");
-            const obj: CourseDataset = JSON.parse(data);
+            const obj: any = JSON.parse(data);
             const dataset: InsightDataset = {
                 id: obj.id,
-                kind: InsightDatasetKind.Courses,
+                kind: obj.kind,
                 numRows: obj.numRows
             };
             datasetList.push(dataset);

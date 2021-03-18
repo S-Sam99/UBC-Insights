@@ -72,30 +72,30 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
         Log.test(`After: ${this.test.parent.title}`);
     });
 
-    // afterEach(function () {
-    //     // This section resets the data directory (removing any cached data) and resets the InsightFacade instance
-    //     // This runs after each test, which should make each test independent from the previous one
-    //     Log.test(`AfterTest: ${this.currentTest.title}`);
-    //     try {
-    //         fs.removeSync(cacheDir);
-    //         fs.mkdirSync(cacheDir);
-    //         insightFacade = new InsightFacade();
-    //     } catch (err) {
-    //         Log.error(err);
-    //     }
-    // });
+    afterEach(function () {
+        // This section resets the data directory (removing any cached data) and resets the InsightFacade instance
+        // This runs after each test, which should make each test independent from the previous one
+        Log.test(`AfterTest: ${this.currentTest.title}`);
+        try {
+            fs.removeSync(cacheDir);
+            fs.mkdirSync(cacheDir);
+            insightFacade = new InsightFacade();
+        } catch (err) {
+            Log.error(err);
+        }
+    });
     // ------------------------------ InsightFacade.addDataset() ------------------------------
     // Fulfill Test Cases
-    // it("Should fulfill addition of valid dataset", function () {
-    //     const id: string = "courses";
-    //     const expected: string[] = [id];
+    it("Should fulfill addition of valid dataset", function () {
+        const id: string = "courses";
+        const expected: string[] = [id];
 
-    //     return expect(insightFacade.addDataset(
-    //         id,
-    //         datasets[id],
-    //         InsightDatasetKind.Courses,
-    //     )).to.eventually.deep.equal(expected);
-    // });
+        return expect(insightFacade.addDataset(
+            id,
+            datasets[id],
+            InsightDatasetKind.Courses,
+        )).to.eventually.deep.equal(expected);
+    });
 
     it("Should fulfill addition of valid dataset - Rooms", function () {
         const id: string = "rooms";

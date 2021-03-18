@@ -10,7 +10,9 @@ const parse5 = require("parse5");
  */
 export default class BuildingDataset {
     public id: string;
+    public kind: string;
     public allRooms: any[];
+    public numRows: number;
     public buildingInfo: BuildingInfo[];
     public seatNum: number;
     public shortName: string;
@@ -18,9 +20,11 @@ export default class BuildingDataset {
     public long: number;
     public count: number;
 
-    constructor(datasetId: string, dataset: any, buildingInfo: BuildingInfo[]) {
+    constructor(datasetId: string, kind: string, dataset: any, buildingInfo: BuildingInfo[]) {
         this.id = datasetId;
+        this.kind = kind;
         this.allRooms = [];
+        this.numRows = 0;
         this.buildingInfo = buildingInfo;
         this.seatNum = 0;
         this.lat = 0;
@@ -37,16 +41,16 @@ export default class BuildingDataset {
 
         for (const fileData of dataset) {
             try {
-                this.parseHTML(fileData).then((parsedData) => {
-                    if (this.checkValidity(parsedData)) {
-                        const buildingData: any = new BuildingData(this.id, parsedData, this.buildingInfo[this.count]);
-                        for (let rooms of buildingData.allRooms) {
-                            if (rooms.isValid) {
-                                this.allRooms.push(rooms);
-                            }
+                const parsedData = this.parseData(fileData);
+                if (this.checkValidity(parsedData)) {
+                    const buildingData: any = new BuildingData(this.id, parsedData, this.buildingInfo[this.count]);
+                    for (let rooms of buildingData.allRooms) {
+                        if (rooms.isValid) {
+                            this.numRows++;
+                            this.allRooms.push(rooms);
                         }
                     }
-                });
+                }
             } catch (err) {
                 Log.error(err);
             }
@@ -54,8 +58,8 @@ export default class BuildingDataset {
         }
     }
 
-    private parseHTML(html: string): Promise<any> {
-        return Promise.resolve(parse5.parse(html));
+    private parseData(html: string): Promise<any> {
+        return parse5.parse(html);
     }
 
     private checkValidity(html: any): boolean {
@@ -74,37 +78,5 @@ export default class BuildingDataset {
             }
         }
         return false;
-    }
-
-    private setAddress(html: any): string {
-        if (html.nodeName === "div" && html.attrs[0].value === "building-info") {
-            return String(html.childNodes[3].childNodes[0].childNodes[0].value);
-        }
-
-        if (html.childNodes && html.childNodes.length > 0) {
-            for (let child of html.childNodes) {
-                let possibleAddress = this.setAddress(child);
-                if (possibleAddress !== "") {
-                    return possibleAddress;
-                }
-            }
-        }
-        return "";
-    }
-
-    private setFullName(html: any): string {
-        if (html.nodeName === "div" && html.attrs[0].value === "building-info") {
-            return String(html.childNodes[1].childNodes[0].childNodes[0].value);
-        }
-
-        if (html.childNodes && html.childNodes.length > 0) {
-            for (let child of html.childNodes) {
-                let possibleAddress = this.setFullName(child);
-                if (possibleAddress !== "") {
-                    return possibleAddress;
-                }
-            }
-        }
-        return "";
     }
 }

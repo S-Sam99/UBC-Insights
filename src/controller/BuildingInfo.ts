@@ -10,10 +10,10 @@ export default class BuildingInfo {
     private code: string;
     private address: string;
 
-    constructor(path: string, code: string, address: string) {
-        this.path = path;
-        this.code = code;
-        this.address = address;
+    constructor(array: any) {
+        this.path = array[0];
+        this.code = array[1];
+        this.address = array[2];
     }
 
     public getPath(): string {
