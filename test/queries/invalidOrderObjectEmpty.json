@@ -1,5 +1,5 @@
 {
-    "title": "Invalid Order Is Array",
+    "title": "Invalid Order Object Empty",
     "query": {
         "WHERE": {
             "AND": [
@@ -20,7 +20,7 @@
                 "rooms_shortname",
                 "maxSeats"
             ],
-            "ORDER": []
+            "ORDER": {}
         },
         "TRANSFORMATIONS": {
             "GROUP": [

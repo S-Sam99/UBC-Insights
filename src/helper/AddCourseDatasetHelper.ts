@@ -2,12 +2,14 @@ import Constants from "../Constants";
 import * as JSZip from "jszip";
 import * as fs from "fs-extra";
 import CourseDataset from "../controller/CourseDataset";
+import {InsightDatasetKind} from "../controller/IInsightFacade";
+import Dataset from "../controller/Dataset";
 
 /**
  * Localized Helper Class for functions pertaining to adding course datasets.
  */
 export default class AddCourseDatasetHelper {
-    public static generateCourseDataset (id: string, kind: string, data: JSZip): Promise<CourseDataset> {
+    public static generateCourseDataset (id: string, kind: InsightDatasetKind, data: JSZip): Promise<Dataset> {
         const promises: any[] = [];
 
         data.folder(Constants.REQUIRED_DIR_COURSES).forEach((filePath, fileObj) => {
@@ -20,7 +22,7 @@ export default class AddCourseDatasetHelper {
             return Promise.all(promises).then((dataset) => {
                 let courseDataset = new CourseDataset(id, kind, dataset);
 
-                if (courseDataset.allCourseSections.length > 0) {
+                if (courseDataset.data.length > 0) {
                     this.persistDataToDisk(id, JSON.stringify(courseDataset));
                     return Promise.resolve(courseDataset);
                 } else {

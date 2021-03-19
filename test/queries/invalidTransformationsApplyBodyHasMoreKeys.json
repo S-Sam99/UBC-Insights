@@ -1,5 +1,5 @@
 {
-    "title": "Invalid Order Is Array",
+    "title": "Invalid Transformations Apply Body Has More Keys",
     "query": {
         "WHERE": {
             "AND": [
@@ -17,19 +17,28 @@
         },
         "OPTIONS": {
             "COLUMNS": [
+                "rooms_furniture",
                 "rooms_shortname",
+                "uniqueFurniture",
                 "maxSeats"
             ],
-            "ORDER": []
+            "ORDER": {
+                "dir": "DOWN",
+                "keys": [
+                    "maxSeats"
+                ]
+            }
         },
         "TRANSFORMATIONS": {
             "GROUP": [
-                "rooms_shortname"
+                "rooms_shortname",
+                "rooms_furniture"
             ],
             "APPLY": [
                 {
                     "maxSeats": {
-                        "MAX": "rooms_seats"
+                        "MAX": "rooms_seats",
+                        "COUNT": "rooms_seats"
                     }
                 }
             ]

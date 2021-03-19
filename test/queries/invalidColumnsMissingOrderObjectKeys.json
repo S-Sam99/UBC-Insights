@@ -1,5 +1,5 @@
 {
-    "title": "Invalid Order Is Array",
+    "title": "Invalid Columns Missing Order Object Keys",
     "query": {
         "WHERE": {
             "AND": [
@@ -20,7 +20,12 @@
                 "rooms_shortname",
                 "maxSeats"
             ],
-            "ORDER": []
+            "ORDER": {
+                "dir": "DOWN",
+                "keys": [
+                    "max_seats"
+                ]
+            }
         },
         "TRANSFORMATIONS": {
             "GROUP": [

@@ -1,5 +1,5 @@
 {
-    "title": "Invalid Order Is Array",
+    "title": "Valid Rooms Query",
     "query": {
         "WHERE": {
             "AND": [
@@ -20,7 +20,12 @@
                 "rooms_shortname",
                 "maxSeats"
             ],
-            "ORDER": []
+            "ORDER": {
+                "dir": "DOWN",
+                "keys": [
+                    "maxSeats"
+                ]
+            }
         },
         "TRANSFORMATIONS": {
             "GROUP": [
@@ -35,6 +40,19 @@
             ]
         }
     },
-    "isQueryValid": false,
-    "result": "InsightError"
+    "isQueryValid": true,
+    "result": [
+        {
+            "rooms_shortname": "OSBO",
+            "maxSeats": 442
+        },
+        {
+            "rooms_shortname": "HEBB",
+            "maxSeats": 375
+        },
+        {
+            "rooms_shortname": "LSC",
+            "maxSeats": 350
+        }
+    ]
 }

@@ -1,0 +1,72 @@
+{
+    "title": "Valid Rooms Transformations",
+    "query": {
+        "WHERE": {
+            "AND": [
+                {
+                    "IS": {
+                        "rooms_furniture": "*Tables*"
+                    }
+                },
+                {
+                    "GT": {
+                        "rooms_seats": 300
+                    }
+                }
+            ]
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "rooms_furniture",
+                "rooms_shortname",
+                "uniqueFurniture",
+                "maxSeats"
+            ],
+            "ORDER": {
+                "dir": "DOWN",
+                "keys": [
+                    "maxSeats"
+                ]
+            }
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "rooms_shortname",
+                "rooms_furniture"
+            ],
+            "APPLY": [
+                {
+                    "maxSeats": {
+                        "MAX": "rooms_seats"
+                    }
+                },
+                {
+                    "uniqueFurniture": {
+                        "COUNT": "rooms_furniture"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        {
+            "rooms_furniture": "Classroom-Movable Tables & Chairs",
+            "rooms_shortname": "OSBO",
+            "uniqueFurniture": 1,
+            "maxSeats": 442
+        },
+        {
+            "rooms_furniture": "Classroom-Fixed Tables/Fixed Chairs",
+            "rooms_shortname": "HEBB",
+            "uniqueFurniture": 1,
+            "maxSeats": 375
+        },
+        {
+            "rooms_furniture": "Classroom-Fixed Tables/Movable Chairs",
+            "rooms_shortname": "LSC",
+            "uniqueFurniture": 1,
+            "maxSeats": 350
+        }
+    ]
+}
