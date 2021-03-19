@@ -1,5 +1,5 @@
 import Constants from "../../Constants";
-import PerformQueryHelper from "../PerformQueryHelper";
+import PerformQueryHelper from "../queryExecution/PerformQueryHelper";
 import DatasetValidationHelper from "../DatasetValidationHelper";
 import QueryValidationHelper from "./QueryValidationHelper";
 

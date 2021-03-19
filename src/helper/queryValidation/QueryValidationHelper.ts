@@ -1,5 +1,5 @@
 import Constants from "../../Constants";
-import PerformQueryHelper from "../PerformQueryHelper";
+import PerformQueryHelper from "../queryExecution/PerformQueryHelper";
 import WhereValidationHelper from "./WhereValidationHelper";
 import OptionsValidationHelper from "./OptionsValidationHelper";
 import TransformationsValidationHelper from "./TransformationsValidationHelper";

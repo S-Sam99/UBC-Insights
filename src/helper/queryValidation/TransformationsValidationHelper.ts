@@ -1,6 +1,6 @@
 import Constants from "../../Constants";
 import QueryValidationHelper from "./QueryValidationHelper";
-import PerformQueryHelper from "../PerformQueryHelper";
+import PerformQueryHelper from "../queryExecution/PerformQueryHelper";
 
 /**
  * Centralized QueryValidationHelper Class for functions pertaining to validation purposes.
@@ -70,7 +70,7 @@ export default class TransformationsValidationHelper {
                 return false;
             }
         }
-        return true;
+        return this.hasNoDuplicateApplyKeys(apply);
     }
 
     private static isValidGroup(group: string[]): boolean {
@@ -128,5 +128,18 @@ export default class TransformationsValidationHelper {
             applyKeys.push(Object.keys(applyRule)[0]);
         }
         return applyKeys;
+    }
+
+    private static hasNoDuplicateApplyKeys(apply: any): boolean {
+        let applyKeys: string[] = [];
+
+        for (const applyRule of apply) {
+            const key = Object.keys(applyRule)[0];
+            if (applyKeys.includes(key)) {
+                return false;
+            }
+            applyKeys.push(key);
+        }
+        return true;
     }
 }

@@ -13,7 +13,7 @@ import Constants from "../Constants";
 import DatasetValidationHelper from "../helper/DatasetValidationHelper";
 import AddCourseDatasetHelper from "../helper/AddCourseDatasetHelper";
 import AddBuildingDatasetHelper from "../helper/AddBuildingDatasetHelper";
-import PerformQueryHelper from "../helper/PerformQueryHelper";
+import PerformQueryHelper from "../helper/queryExecution/PerformQueryHelper";
 import { fstat } from "fs-extra";
 import * as fs from "fs-extra";
 import RemoveDatasetHelper from "../helper/RemoveDatasetHelper";
