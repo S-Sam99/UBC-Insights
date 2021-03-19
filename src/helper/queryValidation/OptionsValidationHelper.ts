@@ -7,7 +7,9 @@ import QueryValidationHelper from "./QueryValidationHelper";
  * Centralized QueryValidationHelper Class for functions pertaining to validation purposes.
  */
 export default class OptionsValidationHelper {
-    public static isValidOptions(options: any): boolean {
+    public static isValidOptions(query: any): boolean {
+        const options = query.OPTIONS;
+
         if (Object.keys(options).length < 1 || !options.hasOwnProperty("COLUMNS")) {
             return false;
         }
@@ -27,7 +29,7 @@ export default class OptionsValidationHelper {
             return false;
         }
 
-        if (!this.isColumnsReferencingOneDataset(columns)) {
+        if (!this.isColumnsReferencingOneDataset(columns, query)) {
             return false;
         }
 
@@ -38,19 +40,27 @@ export default class OptionsValidationHelper {
         return true;
     }
 
-    private static isColumnsReferencingOneDataset(columns: any): boolean {
-        const firstDataset = PerformQueryHelper.getFirstDatasetId(columns);
+    private static isColumnsReferencingOneDataset(columns: any, query: any): boolean {
+        const firstDataset = this.getValidDataset(columns);
 
-        if (!firstDataset ||
-            DatasetValidationHelper.isValidId(firstDataset) &&
-            DatasetValidationHelper.isValidIDNotOnDisk(firstDataset)
-        ) {
+        if (!firstDataset) {
             return false;
         }
 
-        let allKeys = Constants.MKEYS;
-        allKeys = allKeys.concat(Constants.SKEYS);
+        let allKeys = this.getAllKeys();
 
+        if (query.hasOwnProperty("TRANSFORMATIONS")) {
+            return this.isValidColumnKeysWithTransformations(columns, allKeys, firstDataset);
+        } else {
+            return this.isValidColumnKeysWithoutTransformations(columns, allKeys, firstDataset);
+        }
+    }
+
+    private static isValidColumnKeysWithoutTransformations(
+        columns: any,
+        allKeys: string[],
+        firstDataset: string
+    ): boolean {
         for (const key of columns) {
             if (!(typeof key === "string")) {
                 return false;
@@ -67,14 +77,60 @@ export default class OptionsValidationHelper {
                 return false;
             }
         }
+
         return true;
+    }
+
+    private static isValidColumnKeysWithTransformations(
+        columns: any,
+        allKeys: string[],
+        firstDataset: string
+    ): boolean {
+        for (const key of columns) {
+            if (!(typeof key === "string")) {
+                return false;
+            }
+
+            const underscorePos = PerformQueryHelper.getUnderscorePosFromKey(key);
+            if (underscorePos > -1) {
+                const keyWithoutId: string = PerformQueryHelper.getParsedKey(key, underscorePos);
+
+                if (!allKeys.includes(keyWithoutId)) {
+                    return false;
+                }
+
+                if (firstDataset !== PerformQueryHelper.getDatasetIdFromKey(key, underscorePos)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    private static getAllKeys(): string[] {
+        let allKeys = Constants.MKEYS;
+        allKeys = allKeys.concat(Constants.SKEYS);
+        return allKeys;
+    }
+
+    private static getValidDataset(columns: any): string {
+        const firstDataset = PerformQueryHelper.getFirstDatasetId(columns);
+
+        if (DatasetValidationHelper.isValidId(firstDataset) &&
+            DatasetValidationHelper.isValidIDNotOnDisk(firstDataset)
+        ) {
+            return null;
+        }
+
+        return firstDataset;
     }
 
     private static isValidOrder(options: any): boolean {
         if (options.hasOwnProperty("ORDER")) {
             const order = options.ORDER;
 
-            if (Array.isArray(order)) {
+            if (Array.isArray(order) || !order) {
                 return false;
             }
 
@@ -92,7 +148,7 @@ export default class OptionsValidationHelper {
     }
 
     private static isValidOrderObject(columns: any, order: any): boolean {
-        if (Object.keys(order).length < 2) {
+        if (Object.keys(order).length < 1) {
             return false;
         }
         if (!this.isValidOrderDirection(order)) {

@@ -28,11 +28,15 @@ export default class PerformQueryHelper {
     }
 
     public static getFirstDatasetId(columns: any): string {
-        if (!(typeof columns[0] === "string")) {
-            return null;
+        for (const key of columns) {
+            if (typeof key === "string") {
+                const pos = key.indexOf("_");
+                if (pos > -1) {
+                    return this.getDatasetIdFromKey(columns[0], null);
+                }
+            }
         }
-
-        return this.getDatasetIdFromKey(columns[0], null);
+        return null;
     }
 
     private static applyOrder(order: string, results: CourseSection[]): CourseSection[] {
@@ -68,7 +72,10 @@ export default class PerformQueryHelper {
     }
 
     public static getParsedKey(key: string, underscorePos: number): string {
-        return key.substring(underscorePos + 1, key.length);
+        if (underscorePos > -1) {
+            return key.substring(underscorePos + 1, key.length);
+        }
+        return null;
     }
 
     public static getDatasetIdFromKey(key: string, underscorePos: number): string {
@@ -264,7 +271,10 @@ export default class PerformQueryHelper {
 
     private static isMatchingInputString(courseSectionData: string, value: string): boolean {
         const valueLength = value.length;
-        if (value.charAt(0) === "*" && value.charAt(valueLength - 1) === "*") {
+        if (valueLength === 1 && value.charAt(0) === "*" ||
+            valueLength === 2 && value.charAt(0) === "*" && value.charAt(1) === "*") {
+            return true;
+        } else if (value.charAt(0) === "*" && value.charAt(valueLength - 1) === "*") {
             return courseSectionData.includes(value.substring(1, valueLength - 1));
         } else if (value.charAt(0) === "*") {
             return courseSectionData.endsWith(value.substring(1, valueLength));

@@ -16,7 +16,7 @@ export default class QueryValidationHelper {
             return false;
         }
 
-        if (!OptionsValidationHelper.isValidOptions(query.OPTIONS)) {
+        if (!OptionsValidationHelper.isValidOptions(query)) {
             return false;
         }
 
@@ -30,12 +30,19 @@ export default class QueryValidationHelper {
     }
 
     private static hasRequiredQueryKeys(query: any): boolean {
-        if (Object.keys(query).length !== 2) {
+        if (Object.keys(query).length < 1) {
             return false;
         }
 
-        for (const key of Constants.REQUIRED_QUERY_KEYS) {
+        const requiredKeys = Constants.REQUIRED_QUERY_KEYS;
+        for (const key of requiredKeys) {
             if (!query.hasOwnProperty(key)) {
+                return false;
+            }
+        }
+
+        if (Object.keys(query).length === 3) {
+            if (!query.hasOwnProperty("TRANSFORMATIONS")) {
                 return false;
             }
         }
