@@ -18,9 +18,6 @@ export default class AddBuildingDatasetHelper {
         const buildings: any[] = [];
         let buildingInfo: any[] = [];
         let html: any;
-        let path = "";
-        let code = "";
-        let address = "";
         data.folder(Constants.REQUIRED_DIR_ROOMS).forEach((filePath, fileObj) => {
             if (fileObj.dir === false && filePath === "index.htm") {
                 html = Constants.REQUIRED_DIR_ROOMS + filePath;
@@ -28,27 +25,36 @@ export default class AddBuildingDatasetHelper {
         });
 
         return this.parseData(html, data).then((parsedData) => {
-            buildingInfo  = this.gatherData(parsedData);
+            buildingInfo = this.gatherData(parsedData);
             if (buildingInfo.length > 0) {
                 for (let paths of buildingInfo) {
                     buildings.push(data.file(Constants.REQUIRED_DIR_ROOMS + paths.getPath()).async("string"));
-                }
-
+                    }
                 return Promise.all(buildings).then((dataset) => {
-                    let buildingDataset = new BuildingDataset(id, kind, dataset, buildingInfo);
+                    return Promise.resolve(this.createBuildingDataset(dataset, id, kind, buildingInfo));
+                }).catch((err) => {
+                    return Promise.reject(err);
+                });
+            } else {
+                return Promise.reject(Constants.MISSING_BUILDINGS);
+            }
+        });
+    }
 
-                    if (buildingDataset.allRooms.length > 0) {
-                        this.persistDataToDisk(id, JSON.stringify(buildingDataset));
-                        return Promise.resolve(buildingDataset);
-                        } else {
-                            return Promise.reject(Constants.MISSING_ROOMS);
-                        }
-                    }).catch((err) => {
-                        return Promise.reject(err);
-                    });
-                } else {
-                    return Promise.reject(Constants.MISSING_BUILDINGS);
+    private static createBuildingDataset (dataset: any, id: string, kind: string, buildingInfo: any): Promise<any> {
+        return new Promise<BuildingDataset>((resolve, reject) => {
+            let buildingDataset: BuildingDataset = new BuildingDataset(id, kind, dataset, buildingInfo);
+            return buildingDataset.getData(buildingDataset.data).then((data) => {
+                if (data.allRooms.length > 0) {
+                    this.persistDataToDisk(id, JSON.stringify(data));
+                    return resolve(data);
                 }
+                return reject(Constants.MISSING_ROOMS);
+            }).catch((err) => {
+                return reject(err);
+            });
+        }).catch((err) => {
+            return Promise.reject(err);
         });
     }
 
