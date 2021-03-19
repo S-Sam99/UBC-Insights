@@ -1,35 +1,28 @@
-import Constants from "../Constants";
-import RoomData from "./RoomData";
 import Log from "../Util";
 import BuildingInfo from "./BuildingInfo";
 import BuildingData from "./BuildingData";
+import Dataset from "./Dataset";
+import {InsightDatasetKind} from "./IInsightFacade";
 const parse5 = require("parse5");
 
 /**
  * BuildingDataset Class
  */
-export default class BuildingDataset {
-    public id: string;
-    public kind: string;
-    public allRooms: any[];
+export default class BuildingDataset extends Dataset {
     public buildingInfo: BuildingInfo[];
     public seatNum: number;
     public shortName: string;
     public lat: number;
     public long: number;
     public count: number;
-    public numRows: number;
 
-    constructor(datasetId: string, kind: string, dataset: any, buildingInfo: BuildingInfo[]) {
-        this.id = datasetId;
-        this.kind = kind;
-        this.allRooms = [];
+    constructor(datasetId: string, kind: InsightDatasetKind, dataset: any, buildingInfo: BuildingInfo[]) {
+        super(datasetId, kind);
         this.buildingInfo = buildingInfo;
         this.seatNum = 0;
         this.lat = 0;
         this.long = 0;
         this.count = 0;
-        this.numRows = 0;
 
         if (dataset.length > 0) {
             this.parseDataset(dataset);
@@ -45,7 +38,7 @@ export default class BuildingDataset {
                     for (let rooms of buildingData.allRooms) {
                         if (rooms.isValid) {
                             this.numRows++;
-                            this.allRooms.push(rooms);
+                            this.data.push(rooms);
                         }
                     }
                 }

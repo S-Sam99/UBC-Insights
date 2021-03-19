@@ -8,13 +8,18 @@ import { file } from "jszip";
 import { promises } from "dns";
 import { readFileSync } from "fs";
 import {parse, Document} from "parse5";
+import {InsightDatasetKind} from "../controller/IInsightFacade";
 
 /**
  * Localized Helper Class for functions pertaining to adding course datasets.
  */
 export default class AddBuildingDatasetHelper {
 
-    public static generateBuildingDataset (id: string, kind: string, data: JSZip): Promise<BuildingDataset> {
+    public static generateBuildingDataset (
+        id: string,
+        kind: InsightDatasetKind,
+        data: JSZip
+    ): Promise<BuildingDataset> {
         const buildings: any[] = [];
         let buildingInfo: any[] = [];
         let html: any;
@@ -37,7 +42,7 @@ export default class AddBuildingDatasetHelper {
                 return Promise.all(buildings).then((dataset) => {
                     let buildingDataset = new BuildingDataset(id, kind, dataset, buildingInfo);
 
-                    if (buildingDataset.allRooms.length > 0) {
+                    if (buildingDataset.data.length > 0) {
                         this.persistDataToDisk(id, JSON.stringify(buildingDataset));
                         return Promise.resolve(buildingDataset);
                         } else {

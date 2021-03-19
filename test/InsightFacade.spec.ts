@@ -86,27 +86,27 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     });
     // ------------------------------ InsightFacade.addDataset() ------------------------------
     // Fulfill Test Cases
-    // it("Should fulfill addition of valid dataset", function () {
-    //     const id: string = "courses";
-    //     const expected: string[] = [id];
-    //
-    //     return expect(insightFacade.addDataset(
-    //         id,
-    //         datasets[id],
-    //         InsightDatasetKind.Courses,
-    //     )).to.eventually.deep.equal(expected);
-    // });
-    //
-    // it("Should fulfill addition of valid dataset - Rooms", function () {
-    //     const id: string = "rooms";
-    //     const expected: string[] = [id];
-    //
-    //     return expect(insightFacade.addDataset(
-    //         id,
-    //         datasets[id],
-    //         InsightDatasetKind.Rooms,
-    //     )).to.eventually.deep.equal(expected);
-    // });
+    it("Should fulfill addition of valid dataset", function () {
+        const id: string = "courses";
+        const expected: string[] = [id];
+
+        return expect(insightFacade.addDataset(
+            id,
+            datasets[id],
+            InsightDatasetKind.Courses,
+        )).to.eventually.deep.equal(expected);
+    });
+
+    it("Should fulfill addition of valid dataset - Rooms", function () {
+        const id: string = "rooms";
+        const expected: string[] = [id];
+
+        return expect(insightFacade.addDataset(
+            id,
+            datasets[id],
+            InsightDatasetKind.Rooms,
+        )).to.eventually.deep.equal(expected);
+    });
     //
     // it("Should fulfill addition of valid dataset with one course section", function () {
     //     const id: string = "oneCourseSection";
@@ -364,35 +364,35 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //
     // // // ------------------------------ InsightFacade.removeDataset() ------------------------------
     // // // // Fulfill Test Cases
-    // it("Should fulfill removal of valid dataset - courses", function () {
-    //     const id: string = "courses";
-    //     const expected: string[] = [id];
-    //     return expect(insightFacade.addDataset(
-    //         id,
-    //         datasets[id],
-    //         InsightDatasetKind.Courses,
-    //     )).to.eventually.deep.equal(expected)
-    //         .then(() => {
-    //             return expect(insightFacade.removeDataset(id))
-    //                     .to.eventually.deep.equal(id);
-    //             }
-    //         );
-    // });
-    //
-    // it("Should fulfill removal of valid dataset - rooms", function () {
-    //     const id: string = "rooms";
-    //     const expected: string[] = [id];
-    //     return expect(insightFacade.addDataset(
-    //         id,
-    //         datasets[id],
-    //         InsightDatasetKind.Rooms,
-    //     )).to.eventually.deep.equal(expected)
-    //         .then(() => {
-    //             return expect(insightFacade.removeDataset(id))
-    //                     .to.eventually.deep.equal(id);
-    //             }
-    //         );
-    // });
+    it("Should fulfill removal of valid dataset - courses", function () {
+        const id: string = "courses";
+        const expected: string[] = [id];
+        return expect(insightFacade.addDataset(
+            id,
+            datasets[id],
+            InsightDatasetKind.Courses,
+        )).to.eventually.deep.equal(expected)
+            .then(() => {
+                return expect(insightFacade.removeDataset(id))
+                        .to.eventually.deep.equal(id);
+                }
+            );
+    });
+
+    it("Should fulfill removal of valid dataset - rooms", function () {
+        const id: string = "rooms";
+        const expected: string[] = [id];
+        return expect(insightFacade.addDataset(
+            id,
+            datasets[id],
+            InsightDatasetKind.Rooms,
+        )).to.eventually.deep.equal(expected)
+            .then(() => {
+                return expect(insightFacade.removeDataset(id))
+                        .to.eventually.deep.equal(id);
+                }
+            );
+    });
     //
     // it("Should fulfill removal of valid dataset, deleting both memory and disk caches", function () {
     //     const id: string = "courses";

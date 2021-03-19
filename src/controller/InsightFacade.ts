@@ -80,7 +80,7 @@ export default class InsightFacade implements IInsightFacade {
         });
 }
 
-    private unzipDataset(id: string, kind: string, content: string): Promise<string[]> {
+    private unzipDataset(id: string, kind: InsightDatasetKind, content: string): Promise<string[]> {
         return JSZip.loadAsync(content, {base64: true})
             .then((data) => {
                 if (data["files"].hasOwnProperty(Constants.REQUIRED_DIR_COURSES)) {

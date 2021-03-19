@@ -1,15 +1,14 @@
 import * as fs from "fs-extra";
 import Constants from "../Constants";
-import CourseDataset from "../controller/CourseDataset";
-import CourseSection from "../controller/CourseSection";
+import Dataset from "../controller/Dataset";
 /**
  * Centralized Helper Class for functions pertaining to performing queries on added datasets.
  */
 export default class PerformQueryHelper {
     public static performDatasetQuery(query: any): any[] {
         const columnKeys = query.OPTIONS.COLUMNS;
-        const dataset: CourseDataset = this.getDataset(this.getFirstDatasetId(columnKeys));
-        let results: CourseSection[] = this.applyFilter(query, dataset.allCourseSections);
+        const dataset: Dataset = this.getDataset(this.getFirstDatasetId(columnKeys));
+        let results: any[] = this.applyFilter(query, dataset.data);
         if (results.length > Constants.MAX_RESULTS_SIZE) {
             return results;
         }
@@ -39,7 +38,7 @@ export default class PerformQueryHelper {
         return null;
     }
 
-    private static applyOrder(order: string, results: CourseSection[]): CourseSection[] {
+    private static applyOrder(order: string, results: any[]): any[] {
         results.sort((firstSection, secondSection) => {
             const firstValue = firstSection.data[order];
             const secondValue = secondSection.data[order];
@@ -48,23 +47,23 @@ export default class PerformQueryHelper {
         return results;
     }
 
-    private static applyColumns(columnKeys: string[], results: CourseSection[]): any[] {
+    private static applyColumns(columnKeys: string[], results: any[]): any[] {
         let modifiedResults: any[] = [];
 
-        for (const courseSection of results) {
-            modifiedResults.push(this.generateCourseSectionWithColumns(courseSection, columnKeys));
+        for (const result of results) {
+            modifiedResults.push(this.generateResultsWithColumns(result, columnKeys));
         }
 
         return modifiedResults;
     }
 
-    private static generateCourseSectionWithColumns(courseSection: CourseSection, columnKeys: string[]): any {
-        let courseSectionWithColumns: any = {};
+    private static generateResultsWithColumns(result: any, columnKeys: string[]): any {
+        let resultsWithColumns: any = {};
 
         for (const column of columnKeys) {
-            courseSectionWithColumns[column] = courseSection.data[column];
+            resultsWithColumns[column] = result.data[column];
         }
-        return courseSectionWithColumns;
+        return resultsWithColumns;
     }
 
     public static getUnderscorePosFromKey(key: string): number {
@@ -85,9 +84,9 @@ export default class PerformQueryHelper {
         return key.substring(0, underscorePos);
     }
 
-    private static applyFilter(query: any, allCourseSections: CourseSection[]): CourseSection[] {
+    private static applyFilter(query: any, data: any[]): any[] {
         if (Object.keys(query.WHERE).length === 0) {
-            return allCourseSections;
+            return data;
         }
         const filters = Constants.FILTERS;
         const filterFunctions = Constants.FILTER_FUNCTIONS;
@@ -95,7 +94,7 @@ export default class PerformQueryHelper {
             query.WHERE,
             filters,
             filterFunctions,
-            allCourseSections
+            data
         );
     }
 
@@ -103,8 +102,8 @@ export default class PerformQueryHelper {
         parameters: any,
         filters: any,
         filterFunctions: any,
-        allCourseSections: CourseSection[]
-    ): CourseSection[] {
+        data: any[]
+    ): any[] {
         const keys = Object.keys(parameters);
         const key = keys[0];
         const parameter = parameters[key];
@@ -113,28 +112,28 @@ export default class PerformQueryHelper {
         const filter = filters[key];
         switch (filter.function) {
             case filterFunctions.And: {
-                return this.applyFilterLogicAnd(parameter, filters, filterFunctions, allCourseSections);
+                return this.applyFilterLogicAnd(parameter, filters, filterFunctions, data);
             }
             case filterFunctions.Or: {
-                return this.applyFilterLogicOr(parameter, filters, filterFunctions, allCourseSections);
+                return this.applyFilterLogicOr(parameter, filters, filterFunctions, data);
             }
             case filterFunctions.LessThan: {
-                return this.findCourseSectionsLessThan(columnKey, value, allCourseSections);
+                return this.findCourseSectionsLessThan(columnKey, value, data);
             }
             case filterFunctions.GreaterThan: {
-                return this.findCourseSectionsGreaterThan(columnKey, value, allCourseSections);
+                return this.findCourseSectionsGreaterThan(columnKey, value, data);
             }
             case filterFunctions.Equal: {
-                return this.findCourseSectionsEqual(columnKey, value, allCourseSections);
+                return this.findCourseSectionsEqual(columnKey, value, data);
             }
             case filterFunctions.Is: {
-                return this.findCourseSectionsIs(columnKey, value, allCourseSections);
+                return this.findCourseSectionsIs(columnKey, value, data);
             }
             case filterFunctions.Negation: {
-                return this.applyFilterLogicNegation(parameter, filters, filterFunctions, allCourseSections);
+                return this.applyFilterLogicNegation(parameter, filters, filterFunctions, data);
             }
             default: {
-                return allCourseSections;
+                return data;
             }
         }
     }
@@ -143,45 +142,45 @@ export default class PerformQueryHelper {
         parameters: any,
         filters: any,
         filterFunctions: any,
-        allCourseSections: CourseSection[]
-    ): CourseSection[] {
-        let allMatchingCourseSections: CourseSection[][] = [];
+        data: any[]
+    ): any[] {
+        let results: any[][] = [];
         for (const key in parameters) {
             if (parameters.hasOwnProperty(key)) {
-                const courseSections = this.applyFilterFunction(
+                const allMatchingResults = this.applyFilterFunction(
                     parameters[key],
                     filters,
                     filterFunctions,
-                    allCourseSections
+                    data
                 );
-                allMatchingCourseSections.push(courseSections);
+                results.push(allMatchingResults);
             }
         }
-        return allMatchingCourseSections
+        return results
             .reduce((firstList, secondList) => firstList
-                .filter((courseSection) => secondList.includes(courseSection)));
+                .filter((result) => secondList.includes(result)));
     }
 
     private static applyFilterLogicOr(
         parameters: any,
         filters: any,
         filterFunctions: any,
-        allCourseSections: CourseSection[]
-    ): CourseSection[] {
-        let results: CourseSection[] = [];
+        data: any[]
+    ): any[] {
+        let results: any[] = [];
         for (const key in parameters) {
             if (parameters.hasOwnProperty(key)) {
-                const courseSections = this.applyFilterFunction(
+                const allMatchingResults = this.applyFilterFunction(
                     parameters[key],
                     filters,
                     filterFunctions,
-                    allCourseSections
+                    data
                 );
                 if (results.length < 1) {
-                    results = courseSections;
+                    results = allMatchingResults;
                 } else {
                     results = results.concat(
-                        courseSections.filter((courseSection) => results.indexOf(courseSection) < 0)
+                        allMatchingResults.filter((result) => results.indexOf(result) < 0)
                     );
                 }
             }
@@ -193,93 +192,93 @@ export default class PerformQueryHelper {
         parameters: any,
         filters: any,
         filterFunctions: any,
-        allCourseSections: CourseSection[]
-    ): CourseSection[] {
-        const courseSections = this.applyFilterFunction(
+        data: any[]
+    ): any[] {
+        const allMatchingResults = this.applyFilterFunction(
             parameters,
             filters,
             filterFunctions,
-            allCourseSections
+            data
         );
 
-        return allCourseSections.filter((courseSection) => !courseSections.includes(courseSection));
+        return data.filter((result) => !allMatchingResults.includes(result));
     }
 
     private static findCourseSectionsLessThan(
         key: string,
         value: number,
-        allCourseSections: CourseSection[]
-    ): CourseSection[] {
-        let matchingCourses: CourseSection[] = [];
+        data: any[]
+    ): any[] {
+        let allMatchingResults: any[] = [];
 
-        for (const courseSection of allCourseSections) {
-            if (courseSection.data[key] < value) {
-                matchingCourses.push(courseSection);
+        for (const result of data) {
+            if (result.data[key] < value) {
+                allMatchingResults.push(result);
             }
         }
-        return matchingCourses;
+        return allMatchingResults;
     }
 
     private static findCourseSectionsGreaterThan(
         key: string,
         value: number,
-        allCourseSections: CourseSection[]
-    ): CourseSection[] {
-        let matchingCourses: CourseSection[] = [];
+        data: any[]
+    ): any[] {
+        let allMatchingResults: any[] = [];
 
-        for (const courseSection of allCourseSections) {
-            if (courseSection.data[key] > value) {
-                matchingCourses.push(courseSection);
+        for (const result of data) {
+            if (result.data[key] > value) {
+                allMatchingResults.push(result);
             }
         }
-        return matchingCourses;
+        return allMatchingResults;
     }
 
     private static findCourseSectionsEqual(
         key: string,
         value: number,
-        allCourseSections: CourseSection[]
-    ): CourseSection[] {
-        let matchingCourses: CourseSection[] = [];
+        data: any[]
+    ): any[] {
+        let allMatchingResults: any[] = [];
 
-        for (const courseSection of allCourseSections) {
-            if (courseSection.data[key] === value) {
-                matchingCourses.push(courseSection);
+        for (const result of data) {
+            if (result.data[key] === value) {
+                allMatchingResults.push(result);
             }
         }
-        return matchingCourses;
+        return allMatchingResults;
     }
 
     private static findCourseSectionsIs(
         key: string,
         value: string,
-        allCourseSections: CourseSection[]
-    ): CourseSection[] {
-        let matchingCourses: CourseSection[] = [];
+        data: any[]
+    ): any[] {
+        let allMatchingResults: any[] = [];
         const hasWildcard = value.includes("*");
-        for (const courseSection of allCourseSections) {
+        for (const result of data) {
             if (hasWildcard) {
-                if (this.isMatchingInputString(courseSection.data[key], value)) {
-                    matchingCourses.push(courseSection);
+                if (this.isMatchingInputString(result.data[key], value)) {
+                    allMatchingResults.push(result);
                 }
-            } else if (courseSection.data[key] === value) {
-                matchingCourses.push(courseSection);
+            } else if (result.data[key] === value) {
+                allMatchingResults.push(result);
             }
         }
-        return matchingCourses;
+        return allMatchingResults;
     }
 
-    private static isMatchingInputString(courseSectionData: string, value: string): boolean {
+    private static isMatchingInputString(data: string, value: string): boolean {
         const valueLength = value.length;
         if (valueLength === 1 && value.charAt(0) === "*" ||
             valueLength === 2 && value.charAt(0) === "*" && value.charAt(1) === "*") {
             return true;
         } else if (value.charAt(0) === "*" && value.charAt(valueLength - 1) === "*") {
-            return courseSectionData.includes(value.substring(1, valueLength - 1));
+            return data.includes(value.substring(1, valueLength - 1));
         } else if (value.charAt(0) === "*") {
-            return courseSectionData.endsWith(value.substring(1, valueLength));
+            return data.endsWith(value.substring(1, valueLength));
         } else if (value.charAt(valueLength - 1) === "*") {
-            return courseSectionData.startsWith(value.substring(0, valueLength - 1));
+            return data.startsWith(value.substring(0, valueLength - 1));
         } else {
             return false;
         }
