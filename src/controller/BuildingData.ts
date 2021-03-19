@@ -21,13 +21,13 @@ export default class BuildingData {
     public lat: number;
     public long: number;
 
-    constructor(datasetId: string, data: any, buildingInfo: BuildingInfo) {
+    constructor(datasetId: string, data: any, buildingInfo: BuildingInfo, coordinates: any[]) {
         this.id = datasetId;
         this.buildingInfo = buildingInfo;
         this.allRooms = [];
         this.seatNum = 0;
-        this.lat = 0;
-        this.long = 0;
+        this.lat = coordinates[1];
+        this.long = coordinates[0];
         this.parseDataset(data);
     }
 
@@ -37,28 +37,11 @@ export default class BuildingData {
         this.shortName = this.buildingInfo.getCode();
         try {
             this.fullName = this.setFullName(data);
-            // this.findCoordinates(this.address);
             this.findRooms(data, roomFieldMapping);
         } catch (err) {
             Log.error(err);
         }
     }
-
-    // private setAddress(html: any): string {
-    //     if (html.nodeName === "div" && html.attrs[0].value === "building-info") {
-    //         return String(html.childNodes[3].childNodes[0].childNodes[0].value);
-    //     }
-
-    //     if (html.childNodes && html.childNodes.length > 0) {
-    //         for (let child of html.childNodes) {
-    //             let possibleAddress = this.setAddress(child);
-    //             if (possibleAddress !== "") {
-    //                 return possibleAddress;
-    //             }
-    //         }
-    //     }
-    //     return "";
-    // }
 
     private setFullName(html: any): string {
         if (html.nodeName === "span" && html.attrs.length > 0 && html.attrs[0].value === "field-content") {
@@ -111,7 +94,7 @@ export default class BuildingData {
                             }
                         }
                     }
-                    if (fields[0] !== "") {
+                    if (fields[0] !== "" && fields[1] !== "" && fields[2] !== "") {
                         const room = new RoomData(this.id, fields, fieldMapping);
                         this.allRooms.push(room);
                     }
@@ -125,21 +108,14 @@ export default class BuildingData {
         }
     }
 
-    // TODO: finish and test implementation
-    private findCoordinates(address: string): void {
-        const codedAddress = encodeURI(address);
-        const result =  http.get("http://cs310.students.cs.ubc.ca:11316/api/v1/project_team138/" + codedAddress);
-        try {
-            this.long = result.lon;
-            this.lat = result.lat;
-        } catch (err) {
-            Log.error(result.error);
-        }
-    }
-
     private setupArray(array: any): void {
-        array["lat"] = this.lat;
-        array["lon"] = this.long;
+        if (this.lat && this.long) {
+            array["lat"] = this.lat;
+            array["lon"] = this.long;
+        } else {
+            array["lat"] = 0;
+            array["lon"] = 0;
+        }
         array["fullname"] = this.fullName;
         array["shortname"] = this.shortName;
         array["address"] = this.address;
