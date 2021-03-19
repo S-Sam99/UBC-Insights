@@ -1,7 +1,7 @@
 /**
  * Centralized location for constants.
  */
-const KEY_MAP = {
+const KEY_MAP_COURSES = {
     dept: {
         name: "Subject",
         type: "string"
@@ -44,7 +44,56 @@ const KEY_MAP = {
     }
 };
 
-const REQUIRED_DIR = "courses/";
+const KEY_MAP_ROOMS = {
+    fullname: {
+        name: "fullname",
+        type: "string"
+    },
+    shortname: {
+        name: "shortname",
+        type: "string"
+    },
+    number: {
+        name: "number",
+        type: "string"
+    },
+    name: {
+        name: "name",
+        type: "string"
+    },
+    address: {
+        name: "address",
+        type: "string"
+    },
+    lat: {
+        name: "lat",
+        type: "number"
+    },
+    lon: {
+        name: "lon",
+        type: "number"
+    },
+    seats: {
+        name: "seats",
+        type: "number"
+    },
+    type: {
+        name: "name",
+        type: "string"
+    },
+    furniture: {
+        name: "furniture",
+        type: "string"
+    },
+    href: {
+        name: "href",
+        type: "string"
+    }
+};
+
+const REQUIRED_DIR_COURSES = "courses/";
+
+const REQUIRED_DIR_ROOMS = "rooms/";
 
 const MAX_RESULTS_SIZE = 5000;
 
@@ -132,19 +181,27 @@ const INVALID_KIND_COURSES = "Invalid Kind for Course Dataset";
 
 const INVALID_CONTENT = "Invalid Content for Dataset";
 
-const MISSING_COURSES_FOLDER = "Missing \"courses\" folder in root directory.";
+const MISSING_MAIN_FOLDER = "Missing \"courses\" or \"rooms\" folder in root directory.";
 
 const MISSING_COURSES = "Missing valid courses for dataset.";
 
 const MISSING_COURSE_SECTION = "Missing valid course section for dataset.";
+
+const MISSING_BUILDINGS = "Missing valid buildings for dataset.";
+
+const MISSING_ROOMS = "Missing valid Rooms for dataset.";
 
 const DATASET_ALREADY_ADDED = "Dataset has already been added.";
 
 const DATASET_NOT_YET_ADDED = "Dataset has not been added yet.";
 
 export default class Constants {
-    public static get KEY_MAP() {
-        return KEY_MAP;
+    public static get KEY_MAP_COURSES() {
+        return KEY_MAP_COURSES;
+    }
+
+    public static get KEY_MAP_ROOMS() {
+        return KEY_MAP_ROOMS;
     }
 
     public static get MAX_RESULTS_SIZE() {
@@ -179,8 +236,12 @@ export default class Constants {
         return FILTER_FUNCTIONS;
     }
 
-    public static get REQUIRED_DIR() {
-        return REQUIRED_DIR;
+    public static get REQUIRED_DIR_COURSES() {
+        return REQUIRED_DIR_COURSES;
+    }
+
+    public static get REQUIRED_DIR_ROOMS() {
+        return REQUIRED_DIR_ROOMS;
     }
 
     public static get DATASET_NOT_ZIP() {
@@ -199,8 +260,8 @@ export default class Constants {
         return INVALID_CONTENT;
     }
 
-    public static get MISSING_COURSES_FOLDER() {
-        return MISSING_COURSES_FOLDER;
+    public static get MISSING_MAIN_FOLDER() {
+        return MISSING_MAIN_FOLDER;
     }
 
     public static get MISSING_COURSES() {
@@ -209,6 +270,14 @@ export default class Constants {
 
     public static get MISSING_COURSE_SECTION() {
         return MISSING_COURSE_SECTION;
+    }
+
+    public static get MISSING_BUILDINGS() {
+        return MISSING_BUILDINGS;
+    }
+
+    public static get MISSING_ROOMS() {
+        return MISSING_ROOMS;
     }
 
     public static get DATASET_ALREADY_ADDED() {

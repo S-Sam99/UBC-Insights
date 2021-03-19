@@ -7,11 +7,13 @@ import Log from "../Util";
  */
 export default class CourseDataset {
     public id: string;
+    public kind: string;
     public allCourseSections: CourseSection[];
     public numRows: number;
 
-    constructor(datasetId: string, dataset: string[]) {
+    constructor(datasetId: string, kind: string, dataset: string[]) {
         this.id = datasetId;
+        this.kind = kind;
         this.allCourseSections = [];
         this.numRows = 0;
 
@@ -21,7 +23,7 @@ export default class CourseDataset {
     }
 
     private parseDataset(dataset: string[]) {
-        const courseSectionFieldMapping: object = Constants.KEY_MAP;
+        const courseSectionFieldMapping: object = Constants.KEY_MAP_COURSES;
 
         for (const fileData of dataset) {
             try {

@@ -15,17 +15,6 @@ export default class ValidationHelper {
         return !(!id || id.includes("_") || !id.trim().length);
     }
 
-    public static isValidIdforRemove(id: string): boolean {
-        if (!id || id.includes("_") || !id.trim().length) {
-            return false;
-        }
-        return true;
-    }
-
-    public static isValidCourseKind(kind: InsightDatasetKind) {
-        return kind === InsightDatasetKind.Courses;
-    }
-
     public static isValidIDNotOnDisk(id: string): boolean {
         const path = "./data";
         return !fs.existsSync(`${path}/${id}`);

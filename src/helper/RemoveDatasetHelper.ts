@@ -5,7 +5,7 @@ import ValidationHelper from "./ValidationHelper";
 import { delimiter } from "path";
 
 /**
- * Localized Helper Class for functions pertaining to removing course datasets.
+ * Localized Helper Class for functions pertaining to removing datasets.
  */
 export default class RemoveDatasetHelper {
     public static removeDataset (id: string): Promise<string> {

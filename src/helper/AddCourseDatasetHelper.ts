@@ -7,10 +7,10 @@ import CourseDataset from "../controller/CourseDataset";
  * Localized Helper Class for functions pertaining to adding course datasets.
  */
 export default class AddCourseDatasetHelper {
-    public static generateCourseDataset (id: string, data: JSZip): Promise<CourseDataset> {
+    public static generateCourseDataset (id: string, kind: string, data: JSZip): Promise<CourseDataset> {
         const promises: any[] = [];
 
-        data.folder(Constants.REQUIRED_DIR).forEach((filePath, fileObj) => {
+        data.folder(Constants.REQUIRED_DIR_COURSES).forEach((filePath, fileObj) => {
             if (fileObj.dir === false) {
                 promises.push(fileObj.async("string"));
             }
@@ -18,7 +18,7 @@ export default class AddCourseDatasetHelper {
 
         if (promises.length > 0) {
             return Promise.all(promises).then((dataset) => {
-                let courseDataset = new CourseDataset(id, dataset);
+                let courseDataset = new CourseDataset(id, kind, dataset);
 
                 if (courseDataset.allCourseSections.length > 0) {
                     this.persistDataToDisk(id, JSON.stringify(courseDataset));
