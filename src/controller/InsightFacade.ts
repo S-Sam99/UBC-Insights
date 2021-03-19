@@ -10,7 +10,7 @@ import {
 
 import * as JSZip from "jszip";
 import Constants from "../Constants";
-import ValidationHelper from "../helper/ValidationHelper";
+import DatasetValidationHelper from "../helper/DatasetValidationHelper";
 import AddCourseDatasetHelper from "../helper/AddCourseDatasetHelper";
 import AddBuildingDatasetHelper from "../helper/AddBuildingDatasetHelper";
 import PerformQueryHelper from "../helper/PerformQueryHelper";
@@ -20,6 +20,7 @@ import RemoveDatasetHelper from "../helper/RemoveDatasetHelper";
 import { files } from "jszip";
 import CourseDataset from "../controller/CourseDataset";
 import ListDatasetHelper from "../helper/ListDatasetHelper";
+import QueryValidationHelper from "../helper/queryValidation/QueryValidationHelper";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -61,15 +62,15 @@ export default class InsightFacade implements IInsightFacade {
      */
     public addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
         return new Promise<string[]>((resolve, reject) => {
-            if (!ValidationHelper.isValidIDNotOnDisk(id)) {
+            if (!DatasetValidationHelper.isValidIDNotOnDisk(id)) {
                 return reject(new InsightError(Constants.DATASET_ALREADY_ADDED));
             }
 
-            if (!ValidationHelper.isValidId(id)) {
+            if (!DatasetValidationHelper.isValidId(id)) {
                 return reject(new InsightError(`${Constants.INVALID_ID} ${id}`));
             }
 
-            if (!ValidationHelper.isValidContent(content)) {
+            if (!DatasetValidationHelper.isValidContent(content)) {
                 return reject(new InsightError(Constants.INVALID_CONTENT));
             }
 
@@ -132,11 +133,11 @@ export default class InsightFacade implements IInsightFacade {
      */
     public removeDataset(id: string): Promise<string> {
         return new Promise<string>((resolve, reject) => {
-        if (!ValidationHelper.isValidId(id)) {
+        if (!DatasetValidationHelper.isValidId(id)) {
             return reject(new InsightError(`${Constants.INVALID_ID} ${id}`));
         }
 
-        if (ValidationHelper.isValidIDNotOnDisk(id)) {
+        if (DatasetValidationHelper.isValidIDNotOnDisk(id)) {
             return reject(new NotFoundError(Constants.DATASET_NOT_YET_ADDED));
         }
 
@@ -159,7 +160,7 @@ export default class InsightFacade implements IInsightFacade {
      * The promise should reject with an InsightError describing the error.
      */
     public performQuery(query: any): Promise<any[]> {
-        if (!ValidationHelper.isValidQuery(query)) {
+        if (!QueryValidationHelper.isValidQuery(query)) {
             return Promise.reject(new InsightError("Query is incorrectly formatted."));
         }
         const results = PerformQueryHelper.performDatasetQuery(query);

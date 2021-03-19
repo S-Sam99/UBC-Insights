@@ -173,6 +173,11 @@ const REQUIRED_QUERY_KEYS = [
     "OPTIONS"
 ];
 
+const ORDER_DIRECTIONS = [
+    "DOWN",
+    "UP"
+];
+
 const DATASET_NOT_ZIP = "Dataset file is not a ZIP.";
 
 const INVALID_ID = "Invalid ID for dataset for:";
@@ -250,6 +255,10 @@ export default class Constants {
 
     public static get INVALID_ID() {
         return INVALID_ID;
+    }
+
+    public static get ORDER_DIRECTIONS() {
+        return ORDER_DIRECTIONS;
     }
 
     public static get INVALID_KIND_COURSES() {
