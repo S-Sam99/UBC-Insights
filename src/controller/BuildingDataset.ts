@@ -42,7 +42,7 @@ export default class BuildingDataset {
                 try {
                     const parsedData = this.parseData(fileData);
                     if (this.checkValidity(parsedData)) {
-                        let latLong: any[2] = [0, 1];
+                        let latLong: any[2] = [0, 0];
                         buildings.push(parsedData);
                         const currentBuildInfo = this.buildingInfo[this.count];
                         promises.push(this.findCoordinates(currentBuildInfo.getAddress(), latLong));
@@ -88,8 +88,13 @@ export default class BuildingDataset {
                 result.on("end", () => {
                     try {
                         const location = JSON.parse(rawData);
-                        array[0] = location.lon;
-                        array[1] = location.lat;
+                        if (location.error) {
+                            array[0] = 0;
+                            array[1] = 0;
+                        } else {
+                            array[0] = location.lon;
+                            array[1] = location.lat;
+                        }
                         return resolve(array);
                     } catch (err) {
                         return reject(err);
