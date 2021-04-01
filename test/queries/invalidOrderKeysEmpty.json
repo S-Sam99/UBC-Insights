@@ -1,5 +1,5 @@
 {
-    "title": "Invalid Order Is Array",
+    "title": "Invalid Order Keys Empty",
     "query": {
         "WHERE": {
             "AND": [
@@ -20,7 +20,11 @@
                 "rooms_shortname",
                 "maxSeats"
             ],
-            "ORDER": []
+            "ORDER": {
+                "dir": "DOWN",
+                "keys": [
+                ]
+            }
         },
         "TRANSFORMATIONS": {
             "GROUP": [

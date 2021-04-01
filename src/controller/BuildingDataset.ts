@@ -1,8 +1,8 @@
-import Constants from "../Constants";
-import RoomData from "./RoomData";
 import Log from "../Util";
 import BuildingInfo from "./BuildingInfo";
 import BuildingData from "./BuildingData";
+import Dataset from "./Dataset";
+import {InsightDatasetKind} from "./IInsightFacade";
 const parse5 = require("parse5");
 const http = require("http");
 

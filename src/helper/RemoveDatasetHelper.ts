@@ -1,7 +1,6 @@
 import Constants from "../Constants";
 import * as JSZip from "jszip";
 import * as fs from "fs-extra";
-import ValidationHelper from "./ValidationHelper";
 import { delimiter } from "path";
 
 /**

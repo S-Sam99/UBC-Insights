@@ -1,21 +1,16 @@
+import Dataset from "./Dataset";
 import Constants from "../Constants";
 import CourseSection from "./CourseSection";
 import Log from "../Util";
+import {InsightDatasetKind} from "./IInsightFacade";
 
 /**
  * CourseDataset Class
  */
-export default class CourseDataset {
-    public id: string;
-    public kind: string;
-    public allCourseSections: CourseSection[];
-    public numRows: number;
+export default class CourseDataset extends Dataset {
 
-    constructor(datasetId: string, kind: string, dataset: string[]) {
-        this.id = datasetId;
-        this.kind = kind;
-        this.allCourseSections = [];
-        this.numRows = 0;
+    constructor(datasetId: string, kind: InsightDatasetKind, dataset: string[]) {
+        super(datasetId, kind);
 
         if (dataset.length > 0) {
             this.parseDataset(dataset);
@@ -34,7 +29,7 @@ export default class CourseDataset {
                         const courseSection = new CourseSection(this.id, courseSectionData, courseSectionFieldMapping);
                         if (courseSection.isValid) {
                             this.numRows++;
-                            this.allCourseSections.push(courseSection);
+                            this.data.push(courseSection);
                         }
                     }
                 }

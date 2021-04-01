@@ -43,7 +43,6 @@ const KEY_MAP_COURSES = {
         type: "number"
     }
 };
-
 const KEY_MAP_ROOMS = {
     fullname: {
         name: "fullname",
@@ -90,39 +89,25 @@ const KEY_MAP_ROOMS = {
         type: "string"
     }
 };
-
 const REQUIRED_DIR_COURSES = "courses/";
-
 const REQUIRED_DIR_ROOMS = "rooms/";
-
 const MAX_RESULTS_SIZE = 5000;
-
 const QUERY_RESULT_TOO_LARGE =
     `The result is too big. Only queries with a maximum of ${MAX_RESULTS_SIZE} results are supported.`;
-
 const MKEYS = [
-    "avg",
-    "pass",
-    "fail",
-    "audit",
-    "year"
+    "avg", "pass", "fail", "audit",
+    "year", "lat", "lon", "seats"
 ];
-
 const SKEYS = [
-    "dept",
-    "id",
-    "instructor",
-    "title",
-    "uuid"
+    "dept", "id", "instructor", "title", "uuid", "fullname", "shortname",
+    "number", "name", "address", "type", "furniture", "href"
 ];
-
 enum FILTER_OPERATIONS {
     Logic = "LOGIC",
     MComparison = "MCOMPARISON",
     SComparison = "SCOMPARISON",
     Negation = "NEGATION"
 }
-
 enum FILTER_FUNCTIONS {
     And = "AND",
     Or = "OR",
@@ -132,7 +117,6 @@ enum FILTER_FUNCTIONS {
     Is = "IS",
     Negation = "NEGATION"
 }
-
 const FILTERS: any = {
     AND: {
         operation: FILTER_OPERATIONS.Logic,
@@ -167,32 +151,40 @@ const FILTERS: any = {
         function: FILTER_FUNCTIONS.Negation
     }
 };
-
+const APPLY_TOKENS: any = {
+    MAX: {
+        type: ["number"]
+    },
+    MIN: {
+        type: ["number"]
+    },
+    AVG: {
+        type: ["number"]
+    },
+    SUM: {
+        type: ["number"]
+    },
+    COUNT: {
+        type: ["number", "string"]
+    }
+};
 const REQUIRED_QUERY_KEYS = [
     "WHERE",
     "OPTIONS"
 ];
-
+const ORDER_DIRECTIONS = [
+    "DOWN",
+    "UP"
+];
 const DATASET_NOT_ZIP = "Dataset file is not a ZIP.";
-
 const INVALID_ID = "Invalid ID for dataset for:";
-
-const INVALID_KIND_COURSES = "Invalid Kind for Course Dataset";
-
 const INVALID_CONTENT = "Invalid Content for Dataset";
-
 const MISSING_MAIN_FOLDER = "Missing \"courses\" or \"rooms\" folder in root directory.";
-
 const MISSING_COURSES = "Missing valid courses for dataset.";
-
 const MISSING_COURSE_SECTION = "Missing valid course section for dataset.";
-
 const MISSING_BUILDINGS = "Missing valid buildings for dataset.";
-
 const MISSING_ROOMS = "Missing valid Rooms for dataset.";
-
 const DATASET_ALREADY_ADDED = "Dataset has already been added.";
-
 const DATASET_NOT_YET_ADDED = "Dataset has not been added yet.";
 
 export default class Constants {
@@ -236,6 +228,10 @@ export default class Constants {
         return FILTER_FUNCTIONS;
     }
 
+    public static get APPLY_TOKENS() {
+        return APPLY_TOKENS;
+    }
+
     public static get REQUIRED_DIR_COURSES() {
         return REQUIRED_DIR_COURSES;
     }
@@ -252,8 +248,8 @@ export default class Constants {
         return INVALID_ID;
     }
 
-    public static get INVALID_KIND_COURSES() {
-        return INVALID_KIND_COURSES;
+    public static get ORDER_DIRECTIONS() {
+        return ORDER_DIRECTIONS;
     }
 
     public static get INVALID_CONTENT() {

@@ -1,5 +1,5 @@
 {
-    "title": "Invalid Order Is Array",
+    "title": "Invalid Transformations Group Not Non-Empty Array",
     "query": {
         "WHERE": {
             "AND": [
@@ -20,12 +20,15 @@
                 "rooms_shortname",
                 "maxSeats"
             ],
-            "ORDER": []
+            "ORDER": {
+                "dir": "DOWN",
+                "keys": [
+                    "maxSeats"
+                ]
+            }
         },
         "TRANSFORMATIONS": {
-            "GROUP": [
-                "rooms_shortname"
-            ],
+            "GROUP": null,
             "APPLY": [
                 {
                     "maxSeats": {
