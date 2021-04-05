@@ -8,4 +8,14 @@
  * 4.) Result is rendered in the reference UI by calling CampusExplorer.renderResult with the response from the endpoint as argument
  */
 
-// TODO: implement!
+document.getElementById("submit-button").addEventListener("click", function() {
+    let query = CampusExplorer.buildQuery();
+    let httpGET = CampusExplorer.sendQuery(query);
+
+    httpGET.then((res) => {
+        document.getElementById("result-message").innerHTML = "[SUCCESS]";
+        console.log("GET not implemented -- " + res);
+    }).catch((e) => {
+        document.getElementById("result-message").innerHTML = "[ERROR]" + JSON.stringify(e);
+    })
+})
