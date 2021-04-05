@@ -69,7 +69,7 @@ export default class Server {
                 // NOTE: your endpoints should go here
                 that.rest.get("/datasets", Server.getDatasets);
                 that.rest.put("/dataset/:id/:kind", Server.putDataset);
-                that.rest.post("/query", Server.postQuery);
+                //that.rest.post("/query", Server.postQuery);
                 that.rest.del("/dataset/:id", Server.deleteDataset);
 
                 // This must be the last endpoint!
@@ -174,20 +174,20 @@ export default class Server {
         return next();
     }
 
-    private static postQuery(req: restify.Request, res: restify.Response, next: restify.Next) {
-        try {
-            const query = req.body;
-            Server.insightFacade.performQuery(query).then(function (executedQuery: any) {
-                Log.trace("query successful");
-                res.json(200, {result: executedQuery});
-            }). catch(function (err) {
-                res.json(400, {error: err.message});
-            });
-        } catch (e) {
-            res.json(400, {error: e.message});
-        }
-        return next();
-    }
+    // private static postQuery(req: restify.Request, res: restify.Response, next: restify.Next) {
+    //     try {
+    //         const query = req.body;
+    //         Server.insightFacade.performQuery(query).then(function (executedQuery: any) {
+    //             Log.trace("query successful");
+    //             res.json(200, {result: executedQuery});
+    //         }). catch(function (err) {
+    //             res.json(400, {error: err.message});
+    //         });
+    //     } catch (e) {
+    //         res.json(400, {error: e.message});
+    //     }
+    //     return next();
+    // }
 
     private static deleteDataset(req: restify.Request, res: restify.Response, next: restify.Next) {
         try {
