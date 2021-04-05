@@ -25,7 +25,7 @@ generateQueryFromForm = (form) => {
         form.getElementsByClassName("transformations"),
         database
     );
-    const options = gcenerateQueryOptions(
+    const options = generateQueryOptions(
         form.getElementsByClassName("columns"),
         form.getElementsByClassName("order"),
         database
