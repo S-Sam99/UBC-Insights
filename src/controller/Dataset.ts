@@ -1,5 +1,6 @@
 import {InsightDatasetKind} from "./IInsightFacade";
 
+// Abstract class for all the datasets
 export default abstract class Dataset {
     public id: string;
     public kind: InsightDatasetKind;
