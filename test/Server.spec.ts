@@ -114,27 +114,27 @@ describe("Facade D3", function () {
         }
     });
 
-    // it("POST test for courses dataset", function () {
-    //     const buffer = fs.readFileSync("./test/data/rooms.zip");
-    //     try {
-    //         return chai.request(url)
-    //             .post("/complex.json")
-    //             .set("Content-Type", "application/x-zip-compressed")
-    //             .then(function (res: Response) {
-    //                 // some logging here please!
-    //                 expect(res.status).to.be.equal(200);
-    //                 expect(res.body.result).to.deep.equal(["courses", "rooms"]);
-    //             })
-    //             .catch(function (err) {
-    //                 // some logging here please!
-    //                 Log.trace("The query did not execute");
-    //                 expect.fail();
-    //             });
-    //     } catch (err) {
-    //         // and some more logging here!
-    //         Log.trace("The server did not respond");
-    //     }
-    // });
+    it("POST test for courses dataset", function () {
+        const buffer = fs.readFileSync("./test/data/rooms.zip");
+        try {
+            return chai.request(url)
+                .post("/complex.json")
+                .set("Content-Type", "application/x-zip-compressed")
+                .then(function (res: Response) {
+                    // some logging here please!
+                    expect(res.status).to.be.equal(200);
+                    expect(res.body.result).to.deep.equal(["courses", "rooms"]);
+                })
+                .catch(function (err) {
+                    // some logging here please!
+                    Log.trace("The query did not execute");
+                    expect.fail();
+                });
+        } catch (err) {
+            // and some more logging here!
+            Log.trace("The server did not respond");
+        }
+    });
 
     it("GET datasets", function () {
         try {

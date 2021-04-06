@@ -70,7 +70,7 @@ export default class Server {
                 that.rest.get("/datasets", Server.getDatasets);
                 that.rest.put("/dataset/:id/:kind", Server.putDataset);
                 that.rest.post("/query", Server.postQuery);
-                // that.rest.del("/dataset/:id", Server.deleteDataset);
+                that.rest.del("/dataset/:id", Server.deleteDataset);
 
                 // This must be the last endpoint!
                 that.rest.get("/.*", Server.getStatic);
@@ -201,14 +201,12 @@ export default class Server {
             }). catch(function (err) {
                 if (err instanceof InsightError) {
                     res.json(400, {error: err.message});
-                    return next();
                 } else if (err instanceof NotFoundError) {
                     res.json(404, {error: err.message});
-                    return next();
                 } else {
                     res.json(err.statusCode, {error: err.message});
-                    return next();
                 }
+                return next();
             });
         } catch (e) {
             res.json(400, {error: e.message});
