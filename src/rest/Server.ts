@@ -68,7 +68,7 @@ export default class Server {
 
                 // NOTE: your endpoints should go here
                 that.rest.get("/datasets", Server.getDatasets);
-                // that.rest.put("/dataset/:id/:kind", Server.putDataset);
+                that.rest.put("/dataset/:id/:kind", Server.putDataset);
                 // that.rest.post("/query", Server.postQuery);
                 // that.rest.del("/dataset/:id", Server.deleteDataset);
 
@@ -144,6 +144,7 @@ export default class Server {
                 res.json(200, {result: datasets});
             }). catch(function (err) {
                 res.json(400, {error: err.message});
+                return next();
             });
         } catch (e) {
             res.json(400, {error: e.message});
@@ -167,6 +168,7 @@ export default class Server {
                 res.json(200, {result: dataset});
             }). catch(function (err) {
                 res.json(400, {error: err.message});
+                return next();
             });
         } catch (e) {
             res.json(400, {error: e.message});
@@ -174,20 +176,21 @@ export default class Server {
         return next();
     }
 
-    // private static postQuery(req: restify.Request, res: restify.Response, next: restify.Next) {
-    //     try {
-    //         const query = req.body;
-    //         Server.insightFacade.performQuery(query).then(function (executedQuery: any) {
-    //             Log.trace("query successful");
-    //             res.json(200, {result: executedQuery});
-    //         }). catch(function (err) {
-    //             res.json(400, {error: err.message});
-    //         });
-    //     } catch (e) {
-    //         res.json(400, {error: e.message});
-    //     }
-    //     return next();
-    // }
+    private static postQuery(req: restify.Request, res: restify.Response, next: restify.Next) {
+        try {
+            const query = req.body;
+            Server.insightFacade.performQuery(query).then(function (executedQuery: any) {
+                Log.trace("query successful");
+                res.json(200, {result: executedQuery});
+            }). catch(function (err) {
+                res.json(400, {error: err.message});
+                return next();
+            });
+        } catch (e) {
+            res.json(400, {error: e.message});
+        }
+        return next();
+    }
 
     private static deleteDataset(req: restify.Request, res: restify.Response, next: restify.Next) {
         try {
@@ -198,10 +201,13 @@ export default class Server {
             }). catch(function (err) {
                 if (err instanceof InsightError) {
                     res.json(400, {error: err.message});
+                    return next();
                 } else if (err instanceof NotFoundError) {
                     res.json(404, {error: err.message});
+                    return next();
                 } else {
                     res.json(err.statusCode, {error: err.message});
+                    return next();
                 }
             });
         } catch (e) {
