@@ -14,7 +14,7 @@ document.getElementById("submit-button").addEventListener("click", function() {
 
     httpGET.then((res) => {
         document.getElementById("result-message").innerHTML = "[SUCCESS]";
-        console.log("GET not implemented -- " + res);
+        CampusExplorer.renderResult(res);
     }).catch((e) => {
         document.getElementById("result-message").innerHTML = "[ERROR]" + JSON.stringify(e);
     })

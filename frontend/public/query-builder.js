@@ -60,7 +60,8 @@ setFilter = (conditions, database) => {
     }
 
     return {
-        [checkedConditionType]: checkedConditionType !== "NOT" ? getFilter(filters[0]) : {"OR": getFilter(filters[0])}
+        [checkedConditionType]: checkedConditionType !== "NOT" ? getFilter(filters[0], database)
+            : {"OR": getFilter(filters[0], database)}
     };
 }
 
@@ -124,18 +125,22 @@ getValue = (term) => {
 }
 
 generateQueryOptions = (columns, order, database) => {
-    const checkedColumns = getCheckedColumns(
-        columns[0].getElementsByClassName("control-group")[0],
-        database
-    );
+    let options = {
+        "COLUMNS": getCheckedColumns(
+            columns[0].getElementsByClassName("control-group")[0],
+            database
+        )
+    }
     const selectedOrder = getSelectedOrder(
         order[0].getElementsByClassName("control-group")[0],
         database
     );
-    return {
-        "COLUMNS": checkedColumns,
-        "ORDER": selectedOrder
+
+    if (selectedOrder.keys.length > 0) {
+        options["ORDER"] = selectedOrder;
     }
+
+    return options;
 };
 
 getCheckedColumns = (columns, database) => {
@@ -145,7 +150,11 @@ getCheckedColumns = (columns, database) => {
         const input = field.getElementsByTagName("input")[0];
 
         if (input.hasAttribute("checked")) {
-            checkedColumns.push(`${database}_${input.getAttribute("value")}`);
+            if (field.classList.contains("field")) {
+                checkedColumns.push(`${database}_${input.getAttribute("value")}`);
+            } else {
+                checkedColumns.push(input.getAttribute("value"));
+            }
         }
     }
 
