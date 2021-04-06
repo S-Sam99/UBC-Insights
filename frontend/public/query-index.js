@@ -18,4 +18,11 @@ document.getElementById("submit-button").addEventListener("click", function() {
     }).catch((e) => {
         document.getElementById("result-message").innerHTML = "[ERROR]" + JSON.stringify(e);
     })
-})
+});
+
+document.getElementsByClassName("copy-html")[0].addEventListener("click", function() {
+    let activePanel = document.getElementsByClassName("tab-panel active");
+    if (activePanel.length === 1) {
+        document.execCommand('copy');
+    }
+});

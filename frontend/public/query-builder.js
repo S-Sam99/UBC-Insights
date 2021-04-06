@@ -168,13 +168,9 @@ getSelectedOrder = (order, database) => {
             "keys": selectedFields
         }
     } else {
-        if (selectedFields.length > 1) {
-            return {
-                "dir": "UP",
-                "keys": selectedFields
-            }
-        } else {
-            return selectedFields.length === 1 ? selectedFields[0] : "";
+        return {
+            "dir": "UP",
+            "keys": selectedFields
         }
     }
 }
