@@ -198,6 +198,7 @@ export default class Server {
             Server.insightFacade.removeDataset(id).then(function (dataset: any) {
                 Log.trace("deleted dataset");
                 res.json(200, {result: dataset});
+                return next();
             }). catch(function (err) {
                 if (err instanceof InsightError) {
                     res.json(400, {error: err.message});
@@ -210,7 +211,6 @@ export default class Server {
         } catch (e) {
             res.json(400, {error: e.message});
         }
-        return next();
     }
 
 }
