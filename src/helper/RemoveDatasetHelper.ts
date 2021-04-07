@@ -8,13 +8,14 @@ import { delimiter } from "path";
  */
 export default class RemoveDatasetHelper {
     public static removeDataset (id: string): Promise<string> {
-        this.deleteDatasetToDisk(id);
-        return Promise.resolve(id);
+        return this.deleteDatasetToDisk(id);
     }
 
-    private static deleteDatasetToDisk(name: string): void {
+    private static deleteDatasetToDisk(name: string): Promise<string> {
         const path = "./data";
 
         fs.unlinkSync(`${path}/${name}`);
+
+        return Promise.resolve(name);
     }
 }
