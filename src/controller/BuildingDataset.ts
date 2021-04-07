@@ -9,24 +9,15 @@ const http = require("http");
 /**
  * BuildingDataset Class
  */
-export default class BuildingDataset {
-    public id: string;
-    public kind: string;
-    public data: any;
-    public allRooms: any[];
+export default class BuildingDataset extends Dataset {
     public buildingInfo: BuildingInfo[];
     public shortName: string;
     public count: number;
-    public numRows: number;
 
-    constructor(datasetId: string, kind: string, dataset: any, buildingInfo: BuildingInfo[]) {
-        this.id = datasetId;
-        this.kind = kind;
-        this.data = dataset;
-        this.allRooms = [];
+    constructor(datasetId: string, kind: InsightDatasetKind, buildingInfo: BuildingInfo[]) {
+        super(datasetId, kind);
         this.buildingInfo = buildingInfo;
         this.count = 0;
-        this.numRows = 0;
     }
 
     public getData(dataset: any): Promise<BuildingDataset> {
@@ -62,7 +53,7 @@ export default class BuildingDataset {
                         for (let rooms of buildingData.allRooms) {
                             if (rooms.isValid) {
                                 this.numRows++;
-                                this.allRooms.push(rooms);
+                                this.data.push(rooms);
                             }
                         }
                     }
@@ -88,7 +79,7 @@ export default class BuildingDataset {
                 result.on("end", () => {
                     try {
                         const location = JSON.parse(rawData);
-                        if (location.error) {
+                        if (location.error && location.error !== null) {
                             array[0] = 0;
                             array[1] = 0;
                         } else {

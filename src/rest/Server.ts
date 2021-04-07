@@ -201,10 +201,11 @@ export default class Server {
             }). catch(function (err) {
                 if (err instanceof InsightError) {
                     res.json(400, {error: err.message});
+                    return next();
                 } else if (err instanceof NotFoundError) {
                     res.json(404, {error: err.message});
+                    return next();
                 }
-                return next();
             });
         } catch (e) {
             res.json(400, {error: e.message});

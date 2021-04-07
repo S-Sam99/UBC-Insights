@@ -46,11 +46,11 @@ export default class AddBuildingDatasetHelper {
         });
     }
 
-    private static createBuildingDataset (dataset: any, id: string, kind: string, buildingInfo: any): Promise<any> {
+    private static createBuildingDataset (dataset: any, id: string, k: InsightDatasetKind, bInfo: any): Promise<any> {
         return new Promise<BuildingDataset>((resolve, reject) => {
-            let buildingDataset: BuildingDataset = new BuildingDataset(id, kind, dataset, buildingInfo);
-            return buildingDataset.getData(buildingDataset.data).then((data) => {
-                if (data.allRooms.length > 0) {
+            let buildingDataset: BuildingDataset = new BuildingDataset(id, k, bInfo);
+            return buildingDataset.getData(dataset).then((data) => {
+                if (data.data.length > 0) {
                     this.persistDataToDisk(id, JSON.stringify(data));
                     return resolve(data);
                 }
