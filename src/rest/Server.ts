@@ -203,8 +203,6 @@ export default class Server {
                     res.json(400, {error: err.message});
                 } else if (err instanceof NotFoundError) {
                     res.json(404, {error: err.message});
-                } else {
-                    res.json(err.statusCode, {error: err.message});
                 }
                 return next();
             });

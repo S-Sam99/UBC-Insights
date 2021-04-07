@@ -115,15 +115,46 @@ describe("Facade D3", function () {
     });
 
     it("POST test for courses dataset", function () {
-        const buffer = fs.readFileSync("./test/data/rooms.zip");
+        const query: any = {
+        WHERE: {
+            OR: [
+                {
+                    AND: [
+                        {
+                            GT: {
+                                courses_avg: 90
+                            }
+                        },
+                        {
+                            IS: {
+                                courses_dept: "adhe"
+                            }
+                        }
+                    ]
+                },
+                {
+                    EQ: {
+                        courses_avg: 95
+                    }
+                }
+            ]
+        },
+        OPTIONS: {
+            COLUMNS: [
+                "courses_dept",
+                "courses_id",
+                "courses_avg"
+            ],
+            ORDER: "courses_avg"
+        }
+    };
         try {
             return chai.request(url)
-                .post("/complex.json")
-                .set("Content-Type", "application/x-zip-compressed")
+                .post("/query")
+                .send(query)
                 .then(function (res: Response) {
                     // some logging here please!
                     expect(res.status).to.be.equal(200);
-                    expect(res.body.result).to.deep.equal(["courses", "rooms"]);
                 })
                 .catch(function (err) {
                     // some logging here please!
