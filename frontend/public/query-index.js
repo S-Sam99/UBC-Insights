@@ -10,19 +10,18 @@
 
 document.getElementById("submit-button").addEventListener("click", function() {
     let query = CampusExplorer.buildQuery();
-    let httpGET = CampusExplorer.sendQuery(query);
+    let httpPOST = CampusExplorer.sendQuery(query);
 
-    httpGET.then((res) => {
-        document.getElementById("result-message").innerHTML = "[SUCCESS]";
+    httpPOST.then((res) => {
         CampusExplorer.renderResult(res);
     }).catch((e) => {
-        document.getElementById("result-message").innerHTML = "[ERROR]" + JSON.stringify(e);
+        CampusExplorer.renderResult(e);
     })
 });
 
 document.getElementsByClassName("copy-html")[0].addEventListener("click", function() {
     let activePanel = document.getElementsByClassName("tab-panel active");
     if (activePanel.length === 1) {
-        document.execCommand('copy');
+        document.execCommand("copy");
     }
 });
