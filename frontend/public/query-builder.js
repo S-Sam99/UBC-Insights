@@ -87,11 +87,17 @@ getFilter = (conditions, database) => {
         const field = getSelectedField(condition.getElementsByClassName("fields")[0]);
         const operator = getSelectedField(condition.getElementsByClassName("operators")[0]);
         const value = getValue(condition.getElementsByClassName("term")[0]);
-        const cond = {
-            [operator]: {
+        const cond = {};
+
+        if (operator === "IS") {
+            cond[operator] = {
                 [`${database}_${field}`]: value
-            }
-        };
+            };
+        } else {
+            cond[operator] = {
+                [`${database}_${field}`]: parseInt(value)
+            };
+        }
 
         if (not.getElementsByTagName("input")[0].hasAttribute("checked")) {
             filter.push({
@@ -189,7 +195,11 @@ getSelectedFields = (fields, database) => {
 
     for (const field of fields) {
         if (field.hasAttribute("selected")) {
-            selectedFields.push(`${database}_${field.getAttribute("value")}`);
+            if (field.classList.contains("transformation")) {
+                selectedFields.push(field.getAttribute("value"));
+            } else {
+                selectedFields.push(`${database}_${field.getAttribute("value")}`);
+            }
         }
     }
     return selectedFields;
