@@ -12,14 +12,12 @@ import { InsightError } from "../src/controller/IInsightFacade";
 describe("Facade D3", function () {
 
     let facade: InsightFacade = null;
-    let server: Server = null;
+    let server = new Server(4321);
     let url: any = "http://localhost:4321";
 
     chai.use(chaiHttp);
 
     before(function () {
-        facade = new InsightFacade();
-        server = new Server(4321);
         // TODO: start server here once and handle errors properly
         try {
             server.start();
@@ -271,6 +269,27 @@ describe("Facade D3", function () {
                     Log.trace("The dataset was not deleted");
                     expect(err.status).to.be.equal(400);
                     expect(err.response.body.error).to.deep.equal("Invalid ID for dataset for: test__");
+                });
+        } catch (err) {
+            // and some more logging here!
+            Log.trace("The server did not respond");
+        }
+    });
+
+    it("DEL test for whitespace naming", function () {
+        try {
+            return chai.request(url)
+                .del("/dataset/    ")
+                .set("Content-Type", "application/x-zip-compressed")
+                .then(function (res: Response) {
+                    // some logging here please!
+                    expect.fail();
+                })
+                .catch(function (err) {
+                    // some logging here please!
+                    Log.trace("The dataset was not deleted");
+                    expect(err.status).to.be.equal(400);
+                    expect(err.response.body.error).to.deep.equal("Invalid ID for dataset for: ");
                 });
         } catch (err) {
             // and some more logging here!
