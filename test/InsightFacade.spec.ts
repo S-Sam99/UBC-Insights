@@ -229,15 +229,15 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //         );
     // });
     //
-    // it("Should reject addition of dataset with zero course sections", function () {
-    //     const id: string = "zeroCourseSections";
-    //
-    //     return expect(insightFacade.addDataset(
-    //         id,
-    //         datasets[id],
-    //         InsightDatasetKind.Courses,
-    //     )).to.eventually.be.rejectedWith(InsightError);
-    // });
+    it("Should reject addition of dataset with zero course sections", function () {
+        const id: string = "zeroCourseSections";
+
+        return expect(insightFacade.addDataset(
+            id,
+            datasets[id],
+            InsightDatasetKind.Courses,
+        )).to.eventually.be.rejectedWith(InsightError);
+    });
     //
     // it("Should reject addition of dataset with non-JSON courses", function () {
     //     const id: string = "nonJsonCourses";

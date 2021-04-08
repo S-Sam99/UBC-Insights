@@ -2,7 +2,7 @@ import Constants from "../Constants";
 import * as JSZip from "jszip";
 import * as fs from "fs-extra";
 import CourseDataset from "../controller/CourseDataset";
-import {InsightDatasetKind} from "../controller/IInsightFacade";
+import {InsightDatasetKind, InsightError} from "../controller/IInsightFacade";
 import Dataset from "../controller/Dataset";
 
 /**

@@ -28,11 +28,13 @@ import QueryValidationHelper from "../helper/queryValidation/QueryValidationHelp
  *
  */
 export default class InsightFacade implements IInsightFacade {
-    public datasets: any;
+    public datasets: InsightDataset[];
+    public ids: string[];
 
     constructor() {
         Log.trace("InsightFacadeImpl::init()");
-        this.datasets = {};
+        this.datasets = [];
+        this.ids = [];
     }
 
     /**
@@ -75,39 +77,43 @@ export default class InsightFacade implements IInsightFacade {
             }
 
             return this.unzipDataset(id, kind, content).then((result) => {
-                return resolve(result);
+                this.ids.push(result);
+                return resolve(this.ids);
+            }).catch((err) => {
+                return reject(err);
             });
         });
 }
 
-    private unzipDataset(id: string, kind: InsightDatasetKind, content: string): Promise<string[]> {
+    private unzipDataset(id: string, kind: InsightDatasetKind, content: string): Promise<string> {
         return JSZip.loadAsync(content, {base64: true})
             .then((data) => {
                 if (data["files"].hasOwnProperty(Constants.REQUIRED_DIR_COURSES)) {
                     return AddCourseDatasetHelper.generateCourseDataset(id, kind, data)
                         .then((dataset) => {
-                            this.datasets[id] = dataset;
-                            return Promise.resolve(Object.keys(this.datasets));
+                            const temp: InsightDataset = {id: id, kind: kind, numRows: dataset.numRows};
+                            this.datasets.push(temp);
+                            return Promise.resolve(id);
                         }).catch((err) => {
-                            if (err.message) {
-                                return Promise.reject(new InsightError(err.message));
-                            }
+                            return Promise.reject(new InsightError(err));
                         });
                 } else {
                     if (data["files"].hasOwnProperty(Constants.REQUIRED_DIR_ROOMS)) {
                         return AddBuildingDatasetHelper.generateBuildingDataset(id, kind, data)
                         .then((dataset) => {
-                            this.datasets[id] = dataset;
-                            return Promise.resolve(Object.keys(this.datasets));
+                            const temp: InsightDataset = {id: id, kind: kind, numRows: dataset.numRows};
+                            this.datasets.push(temp);
+                            return Promise.resolve(id);
                         }).catch((err) => {
-                            if (err.message) {
-                                return Promise.reject(new InsightError(err.message));
-                            }
+                            return Promise.reject(new InsightError(err));
                         });
                     }
                     return Promise.reject(new InsightError(Constants.MISSING_MAIN_FOLDER));
                 }
             }).catch((e) => {
+                if (e instanceof InsightError) {
+                    return Promise.reject(e);
+                }
                 return Promise.reject(new InsightError(Constants.DATASET_NOT_ZIP + e));
             });
     }
@@ -177,7 +183,8 @@ export default class InsightFacade implements IInsightFacade {
      * The promise should fulfill an array of currently added InsightDatasets, and will only fulfill.
      */
     public listDatasets(): Promise<InsightDataset[]> {
-        const datasetList: InsightDataset[] = [];
-        return ListDatasetHelper.generateListDataset(datasetList, this.datasets);
+        return new Promise<InsightDataset[]>((resolve, reject) => {
+            resolve(this.datasets);
+        });
     }
 }

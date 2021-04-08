@@ -8,7 +8,7 @@ import { file } from "jszip";
 import { promises } from "dns";
 import { readFileSync } from "fs";
 import {parse, Document} from "parse5";
-import {InsightDatasetKind} from "../controller/IInsightFacade";
+import {InsightDatasetKind, InsightError, NotFoundError} from "../controller/IInsightFacade";
 
 /**
  * Localized Helper Class for functions pertaining to adding course datasets.
@@ -29,14 +29,31 @@ export default class AddBuildingDatasetHelper {
             }
         });
 
+        return this.setupData(buildings, html, data, buildingInfo).then((dataset) => {
+            return Promise.resolve(this.createBuildingDataset(dataset, id, kind, buildingInfo)).then((result) => {
+                if (result.data.length > 0) {
+                    this.persistDataToDisk(id, JSON.stringify(result));
+                    return Promise.resolve(result);
+                } else {
+                    return Promise.reject(Constants.MISSING_ROOMS);
+                }
+            }).catch((err) => {
+                return Promise.reject(err);
+            });
+        }).catch((err) => {
+            return Promise.reject(err);
+        });
+    }
+
+    private static setupData (buildings: any[], html: any, data: JSZip, buildingInfo: any[]): Promise<any> {
         return this.parseData(html, data).then((parsedData) => {
-            buildingInfo = this.gatherData(parsedData);
+            this.gatherData(parsedData, buildingInfo);
             if (buildingInfo.length > 0) {
                 for (let paths of buildingInfo) {
                     buildings.push(data.file(Constants.REQUIRED_DIR_ROOMS + paths.getPath()).async("string"));
-                    }
+                }
                 return Promise.all(buildings).then((dataset) => {
-                    return Promise.resolve(this.createBuildingDataset(dataset, id, kind, buildingInfo));
+                    return Promise.resolve(dataset);
                 }).catch((err) => {
                     return Promise.reject(err);
                 });
@@ -50,11 +67,7 @@ export default class AddBuildingDatasetHelper {
         return new Promise<BuildingDataset>((resolve, reject) => {
             let buildingDataset: BuildingDataset = new BuildingDataset(id, k, bInfo);
             return buildingDataset.getData(dataset).then((data) => {
-                if (data.data.length > 0) {
-                    this.persistDataToDisk(id, JSON.stringify(data));
                     return resolve(data);
-                }
-                return reject(Constants.MISSING_ROOMS);
             }).catch((err) => {
                 return reject(err);
             });
@@ -79,22 +92,21 @@ export default class AddBuildingDatasetHelper {
         });
     }
 
-    private static gatherData(data: any): BuildingInfo[] {
+    private static gatherData(data: any, buildingInfo: any[]): BuildingInfo[] {
         if (data.nodeName === "tbody") {
-            let array: any[] = [];
             for (let child of data.childNodes) {
                 let temp: any[3] = ["", "", ""];
                 this.goThroughChildrenTR(child, "tr", temp);
                 if (temp[0] !== "" && temp[1] !== "" && temp[2] !== "") {
-                    array.push(new BuildingInfo(temp));
+                    buildingInfo.push(new BuildingInfo(temp));
                 }
             }
-            return array;
+            return buildingInfo;
     }
 
         if (data.childNodes && data.childNodes.length > 0) {
             for (let child of data.childNodes) {
-                let possibleArray = this.gatherData(child);
+                let possibleArray = this.gatherData(child, buildingInfo);
                 if (possibleArray.length > 0) {
                     return possibleArray;
                 }
