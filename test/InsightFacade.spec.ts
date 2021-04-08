@@ -75,7 +75,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     afterEach(function () {
         // This section resets the data directory (removing any cached data) and resets the InsightFacade instance
         // This runs after each test, which should make each test independent from the previous one
-        Log.test(`AfterTest: ${this.currentTest.title}`);
+        // Log.test(`AfterTest: ${this.currentTest.title}`);
         try {
             fs.removeSync(cacheDir);
             fs.mkdirSync(cacheDir);
@@ -982,63 +982,63 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //     });
     // });
     //
-    // it("List datasets with 1 set", function () {
-    //     const id: string = "courses";
-    //     const expectedID: string[] = [id];
-    //     const expectedKind: InsightDatasetKind = InsightDatasetKind.Courses;
-    //     const expectedNumRow: number = 64612;
-    //     const tempResult: Promise<string[]> = insightFacade.addDataset(
-    //         id,
-    //         datasets[id],
-    //         InsightDatasetKind.Courses,
-    //     );
-    //     return expect(tempResult).to.eventually.deep.equal([id]).then(() => {
-    //         const futureResult: Promise<InsightDataset[]> = insightFacade.listDatasets();
-    //         return futureResult.then((result: InsightDataset[]) => {
-    //             expect(result[0].id).to.have.property("id", expectedID);
-    //             expect(result[0].kind).to.have.property("kind", expectedKind);
-    //             expect(result[0].numRows).to.have.property("numRows", expectedNumRow);
-    //         });
-    //     });
-    // });
-    //
-    // it("List datasets with 1 or more sets", function () {
-    //     const id1: string = "courses";
-    //     const expectedKind1: InsightDatasetKind = InsightDatasetKind.Courses;
-    //     const expectedNumRow1: number = 64612;
-    //     let tempResult: Promise<string[]> = insightFacade.addDataset(
-    //         id1,
-    //         datasets[id1],
-    //         InsightDatasetKind.Courses,
-    //     );
-    //     return expect(tempResult).to.eventually.deep.equal([id1]).then(() => {
-    //         const id2: string = "courses-small";
-    //         const expectedKind2: InsightDatasetKind = InsightDatasetKind.Courses;
-    //         const expectedNumRow2: number = 2;
-    //         tempResult = insightFacade.addDataset(
-    //             id2,
-    //             datasets[id2],
-    //             InsightDatasetKind.Courses,
-    //         );
-    //         return expect(tempResult).to.eventually.deep.equal(["courses", id2]).then(() => {
-    //             const futureResult: Promise<InsightDataset[]> = insightFacade.listDatasets();
-    //             return futureResult.then((result: InsightDataset[]) => {
-    //                 expect(result[0].id).to.have.property("id", id1);
-    //                 expect(result[0].kind).to.have.property("kind", expectedKind1);
-    //                 expect(result[0].numRows).to.have.property("numRows", expectedNumRow1);
-    //                 expect(result[1].id).to.have.property("id", id2);
-    //                 expect(result[1].kind).to.have.property("kind", expectedKind2);
-    //                 expect(result[1].numRows).to.have.property("numRows", expectedNumRow2);
-    //             });
-    //         });
-    //     });
-    // });
-    //
-    // it("List datasets with no sets", function () {
-    //     const expected: InsightDataset[] = [];
-    //     const futureResult: Promise<InsightDataset[]> = insightFacade.listDatasets();
-    //     return expect(futureResult).to.eventually.deep.equal(expected);
-    // });
+    it("List datasets with 1 set", function () {
+        const id: string = "courses";
+        const expectedID: string = id;
+        const expectedKind: InsightDatasetKind = InsightDatasetKind.Courses;
+        const expectedNumRow: number = 64612;
+        const tempResult: Promise<string[]> = insightFacade.addDataset(
+            id,
+            datasets[id],
+            InsightDatasetKind.Courses,
+        );
+        return expect(tempResult).to.eventually.deep.equal([id]).then(() => {
+            const futureResult: Promise<InsightDataset[]> = insightFacade.listDatasets();
+            return futureResult.then((result: InsightDataset[]) => {
+                expect(result[0].id).to.deep.equal(expectedID);
+                expect(result[0].kind).to.deep.equal(expectedKind);
+                expect(result[0].numRows).to.deep.equal(expectedNumRow);
+            });
+        });
+    });
+
+    it("List datasets with 1 or more sets", function () {
+        const id1: string = "courses";
+        const expectedKind1: InsightDatasetKind = InsightDatasetKind.Courses;
+        const expectedNumRow1: number = 64612;
+        let tempResult: Promise<string[]> = insightFacade.addDataset(
+            id1,
+            datasets[id1],
+            InsightDatasetKind.Courses,
+        );
+        return expect(tempResult).to.eventually.deep.equal([id1]).then(() => {
+            const id2: string = "rooms";
+            const expectedKind2: InsightDatasetKind = InsightDatasetKind.Rooms;
+            const expectedNumRow2: number = 363;
+            tempResult = insightFacade.addDataset(
+                id2,
+                datasets[id2],
+                InsightDatasetKind.Rooms,
+            );
+            return expect(tempResult).to.eventually.deep.equal(["courses", id2]).then(() => {
+                const futureResult: Promise<InsightDataset[]> = insightFacade.listDatasets();
+                return futureResult.then((result: InsightDataset[]) => {
+                    expect(result[0].id).to.deep.equal(id1);
+                    expect(result[0].kind).to.deep.equal(expectedKind1);
+                    expect(result[0].numRows).to.deep.equal(expectedNumRow1);
+                    expect(result[1].id).to.deep.equal(id2);
+                    expect(result[1].kind).to.deep.equal(expectedKind2);
+                    expect(result[1].numRows).to.deep.equal(expectedNumRow2);
+                });
+            });
+        });
+    });
+
+    it("List datasets with no sets", function () {
+        const expected: InsightDataset[] = [];
+        const futureResult: Promise<InsightDataset[]> = insightFacade.listDatasets();
+        return expect(futureResult).to.eventually.deep.equal(expected);
+    });
     //
     // it("Should not query valid dataset not added yet", function () {
     //     const futureResult: Promise<any[]> = insightFacade.performQuery("courses");

@@ -77,7 +77,7 @@ const KEY_MAP_ROOMS = {
         type: "number"
     },
     type: {
-        name: "name",
+        name: "type",
         type: "string"
     },
     furniture: {

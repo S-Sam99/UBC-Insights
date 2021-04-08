@@ -11,35 +11,45 @@ const http = require("http");
  */
 export default class BuildingDataset extends Dataset {
     public buildingInfo: BuildingInfo[];
-    public seatNum: number;
     public shortName: string;
-    public lat: number;
-    public long: number;
     public count: number;
 
-    constructor(datasetId: string, kind: InsightDatasetKind, dataset: any, buildingInfo: BuildingInfo[]) {
+    constructor(datasetId: string, kind: InsightDatasetKind, buildingInfo: BuildingInfo[]) {
         super(datasetId, kind);
         this.buildingInfo = buildingInfo;
-        this.seatNum = 0;
-        this.lat = 0;
-        this.long = 0;
         this.count = 0;
+    }
 
+    public getData(dataset: any): Promise<BuildingDataset> {
         if (dataset.length > 0) {
-            this.parseDataset(dataset);
+            return Promise.resolve(this.parseDataset(dataset));
         }
     }
 
-    private parseDataset(dataset: string[]) {
-        for (const fileData of dataset) {
-            try {
-                const parsedData = this.parseData(fileData);
-                if (this.checkValidity(parsedData)) {
-                    let latLong: any[2] = [0, 1];
-                    const currentBuildInfo = this.buildingInfo[this.count];
-                    // this.findCoordinates(currentBuildInfo.getAddress(), latLong).then((location) => {
-                    if (latLong[0] !== 0 || latLong[1] !== 0) {
-                        const buildingData = new BuildingData(this.id, parsedData, currentBuildInfo, latLong);
+    private parseDataset(dataset: string[]): Promise<any> {
+            const promises: any[] = [];
+            const buildings: any[] = [];
+            for (const fileData of dataset) {
+                try {
+                    const parsedData = this.parseData(fileData);
+                    if (this.checkValidity(parsedData)) {
+                        let latLong: any[2] = [0, 0];
+                        buildings.push(parsedData);
+                        const currentBuildInfo = this.buildingInfo[this.count];
+                        promises.push(this.findCoordinates(currentBuildInfo.getAddress(), latLong));
+                    }
+                } catch (err) {
+                    Log.error(err);
+                }
+                this.count++;
+            }
+            this.count = 0;
+            return Promise.all(promises).then((locations) => {
+                for (let geo of locations) {
+                    if (geo && (geo[0] !== 0 || geo[1] !== 0)) {
+                        const currentBuildInfo = this.buildingInfo[this.count];
+                        const currentBuild = buildings[this.count];
+                        const buildingData = new BuildingData(this.id, currentBuild, currentBuildInfo, geo);
                         for (let rooms of buildingData.allRooms) {
                             if (rooms.isValid) {
                                 this.numRows++;
@@ -47,43 +57,47 @@ export default class BuildingDataset extends Dataset {
                             }
                         }
                     }
-                    // });
+                    this.count++;
                 }
-            } catch (err) {
-                Log.error(err);
-            }
-            this.count++;
-        }
+                return Promise.resolve(this);
+            });
     }
 
-    // private async findCoordinates(address: string, array: any[]): Promise<any> {
-    //     return new Promise<any>((resolve, reject) => {
-    //         const codedAddress = encodeURI(address);
-    //         const link = "http://cs310.students.cs.ubc.ca:11316/api/v1/project_team138/" + codedAddress;
-    //         http.get(link, (result: any) => {
-    //             const { statusCode } = result;
-    //             if (statusCode !== 200) {
-    //                 reject("You got a " + result.statusCode + " error code!");
-    //             }
-    //             let rawData = "";
-    //             result.on("data", (chunk: any) => {
-    //                 rawData += chunk;
-    //             });
-    //             result.on("end", () => {
-    //                 try {
-    //                     const location = JSON.parse(rawData);
-    //                     array[0] = location.lon;
-    //                     array[1] = location.lat;
-    //                     resolve(array);
-    //                 } catch (err) {
-    //                     reject(err);
-    //                 }
-    //             });
-    //         }).on("error", (err: any) => {
-    //             reject(err);
-    //         });
-    //     });
-    // }
+    private findCoordinates(address: string, array: any[]): Promise<any> {
+        return new Promise<any>((resolve, reject) => {
+            const codedAddress = encodeURI(address);
+            const link = "http://cs310.students.cs.ubc.ca:11316/api/v1/project_team138/" + codedAddress;
+            http.get(link, (result: any) => {
+                const { statusCode } = result;
+                if (statusCode !== 200) {
+                    array[0] = 0;
+                    array[1] = 0;
+                    return resolve(array);
+                }
+                let rawData = "";
+                result.on("data", (chunk: any) => {
+                    rawData += chunk;
+                });
+                result.on("end", () => {
+                    try {
+                        const location = JSON.parse(rawData);
+                        if (location.error && location.error !== null) {
+                            array[0] = 0;
+                            array[1] = 0;
+                        } else {
+                            array[0] = location.lon;
+                            array[1] = location.lat;
+                        }
+                        return resolve(array);
+                    } catch (err) {
+                        return reject(err);
+                    }
+                });
+            }).on("error", (err: any) => {
+                reject(err);
+            });
+        });
+    }
 
     private parseData(html: any): Promise<any> {
         return parse5.parse(html);
