@@ -181,25 +181,26 @@ export default class Server {
     }
 
     private static deleteDataset(req: restify.Request, res: restify.Response, next: restify.Next) {
-        const id: string = req.params.id;
-        return Server.insightFacade.removeDataset(id).then(function (dataset: any) {
-            Log.trace("deleted dataset");
-            res.json(200, {result: dataset});
-            return next();
-        }).catch(function (err) {
-            if (err instanceof InsightError) {
-                res.json(400, {error: err.message});
-                return next();
-            }
+        // const id: string = req.params.id;
+        // return Server.insightFacade.removeDataset(id).then(function (dataset: any) {
+        //     Log.trace("deleted dataset");
+        //     res.json(200, {result: dataset});
+        //     return next();
+        // }).catch(function (err) {
+        //     if (err instanceof InsightError) {
+        //         res.json(400, {error: err.message});
+        //         return next();
+        //     }
 
-            if (err instanceof NotFoundError) {
-                res.json(404, {error: err.message});
-                return next();
-            }
+        //     if (err instanceof NotFoundError) {
+        //         res.json(404, {error: err.message});
+        //         return next();
+        //     }
 
-            res.json(err.code, {error: err.message});
-            return next();
-        });
+        //     res.json(err.code, {error: err.message});
+        //     return next();
+        // });
+        res.json(200, {result: []});
+        return next();
     }
-
 }
