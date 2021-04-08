@@ -67,10 +67,10 @@ export default class Server {
                 that.rest.get("/echo/:msg", Server.echo);
 
                 // NOTE: your endpoints should go here
-                that.rest.get("/datasets", Server.getDatasets);
-                that.rest.put("/dataset/:id/:kind", Server.putDataset);
+                // that.rest.get("/datasets", Server.getDatasets);
+                // that.rest.put("/dataset/:id/:kind", Server.putDataset);
                 that.rest.del("/dataset/:id", Server.deleteDataset);
-                that.rest.post("/query", Server.postQuery);
+                // that.rest.post("/query", Server.postQuery);
 
                 // This must be the last endpoint!
                 that.rest.get("/.*", Server.getStatic);
@@ -181,26 +181,24 @@ export default class Server {
     }
 
     private static deleteDataset(req: restify.Request, res: restify.Response, next: restify.Next) {
-        // const id: string = req.params.id;
-        // return Server.insightFacade.removeDataset(id).then(function (dataset: any) {
-        //     Log.trace("deleted dataset");
-        //     res.json(200, {result: dataset});
-        //     return next();
-        // }).catch(function (err) {
-        //     if (err instanceof InsightError) {
-        //         res.json(400, {error: err.message});
-        //         return next();
-        //     }
+        const id: string = req.params.id;
+        return Server.insightFacade.removeDataset(id).then(function (dataset: any) {
+            Log.trace("deleted dataset");
+            res.json(200, {result: dataset});
+            return next();
+        }).catch(function (err) {
+            if (err instanceof InsightError) {
+                res.json(400, {error: err.message});
+                return next();
+            }
 
-        //     if (err instanceof NotFoundError) {
-        //         res.json(404, {error: err.message});
-        //         return next();
-        //     }
+            if (err instanceof NotFoundError) {
+                res.json(404, {error: err.message});
+                return next();
+            }
 
-        //     res.json(err.code, {error: err.message});
-        //     return next();
-        // });
-        res.json(200, {result: []});
-        return next();
+            res.json(err.code, {error: err.message});
+            return next();
+        });
     }
 }
