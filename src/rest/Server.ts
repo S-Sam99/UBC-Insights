@@ -142,6 +142,7 @@ export default class Server {
             Server.insightFacade.listDatasets().then(function (datasets: any) {
                 Log.trace("listed all current datasets");
                 res.json(200, {result: datasets});
+                return next();
             }). catch(function (err) {
                 res.json(400, {error: err.message});
                 return next();
@@ -149,7 +150,6 @@ export default class Server {
         } catch (e) {
             res.json(400, {error: e.message});
         }
-        return next();
     }
 
     private static putDataset(req: restify.Request, res: restify.Response, next: restify.Next) {
@@ -166,6 +166,7 @@ export default class Server {
             Server.insightFacade.addDataset(id, buffer, setKind).then(function (dataset: any) {
                 Log.trace("added a new dataset");
                 res.json(200, {result: dataset});
+                return next();
             }). catch(function (err) {
                 res.json(400, {error: err.message});
                 return next();
@@ -173,7 +174,6 @@ export default class Server {
         } catch (e) {
             res.json(400, {error: e.message});
         }
-        return next();
     }
 
     private static postQuery(req: restify.Request, res: restify.Response, next: restify.Next) {
@@ -182,6 +182,7 @@ export default class Server {
             Server.insightFacade.performQuery(query).then(function (executedQuery: any) {
                 Log.trace("query successful");
                 res.json(200, {result: executedQuery});
+                return next();
             }). catch(function (err) {
                 res.json(400, {error: err.message});
                 return next();
@@ -189,7 +190,6 @@ export default class Server {
         } catch (e) {
             res.json(400, {error: e.message});
         }
-        return next();
     }
 
     private static deleteDataset(req: restify.Request, res: restify.Response, next: restify.Next) {
@@ -198,6 +198,7 @@ export default class Server {
             Server.insightFacade.removeDataset(id).then(function (dataset: any) {
                 Log.trace("deleted dataset");
                 res.json(200, {result: dataset});
+                return next();
             }). catch(function (err) {
                 if (err instanceof InsightError) {
                     res.json(400, {error: err.message});
@@ -206,7 +207,7 @@ export default class Server {
                     res.json(404, {error: err.message});
                     return next();
                 } else {
-                    res.json(405, {error: err.message});
+                    res.json(err.statusCode, {error: err.message});
                     return next();
                 }
             });
@@ -214,7 +215,6 @@ export default class Server {
             res.json(e.statusCode, {error: e.message});
             return next();
         }
-        return next();
     }
 
 }
