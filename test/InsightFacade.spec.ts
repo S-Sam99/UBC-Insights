@@ -910,78 +910,78 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //     });
     // });
     //
-    // it("Should remove valid dataset", function () {
-    //     let id: string = "courses";
-    //     let expected: string[] = [id];
-    //     let removeExpected: string = "courses";
-    //     let removeFutureResult: Promise<string>;
-    //     let futureResult: Promise<string[]> = insightFacade.addDataset(
-    //         id,
-    //         datasets[id],
-    //         InsightDatasetKind.Courses,
-    //     );
-    //     return expect(futureResult).to.eventually.deep.equal(expected).then(() => {
-    //          removeFutureResult = insightFacade.removeDataset("courses");
-    //          return expect(removeFutureResult).to.eventually.deep.equal(removeExpected);
-    //     });
-    // });
-    //
-    // it("Should remove first dataset out of list of 2", function () {
-    //     let id: string = "courses";
-    //     let expected: string[] = [id];
-    //     let futureResult: Promise<string[]> = insightFacade.addDataset(
-    //         id,
-    //         datasets[id],
-    //         InsightDatasetKind.Courses,
-    //     );
-    //     return expect(futureResult).to.eventually.deep.equal(expected).then(() => {
-    //         id = "courses-small";
-    //         expected = ["courses", id];
-    //         futureResult = insightFacade.addDataset(
-    //             id,
-    //             datasets[id],
-    //             InsightDatasetKind.Courses,
-    //         );
-    //         return expect(futureResult).to.eventually.deep.equal(expected).then(() => {
-    //             let removeExpected: string = "courses";
-    //             let removeFutureResult: Promise<string> = insightFacade.removeDataset("courses");
-    //             return expect(removeFutureResult).to.eventually.deep.equal(removeExpected).then(() => {
-    //                 removeExpected = "courses-small";
-    //                 removeFutureResult = insightFacade.removeDataset("courses-small");
-    //                 return expect(removeFutureResult).to.eventually.deep.equal(removeExpected);
-    //             });
-    //         });
-    //     });
-    // });
-    //
-    // it("Should remove 2nd dataset out of list of 2", function () {
-    //     let id: string = "courses";
-    //     let expected: string[] = [id];
-    //     let futureResult: Promise<string[]> = insightFacade.addDataset(
-    //         id,
-    //         datasets[id],
-    //         InsightDatasetKind.Courses,
-    //     );
-    //     return expect(futureResult).to.eventually.deep.equal(expected).then(() => {
-    //         id = "courses-small";
-    //         expected = ["courses", id];
-    //         futureResult = insightFacade.addDataset(
-    //             id,
-    //             datasets[id],
-    //             InsightDatasetKind.Courses,
-    //         );
-    //         return expect(futureResult).to.eventually.deep.equal(expected).then(() => {
-    //             let removeExpected: string = "courses-small";
-    //             let removeFutureResult: Promise<string> = insightFacade.removeDataset("courses-small");
-    //             return expect(removeFutureResult).to.eventually.deep.equal(removeExpected).then(() => {
-    //                 removeExpected = "courses";
-    //                 removeFutureResult = insightFacade.removeDataset("courses");
-    //                 return expect(removeFutureResult).to.eventually.deep.equal(removeExpected);
-    //             });
-    //         });
-    //     });
-    // });
-    //
+    it("Should remove valid dataset", function () {
+        let id: string = "courses";
+        let expected: string[] = [id];
+        let removeExpected: string = "courses";
+        let removeFutureResult: Promise<string>;
+        let futureResult: Promise<string[]> = insightFacade.addDataset(
+            id,
+            datasets[id],
+            InsightDatasetKind.Courses,
+        );
+        return expect(futureResult).to.eventually.deep.equal(expected).then(() => {
+             removeFutureResult = insightFacade.removeDataset("courses");
+             return expect(removeFutureResult).to.eventually.deep.equal(removeExpected);
+        });
+    });
+
+    it("Should remove first dataset out of list of 2", function () {
+        let id: string = "courses";
+        let expected: string[] = [id];
+        let futureResult: Promise<string[]> = insightFacade.addDataset(
+            id,
+            datasets[id],
+            InsightDatasetKind.Courses,
+        );
+        return expect(futureResult).to.eventually.deep.equal(expected).then(() => {
+            id = "rooms";
+            expected = ["courses", id];
+            futureResult = insightFacade.addDataset(
+                id,
+                datasets[id],
+                InsightDatasetKind.Courses,
+            );
+            return expect(futureResult).to.eventually.deep.equal(expected).then(() => {
+                let removeExpected: string = "courses";
+                let removeFutureResult: Promise<string> = insightFacade.removeDataset("courses");
+                return expect(removeFutureResult).to.eventually.deep.equal(removeExpected).then(() => {
+                    removeExpected = "rooms";
+                    removeFutureResult = insightFacade.removeDataset("rooms");
+                    return expect(removeFutureResult).to.eventually.deep.equal(removeExpected);
+                });
+            });
+        });
+    });
+
+    it("Should remove 2nd dataset out of list of 2", function () {
+        let id: string = "courses";
+        let expected: string[] = [id];
+        let futureResult: Promise<string[]> = insightFacade.addDataset(
+            id,
+            datasets[id],
+            InsightDatasetKind.Courses,
+        );
+        return expect(futureResult).to.eventually.deep.equal(expected).then(() => {
+            id = "rooms";
+            expected = ["courses", id];
+            futureResult = insightFacade.addDataset(
+                id,
+                datasets[id],
+                InsightDatasetKind.Rooms,
+            );
+            return expect(futureResult).to.eventually.deep.equal(expected).then(() => {
+                let removeExpected: string = "rooms";
+                let removeFutureResult: Promise<string> = insightFacade.removeDataset("rooms");
+                return expect(removeFutureResult).to.eventually.deep.equal(removeExpected).then(() => {
+                    removeExpected = "courses";
+                    removeFutureResult = insightFacade.removeDataset("courses");
+                    return expect(removeFutureResult).to.eventually.deep.equal(removeExpected);
+                });
+            });
+        });
+    });
+
     it("List datasets with 1 set", function () {
         const id: string = "courses";
         const expectedID: string = id;
@@ -1066,85 +1066,85 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
  * You should not need to modify it; instead, add additional files to the queries directory.
  * You can still make tests the normal way, this is just a convenient tool for a majority of queries.
  */
-describe("InsightFacade PerformQuery", () => {
-    const datasetsToQuery: {
-        [id: string]: { path: string; kind: InsightDatasetKind };
-    } = {
-        courses: {
-            path: "./test/data/courses.zip",
-            kind: InsightDatasetKind.Courses
-        },
-        oneCourseSection: {
-            path: "./test/data/oneCourseSection.zip",
-            kind: InsightDatasetKind.Courses
-        },
-        multipleCourseSections: {
-            path: "./test/data/multipleCourseSections.zip",
-            kind: InsightDatasetKind.Courses
-        },
-        rooms: {
-                path: "./test/data/rooms.zip",
-                kind: InsightDatasetKind.Rooms
-            },
-    };
-    let insightFacade: InsightFacade;
-    let testQueries: ITestQuery[] = [];
+// describe("InsightFacade PerformQuery", () => {
+//     const datasetsToQuery: {
+//         [id: string]: { path: string; kind: InsightDatasetKind };
+//     } = {
+//         courses: {
+//             path: "./test/data/courses.zip",
+//             kind: InsightDatasetKind.Courses
+//         },
+//         oneCourseSection: {
+//             path: "./test/data/oneCourseSection.zip",
+//             kind: InsightDatasetKind.Courses
+//         },
+//         multipleCourseSections: {
+//             path: "./test/data/multipleCourseSections.zip",
+//             kind: InsightDatasetKind.Courses
+//         },
+//         rooms: {
+//                 path: "./test/data/rooms.zip",
+//                 kind: InsightDatasetKind.Rooms
+//             },
+//     };
+//     let insightFacade: InsightFacade;
+//     let testQueries: ITestQuery[] = [];
 
-    // Load all the test queries, and call addDataset on the insightFacade instance for all the datasets
-    before(function () {
-        Log.test(`Before: ${this.test.parent.title}`);
+//     // Load all the test queries, and call addDataset on the insightFacade instance for all the datasets
+//     before(function () {
+//         Log.test(`Before: ${this.test.parent.title}`);
 
-        // Load the query JSON files under test/queries.
-        // Fail if there is a problem reading ANY query.
-        try {
-            testQueries = TestUtil.readTestQueries();
-        } catch (err) {
-            expect.fail(
-                "",
-                "",
-                `Failed to read one or more test queries. ${err}`,
-            );
-        }
+//         // Load the query JSON files under test/queries.
+//         // Fail if there is a problem reading ANY query.
+//         try {
+//             testQueries = TestUtil.readTestQueries();
+//         } catch (err) {
+//             expect.fail(
+//                 "",
+//                 "",
+//                 `Failed to read one or more test queries. ${err}`,
+//             );
+//         }
 
-        // Load the datasets specified in datasetsToQuery and add them to InsightFacade.
-        // Will fail* if there is a problem reading ANY dataset.
-        const loadDatasetPromises: Array<Promise<string[]>> = [];
-        insightFacade = new InsightFacade();
-        for (const id of Object.keys(datasetsToQuery)) {
-            const ds = datasetsToQuery[id];
-            const data = fs.readFileSync(ds.path).toString("base64");
-            loadDatasetPromises.push(
-                insightFacade.addDataset(id, data, ds.kind),
-            );
-        }
-        return Promise.all(loadDatasetPromises);
-    });
+//         // Load the datasets specified in datasetsToQuery and add them to InsightFacade.
+//         // Will fail* if there is a problem reading ANY dataset.
+//         const loadDatasetPromises: Array<Promise<string[]>> = [];
+//         insightFacade = new InsightFacade();
+//         for (const id of Object.keys(datasetsToQuery)) {
+//             const ds = datasetsToQuery[id];
+//             const data = fs.readFileSync(ds.path).toString("base64");
+//             loadDatasetPromises.push(
+//                 insightFacade.addDataset(id, data, ds.kind),
+//             );
+//         }
+//         return Promise.all(loadDatasetPromises);
+//     });
 
-    beforeEach(function () {
-        Log.test(`BeforeTest: ${this.currentTest.title}`);
-    });
+//     beforeEach(function () {
+//         Log.test(`BeforeTest: ${this.currentTest.title}`);
+//     });
 
-    after(function () {
-        Log.test(`After: ${this.test.parent.title}`);
-    });
+//     after(function () {
+//         Log.test(`After: ${this.test.parent.title}`);
+//     });
 
-    afterEach(function () {
-        Log.test(`AfterTest: ${this.currentTest.title}`);
-    });
+//     afterEach(function () {
+//         Log.test(`AfterTest: ${this.currentTest.title}`);
+//     });
 
-//     // ------------------------------ InsightFacade.performQuery() ------------------------------
-//     // Dynamically create and run a test for each query in testQueries
-//     // Creates an extra "test" called "Should run test queries" as a byproduct. Don't worry about it
-    it("Should run test queries", function () {
-        describe("Dynamic InsightFacade PerformQuery tests", function () {
-            for (const test of testQueries) {
-                it(`[${test.filename}] ${test.title}`, function () {
-                    const futureResult: Promise<
-                        any[]
-                      > = insightFacade.performQuery(test.query);
-                    return TestUtil.verifyQueryResult(futureResult, test);
-                });
-            }
-        });
-    });
-});
+// //     // ------------------------------ InsightFacade.performQuery() ------------------------------
+// //     // Dynamically create and run a test for each query in testQueries
+// //     // Creates an extra "test" called "Should run test queries" as a byproduct. Don't worry about it
+//     it("Should run test queries", function () {
+//         describe("Dynamic InsightFacade PerformQuery tests", function () {
+//             for (const test of testQueries) {
+//                 it(`[${test.filename}] ${test.title}`, function () {
+//                     const futureResult: Promise<
+//                         any[]
+//                       > = insightFacade.performQuery(test.query);
+//                     return TestUtil.verifyQueryResult(futureResult, test);
+//                 });
+//             }
+//         });
+//     });
+// });
