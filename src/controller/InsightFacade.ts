@@ -141,7 +141,7 @@ export default class InsightFacade implements IInsightFacade {
             return reject(new NotFoundError(Constants.DATASET_NOT_YET_ADDED));
         }
 
-        return resolve(RemoveDatasetHelper.removeDataset(id));
+        return resolve(RemoveDatasetHelper.removeDataset(id, this.datasets));
         });
     }
 
@@ -178,6 +178,6 @@ export default class InsightFacade implements IInsightFacade {
      */
     public listDatasets(): Promise<InsightDataset[]> {
         const datasetList: InsightDataset[] = [];
-        return ListDatasetHelper.generateListDataset(datasetList);
+        return ListDatasetHelper.generateListDataset(datasetList, this.datasets);
     }
 }

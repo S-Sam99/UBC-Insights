@@ -75,7 +75,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     afterEach(function () {
         // This section resets the data directory (removing any cached data) and resets the InsightFacade instance
         // This runs after each test, which should make each test independent from the previous one
-        Log.test(`AfterTest: ${this.currentTest.title}`);
+        // Log.test(`AfterTest: ${this.currentTest.title}`);
         try {
             fs.removeSync(cacheDir);
             fs.mkdirSync(cacheDir);
