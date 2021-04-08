@@ -6,7 +6,18 @@
  */
 CampusExplorer.sendQuery = (query) => {
     return new Promise((resolve, reject) => {
-        // TODO: implement!
-        console.log("CampusExplorer.sendQuery not implemented yet.");
+        const url = "http://localhost:4321/query";
+
+        let xmlHttp = new XMLHttpRequest();
+        xmlHttp.open("POST", url);
+        xmlHttp.setRequestHeader("Content-Type", "application/json");
+        xmlHttp.onload = () => {
+            if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+                resolve(JSON.parse(xmlHttp.responseText));
+            } else {
+                reject(JSON.parse(xmlHttp.responseText));
+            }
+        };
+        xmlHttp.send(JSON.stringify(query));
     });
 };

@@ -8,4 +8,20 @@
  * 4.) Result is rendered in the reference UI by calling CampusExplorer.renderResult with the response from the endpoint as argument
  */
 
-// TODO: implement!
+document.getElementById("submit-button").addEventListener("click", function() {
+    let query = CampusExplorer.buildQuery();
+    let httpPOST = CampusExplorer.sendQuery(query);
+
+    httpPOST.then((res) => {
+        CampusExplorer.renderResult(res);
+    }).catch((e) => {
+        CampusExplorer.renderResult(e);
+    })
+});
+
+document.getElementsByClassName("copy-html")[0].addEventListener("click", function() {
+    let activePanel = document.getElementsByClassName("tab-panel active");
+    if (activePanel.length === 1) {
+        document.execCommand("copy");
+    }
+});
