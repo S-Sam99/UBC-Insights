@@ -69,7 +69,7 @@ export default class Server {
                 // NOTE: your endpoints should go here
                 that.rest.get("/datasets", Server.getDatasets);
                 that.rest.put("/dataset/:id/:kind", Server.putDataset);
-                // that.rest.del("/dataset/:id", Server.deleteDataset);
+                that.rest.del("/dataset/:id", Server.deleteDataset);
                 that.rest.post("/query", Server.postQuery);
 
                 // This must be the last endpoint!
@@ -189,15 +189,12 @@ export default class Server {
         }).catch(function (err) {
             if (err instanceof InsightError) {
                 res.json(400, {error: err.message});
-                return next();
             }
 
             if (err instanceof NotFoundError) {
                 res.json(404, {error: err.message});
-                return next();
             }
 
-            res.json(err.code, {error: err.message});
             return next();
         });
     }
