@@ -195,7 +195,7 @@ export default class Server {
     private static deleteDataset(req: restify.Request, res: restify.Response, next: restify.Next) {
         try {
             const id: string = req.params.id;
-            Server.insightFacade.removeDataset(id).then(function (dataset: any) {
+            return Server.insightFacade.removeDataset(id).then(function (dataset: any) {
                 Log.trace("deleted dataset");
                 res.json(200, {result: dataset});
                 return next();
@@ -207,7 +207,7 @@ export default class Server {
                     res.json(404, {error: err.message});
                     return next();
                 } else {
-                    res.json(err.statusCode, {error: err.message});
+                    res.json(err.code, {error: err.message});
                     return next();
                 }
             });
