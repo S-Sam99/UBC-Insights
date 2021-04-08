@@ -70,7 +70,9 @@ export default class BuildingDataset extends Dataset {
             http.get(link, (result: any) => {
                 const { statusCode } = result;
                 if (statusCode !== 200) {
-                    return reject("You got a " + result.statusCode + " error code!");
+                    array[0] = 0;
+                    array[1] = 0;
+                    return resolve(array);
                 }
                 let rawData = "";
                 result.on("data", (chunk: any) => {

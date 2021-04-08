@@ -205,6 +205,9 @@ export default class Server {
                 } else if (err instanceof NotFoundError) {
                     res.json(404, {error: err.message});
                     return next();
+                } else {
+                    res.json(405, {error: err.message});
+                    return next();
                 }
             });
         } catch (e) {

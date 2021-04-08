@@ -297,6 +297,26 @@ describe("Facade D3", function () {
         }
     });
 
+    it("DEL test for invalid call", function () {
+        try {
+            return chai.request(url)
+                .del("/datasets/")
+                .set("Content-Type", "application/x-zip-compressed")
+                .then(function (res: Response) {
+                    // some logging here please!
+                    expect.fail();
+                })
+                .catch(function (err) {
+                    // some logging here please!
+                    Log.trace("The dataset was not deleted");
+                    expect(err.status).to.be.equal(405);
+                });
+        } catch (err) {
+            // and some more logging here!
+            Log.trace("The server did not respond");
+        }
+    });
+
     // Sample on how to format PUT requests
     /*
     it("PUT test for courses dataset", function () {
