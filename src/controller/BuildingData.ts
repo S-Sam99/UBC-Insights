@@ -110,13 +110,8 @@ export default class BuildingData {
     }
 
     private setupArray(array: any): void {
-        if (this.lat && this.long) {
-            array["lat"] = this.lat;
-            array["lon"] = this.long;
-        } else {
-            array["lat"] = 0;
-            array["lon"] = 0;
-        }
+        array["lat"] = this.lat;
+        array["lon"] = this.long;
         array["fullname"] = this.fullName;
         array["shortname"] = this.shortName;
         array["address"] = this.address;

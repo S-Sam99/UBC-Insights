@@ -29,7 +29,7 @@
                     }
                     default: {
                         const value: string = roomData[field.name].toString();
-                        if (value === null || value === undefined || value === "") {
+                        if (value === null || value === undefined) {
                             this.isValid = false;
                             break;
                         }
