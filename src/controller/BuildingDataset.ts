@@ -33,7 +33,7 @@ export default class BuildingDataset extends Dataset {
                 try {
                     const parsedData = this.parseData(fileData);
                     if (this.checkValidity(parsedData)) {
-                        let latLong: any[2] = [0, 0];
+                        let latLong: any[2] = [null, null];
                         buildings.push(parsedData);
                         const currentBuildInfo = this.buildingInfo[this.count];
                         promises.push(this.findCoordinates(currentBuildInfo.getAddress(), latLong));
@@ -46,7 +46,7 @@ export default class BuildingDataset extends Dataset {
             this.count = 0;
             return Promise.all(promises).then((locations) => {
                 for (let geo of locations) {
-                    if (geo && (geo[0] !== 0 || geo[1] !== 0)) {
+                    if (geo && geo[0] !== null && geo[1] !== null) {
                         const currentBuildInfo = this.buildingInfo[this.count];
                         const currentBuild = buildings[this.count];
                         const buildingData = new BuildingData(this.id, currentBuild, currentBuildInfo, geo);
@@ -70,8 +70,6 @@ export default class BuildingDataset extends Dataset {
             http.get(link, (result: any) => {
                 const { statusCode } = result;
                 if (statusCode !== 200) {
-                    array[0] = 0;
-                    array[1] = 0;
                     return resolve(array);
                 }
                 let rawData = "";
@@ -81,13 +79,8 @@ export default class BuildingDataset extends Dataset {
                 result.on("end", () => {
                     try {
                         const location = JSON.parse(rawData);
-                        if (location.error && location.error !== null) {
-                            array[0] = 0;
-                            array[1] = 0;
-                        } else {
-                            array[0] = location.lon;
-                            array[1] = location.lat;
-                        }
+                        array[0] = location.lon;
+                        array[1] = location.lat;
                         return resolve(array);
                     } catch (err) {
                         return reject(err);
