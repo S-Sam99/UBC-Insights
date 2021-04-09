@@ -24,17 +24,21 @@ export default class ListDatasetHelper {
         //     }
         // } else {
         const path = "./data";
-        const dir = fs.readdirSync (path);
-        dir.forEach ((file) => {
-            const data = fs.readFileSync(`${path}/${file}`, "utf8");
-            const obj: any = JSON.parse(data);
-            const dataset: InsightDataset = {
-                id: obj.id,
-                kind: obj.kind,
-                numRows: obj.numRows
-            };
-            datasetList.push(dataset);
-        });
+        const cacheDir = __dirname + "/../data";
+
+        if (fs.existsSync(cacheDir)) {
+            const dir = fs.readdirSync (path);
+            dir.forEach ((file) => {
+                const data = fs.readFileSync(`${path}/${file}`, "utf8");
+                const obj: any = JSON.parse(data);
+                const dataset: InsightDataset = {
+                    id: obj.id,
+                    kind: obj.kind,
+                    numRows: obj.numRows
+                };
+                datasetList.push(dataset);
+            });
+        }
         return Promise.resolve(datasetList).catch((err) => {
             return Promise.reject(err);
         });
