@@ -72,6 +72,10 @@ export default class InsightFacade implements IInsightFacade {
                 return reject(new InsightError(`${Constants.INVALID_ID} ${id}`));
             }
 
+            if (!DatasetValidationHelper.isValidKind(kind)) {
+                return reject(new InsightError(`${Constants.INVALID_ID} ${kind}`));
+            }
+
             if (!DatasetValidationHelper.isValidContent(content)) {
                 return reject(new InsightError(Constants.INVALID_CONTENT));
             }
@@ -88,16 +92,20 @@ export default class InsightFacade implements IInsightFacade {
     private unzipDataset(id: string, kind: InsightDatasetKind, content: string): Promise<string> {
         return JSZip.loadAsync(content, {base64: true})
             .then((data) => {
-                if (data["files"].hasOwnProperty(Constants.REQUIRED_DIR_COURSES)) {
-                    return AddCourseDatasetHelper.generateCourseDataset(id, kind, data)
-                        .then((dataset) => {
-                            const temp: InsightDataset = {id: id, kind: kind, numRows: dataset.numRows};
-                            this.datasets.push(temp);
-                            return Promise.resolve(id);
-                        }).catch((err) => {
+                if (kind === InsightDatasetKind.Courses) {
+                    if (data["files"].hasOwnProperty(Constants.REQUIRED_DIR_COURSES)) {
+                        return AddCourseDatasetHelper.generateCourseDataset(id, kind, data)
+                            .then((dataset) => {
+                                const temp: InsightDataset = {id: id, kind: kind, numRows: dataset.numRows};
+                                this.datasets.push(temp);
+                                return Promise.resolve(id);
+                            }).catch((err) => {
                             return Promise.reject(new InsightError(err));
                         });
-                } else {
+                    }
+                }
+
+                if (kind === InsightDatasetKind.Rooms) {
                     if (data["files"].hasOwnProperty(Constants.REQUIRED_DIR_ROOMS)) {
                         return AddBuildingDatasetHelper.generateBuildingDataset(id, kind, data)
                         .then((dataset) => {
@@ -108,8 +116,9 @@ export default class InsightFacade implements IInsightFacade {
                             return Promise.reject(new InsightError(err));
                         });
                     }
-                    return Promise.reject(new InsightError(Constants.MISSING_MAIN_FOLDER));
                 }
+
+                return Promise.reject(new InsightError(Constants.MISSING_MAIN_FOLDER));
             }).catch((e) => {
                 if (e instanceof InsightError) {
                     return Promise.reject(e);
@@ -183,8 +192,9 @@ export default class InsightFacade implements IInsightFacade {
      * The promise should fulfill an array of currently added InsightDatasets, and will only fulfill.
      */
     public listDatasets(): Promise<InsightDataset[]> {
+        const datasetList: InsightDataset[] = [];
         return new Promise<InsightDataset[]>((resolve, reject) => {
-            resolve(this.datasets);
+            resolve(ListDatasetHelper.generateListDataset(datasetList));
         });
     }
 }

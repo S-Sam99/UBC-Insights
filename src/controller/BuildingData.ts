@@ -100,6 +100,7 @@ export default class BuildingData {
                     }
                 }
             }
+            return;
         }
         if (html.childNodes && html.childNodes.length > 0) {
             for (let child of html.childNodes) {
