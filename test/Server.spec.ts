@@ -178,7 +178,7 @@ describe("Facade D3", function () {
                     expect(res.body.result[0].numRows).to.deep.equal(64612);
                     expect(res.body.result[1].id).to.deep.equal("rooms");
                     expect(res.body.result[1].kind).to.deep.equal("rooms");
-                    expect(res.body.result[1].numRows).to.deep.equal(363);
+                    expect(res.body.result[1].numRows).to.deep.equal(364yarn);
                 })
                 .catch(function (err) {
                     // some logging here please!

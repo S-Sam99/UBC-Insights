@@ -1013,7 +1013,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
         return expect(tempResult).to.eventually.deep.equal([id1]).then(() => {
             const id2: string = "rooms";
             const expectedKind2: InsightDatasetKind = InsightDatasetKind.Rooms;
-            const expectedNumRow2: number = 363;
+            const expectedNumRow2: number = 364;
             tempResult = insightFacade.addDataset(
                 id2,
                 datasets[id2],
